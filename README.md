@@ -31,7 +31,7 @@
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php) (if nulis want work,  checklist columns 1,2,3,5,6) 
 ```bash
 > git clone https://github.com/BochilGaming/EpicRpgWaBot
-> cd Zero-bot
+> cd EpicRpgWaBot
 > npm install
 ```
 ###### Run
@@ -39,8 +39,6 @@
 > node index.js
 ```
 --------------
-
-##### Powered By : [`XTEAM`](https://api.xteam.xyz)
 
 ### Thanks To 
 [`@Nurutomo`](https://github.com/Nurutomo)
