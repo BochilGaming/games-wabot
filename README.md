@@ -1,11 +1,11 @@
-# EpicRpgWaBot
+# EpicRpgWaBot COMING SOON
 <a href="https://github.com/BochilGaming/EpicRpgWaBot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/BochilGaming/EpicRpgWaBot?label=Forks&color=blue&style=flat-square"></a>
 <a href="https://github.com/BochilGaming/EpicRpgWaBot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/BochilGaming/EpicRpgWaBot?label=Watchers&color=green&style=flat-square"></a>
 <a href="https://github.com/BochilGaming/EpicRpgWaBot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/BochilGaming/EpicRpgWaBot?label=Stars&color=yellow&style=flat-square"></a>
 <a href="https://github.com/BochilGaming/EpicRpgWaBot/graphs/contributors"><img title="Contributors" src="https://img.shields.io/github/contributors/BochilGaming/EpicRpgWaBot?label=Contributors&color=blue&style=flat-square"></a>
 
 ## Join Group Bot
-<a href="https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM"><img title="Group Wa" src="https://img.shields.io/images.app.goo.gl/cfCWghdTgC38BXyt5?label=Group Wa&color=green"></a>
+[`Group Whatsapp`](https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM)
 ### FOR TERMUX USER
 ```bash
 > pkg update && pkg upgrade
