@@ -1,8 +1,8 @@
-# Games-Wabot COMING SOON
-<a href="https://github.com/BochilGaming/EpicRpgWaBot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/BochilGaming/EpicRpgWaBot?label=Forks&color=blue&style=flat-square"></a>
-<a href="https://github.com/BochilGaming/EpicRpgWaBot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/BochilGaming/EpicRpgWaBot?label=Watchers&color=green&style=flat-square"></a>
-<a href="https://github.com/BochilGaming/EpicRpgWaBot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/BochilGaming/EpicRpgWaBot?label=Stars&color=yellow&style=flat-square"></a>
-<a href="https://github.com/BochilGaming/EpicRpgWaBot/graphs/contributors"><img title="Contributors" src="https://img.shields.io/github/contributors/BochilGaming/EpicRpgWaBot?label=Contributors&color=blue&style=flat-square"></a>
+# Games-Wabot
+<a href="https://github.com/BochilGaming/games-wabot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/BochilGaming/games-wabot?label=Forks&color=blue&style=flat-square"></a>
+<a href="https://github.com/BochilGaming/games-wabot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/BochilGaming/games-wabot?label=Watchers&color=green&style=flat-square"></a>
+<a href="https://github.com/BochilGaming/games-wabot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/BochilGaming/games-wabot?label=Stars&color=yellow&style=flat-square"></a>
+<a href="https://github.com/BochilGaming/games-wabot/graphs/contributors"><img title="Contributors" src="https://img.shields.io/github/contributors/BochilGaming/games-wabot?label=Contributors&color=blue&style=flat-square"></a>
 
 ## Join Group Bot
 [`Group Whatsapp`](https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM)
@@ -13,8 +13,8 @@
 > pkg install nodejs -y
 > pkg install ffmpeg -y
 > pkg install imagemagick -y
-> git clone https://github.com/BochilGaming/EpicRpgWaBot
-> cd EpicRpgWaBot
+> git clone https://github.com/BochilGaming/games-wabot
+> cd games-wabot
 > npm install
 ```
 ###### Run
@@ -30,8 +30,8 @@
 * Download And Install FFMPEG [`Click Here`](https://ffmpeg.org/download.html) (don't forget to path) 
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php) (if nulis want work,  checklist columns 1,2,3,5,6) 
 ```bash
-> git clone https://github.com/BochilGaming/EpicRpgWaBot
-> cd EpicRpgWaBot
+> git clone https://github.com/BochilGaming/games-wabot
+> cd games-wabot
 > npm install
 ```
 ###### Run
