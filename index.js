@@ -14,7 +14,21 @@ CFonts.say(`'${package.name}' By @${package.author.name || package.author}`, {
   align: 'center',
   gradient: ['red', 'magenta']
 })
-
+let d = new Date
+let date = d.toLocaleDateString('id', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+})
+/**
+ * fs.copyFile('./database.json', `./database ${date}.json`, (err) => {
+ * if (err) {
+ * console.log('Cannot copy database.json\n\n' + err)
+ * } else {
+ * console.log('database.json was copied to database ' + date + '.json')
+ * }
+ })
+*/
 /**
  * Start a js file
  * @param {String} file `path/to/file`
