@@ -185,7 +185,7 @@ module.exports = {
       let bot = m.isGroup ? participants.find(u => u.jid == this.user.jid) : {} // Your Data
       let isAdmin = user.isAdmin || user.isSuperAdmin || false // Is User Admin?
       let isBotAdmin = bot.isAdmin || bot.isSuperAdmin || false // Are you Admin?
-      let DevMode = (global.DeveloperMode == true)
+      let DevMode = (global.DeveloperMode.toLowerCase() == true)
     	for (let name in global.plugins) {
     	  let plugin = global.plugins[name]
         if (!plugin) continue
