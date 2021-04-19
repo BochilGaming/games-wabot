@@ -155,7 +155,7 @@ global.reloadHandler = function () {
 }
 
 // Plugin Loader
-let pluginFolder = path.join(__dirname, 'plugin')
+let pluginFolder = path.join(__dirname, 'plugins')
 let pluginFilter = filename => /\.js$/.test(filename)
 global.plugins = {}
 for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
