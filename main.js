@@ -209,6 +209,7 @@ async function _quickTest() {
   if (!global.support.ffmpeg) conn.logger.warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
   if (!global.support.ffmpegWebp) conn.logger.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
   if (!global.support.convert) conn.logger.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
+  if (global.DeveloperMode.toLowerCase() == true) conn.logger.warn('Developer Mode Active!!, change To false In config.js in global.DeveloperMode')
 }
 
 _quickTest()

@@ -167,10 +167,11 @@ module.exports = {
         console.log(e, global.DATABASE.data)
       }
       if (!m.fromMe && opts['self']) return
+      if (m.chat == 'status@broadcast') return
+      conn.chatRead(m.chat)
       if (typeof m.text !== 'string') m.text = ''
       if (m.isBaileys) return
       m.exp += Math.ceil(Math.random() * 10)
-      await conn.chatRead (m.chat)
     	let usedPrefix
       let _user = global.DATABASE.data && global.DATABASE.data.users && global.DATABASE.data.users[m.sender]
 
@@ -184,6 +185,7 @@ module.exports = {
       let bot = m.isGroup ? participants.find(u => u.jid == this.user.jid) : {} // Your Data
       let isAdmin = user.isAdmin || user.isSuperAdmin || false // Is User Admin?
       let isBotAdmin = bot.isAdmin || bot.isSuperAdmin || false // Are you Admin?
+      let DevMode = (global.DeveloperMode == true)
     	for (let name in global.plugins) {
     	  let plugin = global.plugins[name]
         if (!plugin) continue
@@ -230,11 +232,22 @@ module.exports = {
           if (m.chat in global.DATABASE._data.chats || m.sender in global.DATABASE._data.users) {
             let chat = global.DATABASE._data.chats[m.chat]
             let user = global.DATABASE._data.users[m.sender]
+            
+        /*Message If Banned*/
             if (chat.isBanned == true || user.Banneduser == true) {
                 if (name != 'math_answer.js' && name != '_afk.js' && name != 'leveling.js') {       
-                    this.reply(m.chat, '*Anda Terbanned*\nJoin Official Group Metro Bot untuk keterangan lebih lanjut\n\n https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM \n\n*Atau hubungi wa.me/6281390658325*', m) 
+                    this.reply(m.chat, `
+*Anda Terbanned*
+Join Official Group *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
+
+${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
+
+*Atau hubungi*
+${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
+${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim()
                 }
             }
+            
             if (name != 'unbanchat.js' && chat && chat.isBanned) return // Except this
             if (name != 'unbanuser.js' && user && user.Banneduser) return
           }
@@ -276,30 +289,40 @@ module.exports = {
             fail('unreg', m, this)
             continue
           }
+          
+          /*Anti Spamm*/
           if (new Date - global.DATABASE._data.users[m.sender].antispamlastclaim > 5000) {
             global.DATABASE._data.users[m.sender].antispam = 0
-            global.DATABASE._data.users[m.sender].antispamlastclaim = new Date
+            global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
           } else {
             global.DATABASE._data.users[m.sender].antispam += 1
           }
           if (global.DATABASE._data.users[m.sender].antispam > 15) {
               if (isROwner) return
-              if (isOwner) return
               if (isMods) return
-            
-            global.DATABASE._data.users[m.sender].antispam = 0
-            global.DATABASE._data.users[m.sender].warn += 1
-            global.DATABASE._data.users[m.sender].antispamlastclaim = new Date
-            this.reply(m.chat, '*You get a warn for being spammed*\n*remember if you get a warn 4 times you will automatically be BANNED*', m)
-            this.sendMessage('6281390658325@s.whatsapp.net', `${m.sender.split`@`[0]} *Spam*`.trim(), MessageType.text)
-            if(global.DATABASE._data.users[m.sender].warn == 3) {
-                this.reply(m.chat, '*You got banned for spam*\nJoin Official Group Metro Bot untuk keterangan lebih lanjut\n\n https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM \n\n*Atau hubungi wa.me/6281390658325*', m)
-                this.sendMessage('6281390658325@s.whatsapp.net', `${m.sender.split`@`[0]} *Spam And Got BANNED*`.trim(), MessageType.text)
-            }
+              
+              global.DATABASE._data.users[m.sender].antispam = 0
+              global.DATABASE._data.users[m.sender].warn += 1
+              global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
+              this.reply(m.chat, '*You get a warn for being spammed*\n*remember if you get a warn 4 times you will automatically be BANNED*', m)
+              if(global.DATABASE._data.users[m.sender].warn == 3) {
+              this.reply(m.chat, `*You got banned for spam*
+Join Official *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
+${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
+
+*Atau hubungi*
+${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
+${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
+              for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) this.sendMessage(jid, `${m.sender.split`@`[0]} Spamm!!!`)
+              }
           }
+          
+    /*Fix Error Money*/
           if (global.DATABASE._data.users[m.sender].money > 99999999) {
               global.DATABASE._data.users[m.sender].money = 99999999
           }
+          
+    /*Max Healt And Minimum Health*/
           if (global.DATABASE._data.users[m.sender].healt > 100) {
               global.DATABASE._data.users[m.sender].healt = 100
           }
@@ -333,6 +356,7 @@ module.exports = {
               isOwner,
               isAdmin,
               isBotAdmin,
+              DevMode,
               isPrems,
               chatUpdate,
             })
@@ -445,7 +469,7 @@ global.dfail = (type, m, conn) => {
     mods: 'Perintah ini hanya dapat digunakan oleh _*Moderator*_ !',
     premium: 'Perintah ini hanya untuk member _*Premium*_ !',
     group: 'Perintah ini hanya dapat digunakan di grup!',
-    private: 'Perintah ini hanya dapat digunakan di Chat Pribadi!\nKuy Join Official Group Metro Bot\n\nhttps://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM',
+    private: 'Perintah ini hanya dapat digunakan di Chat Pribadi!',
     admin: 'Perintah ini hanya untuk *Admin* grup!',
     botAdmin: 'Jadikan bot sebagai *Admin* untuk menggunakan perintah ini!',
     unreg: 'Silahkan daftar untuk menggunakan fitur ini dengan cara mengetik:\n\n*#daftar nama.umur*\n\nContoh: *#daftar Manusia.16*'

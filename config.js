@@ -1,3 +1,5 @@
+global.DeveloperMode = 'false' //true Or false
+global.linkGC = ['https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM']
 global.owner = ['6281390658325', '6282256115584', '6285713964963']// Put your number here
 global.mods = [] // Want some help?
 global.prems = [] // Premium user has unlimited limit

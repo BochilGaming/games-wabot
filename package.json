@@ -1,6 +1,6 @@
 {
-  "name": "wabot-aq",
-  "version": "1.6.0",
+  "name": "games-wabot",
+  "version": "0.8.2",
   "description": "Customizable WhatsApp Bot",
   "depecrated": false,
   "main": "index.js",
@@ -17,18 +17,21 @@
     "termux-whatsapp-bot",
     "whatsapp-bot",
     "whatsapp",
-    "js-whatsapp"
+    "js-whatsapp",
+    "whatsapp",
+    "Games-wabot",
+    "wabot-aq"
   ],
-  "homepage": "https://github.com/Nurutomo/wabot-aq",
+  "homepage": "https://github.com/BochilGaming/games-wabot",
   "author": {
-    "name": "Nurutomo"
+    "name": "BochilGaming"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Nurutomo/wabot-aq.git"
   },
   "bugs": {
-    "url": "https://github.com/Nurutomo/wabot-aq/issues"
+    "url": "https://github.com/BochilGaming/games-wabot/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
@@ -57,6 +60,6 @@
     "url-regex": "^5.0.0",
     "warn": "^1.0.1",
     "yargs": "^16.2.0",
-    "yt-search": "^2.7.4"
+    "yt-search": "^2.7.6"
   }
 }

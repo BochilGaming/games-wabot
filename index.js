@@ -1,7 +1,31 @@
 console.log('Starting...')
+let fs = require('fs')
+
+/*For Auto Backup*/
+let d = new Date
+let tanggal = d.toLocaleDateString('id', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+})
+let waktu = d.toLocaleTimeString('id', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+})
+let _data = './database.json'
+if (fs.existsSync(_data)) {
+    fs.copyFile(_data, `./database ${tanggal} ${waktu}.json`, (err) => {
+        if (err) {
+            console.log('Cannot copy database.json\n\n' + err)
+        } else {
+            console.log('database.json was copied to database ' + tanggal + ' ' + waktu + '.json')
+        }
+    })
+}
+
 let { spawn } = require('child_process')
 let path = require('path')
-let fs = require('fs')
 let package = require('./package.json')
 const CFonts  = require('cfonts')
 CFonts.say('Lightweight\nWhatsApp Bot', {
@@ -14,21 +38,7 @@ CFonts.say(`'${package.name}' By @${package.author.name || package.author}`, {
   align: 'center',
   gradient: ['red', 'magenta']
 })
-let d = new Date
-let date = d.toLocaleDateString('id', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-})
-/**
- * fs.copyFile('./database.json', `./database ${date}.json`, (err) => {
- * if (err) {
- * console.log('Cannot copy database.json\n\n' + err)
- * } else {
- * console.log('database.json was copied to database ' + date + '.json')
- * }
- })
-*/
+
 /**
  * Start a js file
  * @param {String} file `path/to/file`
