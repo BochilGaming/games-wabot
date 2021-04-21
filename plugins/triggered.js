@@ -7,6 +7,7 @@ const imgbb = require('imgbb-uploader')
 const fs = require('fs')
 const { exec } = require('child_process')
 const { MessageType } = require('@adiwajshing/baileys')
+
 let handler = async (m, { conn, args }) => {
     const content = JSON.stringify(m.message)
     const type = Object.keys(m.message)[0]
@@ -24,3 +25,22 @@ let handler = async (m, { conn, args }) => {
             fs.unlinkSync(ranp)
             if (err) return m.reply('emror..')
             nobg = fs.readFileSync(rano)
+            conn.sendMessage(m.chat, nobg, MessageType.sticker, { quoted: m })
+            fs.unlinkSync(rano)
+            fs.unlinkSync(owgi)
+        })
+    } else {
+        m.reply('pastikan format jpg/png!')
+    }
+}
+
+handler.help = ['trigger (caption|reply media)']
+handler.tags = ['sticker']
+handler.command = /^(trigger(ed)?)$/i
+handler.limit = true
+handler.group = true
+module.exports = handler
+
+const getRandom = (ext) => {
+    return `${Math.floor(Math.random() * 10000)}${ext}`
+}
