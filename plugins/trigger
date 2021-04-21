@@ -1,5 +1,7 @@
 // Feature by shinz
 // tqto shinz
+// Pembuat :v : wa.me/6285719854930
+// gw cuman remake dikit :v
 
 const imgbb = require('imgbb-uploader')
 const fs = require('fs')
