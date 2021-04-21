@@ -29,6 +29,7 @@ let handler  = async (m, { conn, usedPrefix: _p, DevMode }) => {
       'rpg': 'Rpg',
       'game': 'Games',
       'sticker': 'Sticker',
+      'audio': 'Filter Audio',
       'kerang': 'Kerang Ajaib',
       'quotes': 'Quotes',
       'nulis': 'Mager Nulis',
