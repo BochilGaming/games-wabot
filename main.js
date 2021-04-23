@@ -1,5 +1,5 @@
 require('./config.js')
-let { WAConnection: _WAConnection } = require('@adiwajshing/baileys')
+let { WAConnection: _WAConnection, WA_MESSAGE_STUB_TYPES } = require('@adiwajshing/baileys')
 let { generate } = require('qrcode-terminal')
 let { spawnSync } = require('child_process')
 let syntaxerror = require('syntax-error')
@@ -37,6 +37,7 @@ if (opts['server']) {
   let express = require('express')
   global.app = express()
   app.all('*', async (req, res) => {
+    await global.conn.connect().catch(console.log)
     res.end(await qrcode.toBuffer(global.qr))
   })
   app.listen(PORT, () => console.log('App listened on port', PORT))
@@ -44,10 +45,9 @@ if (opts['server']) {
 global.conn = new WAConnection()
 let authFile = `${opts._[0] || 'session'}.data.json`
 if (fs.existsSync(authFile)) conn.loadAuthInfo(authFile)
-if (opts['trace']) conn.logger.level = 'trace'
-if (opts['debug']) conn.logger.level = 'debug'
 if (opts['big-qr'] || opts['server']) conn.on('qr', qr => generate(qr, { small: false }))
 if (opts['server']) conn.on('qr', qr => { global.qr = qr })
+conn.on('credentials-updated', () => fs.writeFileSync(authFile, JSON.stringify(conn.base64EncodedAuthInfo())))
 let lastJSON = JSON.stringify(global.DATABASE.data)
 if (!opts['test']) setInterval(() => {
   conn.logger.info('Saving database . . .')
@@ -91,14 +91,7 @@ if (opts['test']) {
     let message = await conn.prepareMessageContent(content, type, opts)
     let waMessage = conn.prepareMessageFromContent(chatId, message, opts)
     if (type == 'conversation') waMessage.key.id = require('crypto').randomBytes(16).toString('hex').toUpperCase()
-    conn.emit('chat-update', {
-      jid: conn.user.jid,
-      messages: {
-        all() {
-          return [waMessage]
-        }
-      }
-    })
+    conn.emit('message-new', waMessage)
   }
   rl.on('line', line => conn.sendMessage('123@s.whatsapp.net', line.trim(), 'conversation'))
 } else {
@@ -107,7 +100,6 @@ if (opts['test']) {
     process.send(line.trim())
   })
   conn.connect().then(() => {
-    fs.writeFileSync(authFile, JSON.stringify(conn.base64EncodedAuthInfo(), null, '\t'))
     global.timestamp.connect = new Date
   })
 }
@@ -118,7 +110,7 @@ let isInit = true
 global.reloadHandler = function () {
   let handler = require('./handler')
   if (!isInit) {
-    conn.off('chat-update', conn.handler)
+    conn.off('message-new', conn.handler)
     conn.off('message-delete', conn.onDelete)
     conn.off('group-add', conn.onAdd)
     conn.off('group-leave', conn.onLeave)
@@ -129,7 +121,7 @@ global.reloadHandler = function () {
   conn.onAdd = handler.welcome
   conn.onLeave = handler.leave
   conn.onDelete = handler.delete
-  conn.on('chat-update', conn.handler)
+  conn.on('message-new', conn.handler)
   conn.on('message-delete', conn.onDelete)
   conn.on('group-add', conn.onAdd)
   conn.on('group-leave', conn.onLeave)
@@ -139,9 +131,8 @@ global.reloadHandler = function () {
       setTimeout(async () => {
         try {
           if (conn.state === 'close') {
-            if (fs.existsSync(authFile)) await conn.loadAuthInfo(authFile)
+            await conn.loadAuthInfo(authFile)
             await conn.connect()
-            fs.writeFileSync(authFile, JSON.stringify(conn.base64EncodedAuthInfo(), null, '\t'))
             global.timestamp.connect = new Date
           }
         } catch (e) {

@@ -1,6 +1,6 @@
 {
   "name": "games-wabot",
-  "version": "0.9",
+  "version": "0.8.2",
   "description": "Customizable WhatsApp Bot",
   "depecrated": false,
   "main": "index.js",
@@ -28,14 +28,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BochilGaming/games-wabot.git"
+    "url": "git+https://github.com/Nurutomo/wabot-aq.git"
   },
   "bugs": {
     "url": "https://github.com/BochilGaming/games-wabot/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@adiwajshing/baileys": "^3.4.1",
+    "@adiwajshing/baileys": "3.4.1",
     "awesome-phonenumber": "^2.47.0",
     "brainly-scraper-v2": "^1.1.2",
     "cfonts": "^2.9.1",

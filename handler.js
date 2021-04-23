@@ -3,10 +3,7 @@ let simple = require('./lib/simple')
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 module.exports = {
-  async handler(chatUpdate) {
-    if (!chatUpdate.hasNewMessage) return
-    if (!chatUpdate.messages && !chatUpdate.count) return
-    let m = chatUpdate.messages.all()[0]
+  async handler(m) {
     try {
     	simple.smsg(this, m)
       m.exp = 0
@@ -17,27 +14,35 @@ module.exports = {
             if (!isNumber(user.healt)) user.healt = 0
             if (!isNumber(user.healtlimit)) user.healtlimit = 10
             if (!isNumber(user.healtlastclaim)) user.healtlastclaim = 0  
+            
             if (!isNumber(user.level)) user.level = 0
             if (!isNumber(user.levellimit)) user.levellimit = 10
             if (!isNumber(user.lastclaimlevel)) user.lastclaimlevel = 0
+            
             if (!isNumber(user.exp)) user.exp = 0
             if (!isNumber(user.limit)) user.limit = 10
             if (!isNumber(user.lastclaim)) user.lastclaim = 0
+            
             if (!isNumber(user.money)) user.money = 0
             if (!isNumber(user.moneylimit)) user.moneylimit = 10
             if (!isNumber(user.moneylastclaim)) user.moneylastclaim = 0
+            
             if (!isNumber(user.diamond)) user.diamond = 0
             if (!isNumber(user.diamondlimit)) user.diamondlimit = 10
             if (!isNumber(user.diamondlastclaim)) user.diamondlastclaim = 0
+            
             if (!isNumber(user.common)) user.common = 0
             if (!isNumber(user.commonlimit)) user.commonlimit = 10
             if (!isNumber(user.commonlastclaim)) user.commonlastclaim = 0
+            
             if (!isNumber(user.uncommon)) user.uncommon = 0
             if (!isNumber(user.uncommonlimit)) user.uncommonlimit = 10
             if (!isNumber(user.uncommonlastclaim)) user.uncommonlastclaim = 0
+            
             if (!isNumber(user.mythic)) user.mythic = 0
             if (!isNumber(user.mythiclimit)) user.mythiclimit = 10
             if (!isNumber(user.mythiclastclaim)) user.mythiclastclaim = 0
+            
             if (!isNumber(user.legendary)) user.legendary = 0
             if (!isNumber(user.legendarylimit)) user.legendarylimit = 10
             if (!isNumber(user.legendarylastclaim)) user.legendarylastclaim = 0
@@ -68,7 +73,11 @@ module.exports = {
             if (!isNumber(user.rubah)) user.rubah = 0
             if (!isNumber(user.rubahlimit)) user.rubahlimit = 10
             if (!isNumber(user.rubahlastclaim)) user.rubahlastclaim = 0
+            if (!isNumber(user.anjing)) user.anjing = 0
+            if (!isNumber(user.anjinglimit)) user.anjinglimit = 10
+            if (!isNumber(user.anjinglastclaim)) user.anjinglastclaim = 0
             if (!'Banneduser' in user) user.Banneduser = false
+            if (!'BannedReason' in user) user.BannedReason = ''
         
             if (!isNumber(user.warn)) user.warn = 0
             if (!isNumber(user.warnlimit)) user.warnlimit = 10
@@ -79,9 +88,14 @@ module.exports = {
             if (!isNumber(user.anakkucing)) user.anakkucing = 0
             if (!isNumber(user.anakkuda)) user.anakkuda = 0
             if (!isNumber(user.anakrubah)) user.anakrubah = 0
+            if (!isNumber(user.anakanjing)) user.anakanjing = 0
             if (!isNumber(user.makananpet)) user.makananpet = 0
             if (!isNumber(user.antispam)) user.antispam = 0
             if (!isNumber(user.antispamlastclaim)) user.antispamlastclaim = 0
+            if (!isNumber(user.kayu)) user.kayu = 0
+            if (!isNumber(user.batu)) user.batu = 0
+            if (!isNumber(user.string)) user.string = 0
+            if (!isNumber(user.sword)) user.sword = 0
         } else global.DATABASE._data.users[m.sender] = {
         healt: 100,
         healtlimit: 999999,
@@ -131,7 +145,11 @@ module.exports = {
         rubah: 0,
         rubahlimit: 999999,
         rubahlastclaim: 0,
+        anjing: 0,
+        anjinglimit: 999999,
+        anjinglastclaim: 0,
         Banneduser: false,
+        BannedReason: '',
         warn: 0,
         warnlimit: 999999,
         warnlastclaim: 0,
@@ -140,9 +158,14 @@ module.exports = {
         anakkucing: 0,
         anakkuda: 0,
         anakrubah: 0,
+        anakanjing: 0,
         makananpet: 0,
         antispam: 0,
         antispamlastclaim: 0,
+        kayu: 0,
+        batu: 0,
+        string: 0,
+        sword: 0
         }
     
         let chat
@@ -154,6 +177,7 @@ module.exports = {
           if (!'delete' in chat) chat.delete = true
           if (!'antiLink' in chat) chat.antiLink = false
           if (!'antiToxic' in chat) chat.antiToxic = true
+          if (!'antiVirtex' in chat) chat.antiVirtex = true
         } else global.DATABASE._data.chats[m.chat] = {
           isBanned: false,
           welcome: false,
@@ -162,12 +186,26 @@ module.exports = {
           delete: true,
           antiLink: false,
           antiToxic: true,
+          antiVirtex: true
         }
       } catch (e) {
         console.log(e, global.DATABASE.data)
       }
+      
       if (!m.fromMe && opts['self']) return
+      
+        /*Max Healt And Minimum Health*/
+      if (global.DATABASE._data.users[m.sender].healt > 100) {
+          global.DATABASE._data.users[m.sender].healt = 100
+      }
+      if (global.DATABASE._data.users[m.sender].healt < 0) {
+          global.DATABASE._data.users[m.sender].healt = 0
+      }
+      
+/*jika Ada Yang Gunain Bot Di Status, Nanti Gk Akan Muncul Apa Apa*/
       if (m.chat == 'status@broadcast') return
+      
+/*Untuk Auto Read (centang Biru)*/
       conn.chatRead(m.chat)
       if (typeof m.text !== 'string') m.text = ''
       if (m.isBaileys) return
@@ -206,7 +244,7 @@ module.exports = {
               [[[], new RegExp]]
         ).find(p => p[1])
         if (typeof plugin.before == 'function') if (await plugin.before.call(this, m, {
-          match, user, groupMetadata, chatUpdate
+          match, user, groupMetadata
         })) continue
     	  if ((usedPrefix = (match[0] || '')[0])) {
           let noPrefix = m.text.replace(usedPrefix, '')
@@ -244,7 +282,7 @@ ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
 
 *Atau hubungi*
 ${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
-${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
+${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m) 
                 }
             }
             
@@ -291,21 +329,17 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
           }
           
           /*Anti Spamm*/
+          global.DATABASE._data.users[m.sender].antispam += 1
           if (new Date - global.DATABASE._data.users[m.sender].antispamlastclaim > 5000) {
             global.DATABASE._data.users[m.sender].antispam = 0
             global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
-          } else {
-            global.DATABASE._data.users[m.sender].antispam += 1
-          }
-          if (global.DATABASE._data.users[m.sender].antispam > 15) {
-              if (isROwner) return
-              if (isMods) return
+          } else if (global.DATABASE._data.users[m.sender].antispam > 13) {
               
               global.DATABASE._data.users[m.sender].antispam = 0
               global.DATABASE._data.users[m.sender].warn += 1
               global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
               this.reply(m.chat, '*You get a warn for being spammed*\n*remember if you get a warn 4 times you will automatically be BANNED*', m)
-              if(global.DATABASE._data.users[m.sender].warn == 3) {
+              if (global.DATABASE._data.users[m.sender].warn == 3) {
               this.reply(m.chat, `*You got banned for spam*
 Join Official *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
 ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
@@ -320,14 +354,6 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
     /*Fix Error Money*/
           if (global.DATABASE._data.users[m.sender].money > 99999999) {
               global.DATABASE._data.users[m.sender].money = 99999999
-          }
-          
-    /*Max Healt And Minimum Health*/
-          if (global.DATABASE._data.users[m.sender].healt > 100) {
-              global.DATABASE._data.users[m.sender].healt = 100
-          }
-          if (global.DATABASE._data.users[m.sender].healt < 0) {
-              global.DATABASE._data.users[m.sender].healt = 0
           }
 
           m.isCommand = true
@@ -357,8 +383,7 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
               isAdmin,
               isBotAdmin,
               DevMode,
-              isPrems,
-              chatUpdate,
+              isPrems
             })
             if (!isPrems) m.limit = m.limit || plugin.limit || false
           } catch (e) {
