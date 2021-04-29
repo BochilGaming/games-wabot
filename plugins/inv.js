@@ -1,3 +1,4 @@
+let levelling = require('../lib/levelling')
 let handler = async (m, { conn, usedPrefix }) => {
     let healt = global.DATABASE._data.users[m.sender].healt
     let armor = global.DATABASE._data.users[m.sender].armor 
@@ -20,6 +21,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let money = global.DATABASE._data.users[m.sender].money
     let exp = global.DATABASE._data.users[m.sender].exp
     let sampah = global.DATABASE._data.users[m.sender].sampah
+    let { max } = levelling.xpRange(level, exp, global.multiplier)
     let name = m.fromMe ? conn.user : conn.contacts[m.sender]
     let sortedmoney = Object.entries(global.DATABASE.data.users).sort((a, b) => b[1].money - a[1].money)
     let sortedlevel = Object.entries(global.DATABASE.data.users).sort((a, b) => b[1].level - a[1].level)
@@ -65,7 +67,7 @@ Kucing: *${kucing == 0 ? 'Tidak Punya' : '' || kucing == 1 ? 'Level 1' : '' || k
 *Proges*\n
 ╭────────────────
 │Level *${level}* To Level *${level}*
-│Exp *${exp}* -> *${level * 100}*
+│Exp *${exp}* -> *${max}*
 ╰────────────────
 ╭────────────────
 │Rubah ${rubah == 0 ? 'Tidak Punya' : '' || rubah > 0 && rubah < 5 ? `Level *${rubah}* To level *${rubah + 1}*\n│Exp *${_rubah}* -> *${rubah *100}*` : '' || rubah == 5 ? '*Max Level*' : ''}

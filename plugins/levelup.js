@@ -3,10 +3,10 @@ let levelling = require('../lib/levelling')
 let handler = m => {
   let user = global.DATABASE.data.users[m.sender]
   if (!levelling.canLevelUp(user.level, user.exp, global.multiplier)) {
-    let { min, xp, max } = levelling.xpRange(user.level, global.multiplier)
+    let { min, max } = levelling.xpRange(user.level, user.exp, global.multiplier)
     throw `
-Level *${user.level} (${user.exp - min}/${xp})*
-Kurang *${max - user.exp}* lagi!
+Level *${user.level} (${user.exp}/${max})*
+Kurang *${min} XP* lagi!
 `.trim()
   }
   user.level++
@@ -17,7 +17,7 @@ Selamat, anda telah naik level!
 }
 
 handler.help = ['levelup']
-handler.tags = ['xp']
+handler.tags = ['rpg']
 
 handler.command = /^levelup$/i
 
