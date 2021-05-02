@@ -5,6 +5,7 @@ let handler = async (m, { conn, args, DevMode }) => {
             let mention = args[0].replace(/[@.+-]/g, '').replace(' ', '')
             let ban = (mention + '@s.whatsapp.net')
             global.DATABASE._data.users[ban].Banneduser = false
+            global.DATABASE._data.users[ban].BannedReason = ''
             conn.reply(m.chat, 'Berhasil Unbanned User', m)
         } else conn.reply(m.chat, 'Siapa yang mau di unbanned om?', m)
     } catch (e) {
