@@ -3,8 +3,10 @@ let handler = async (m, { conn, args, DevMode }) => {
     try {
         if (args.length > 0) {
             let mention = args[0].replace(/[@.+-]/g, '').replace(' ', '')
+            let txt = (args.length > 1 ? args.slice(1).join(' ') : '')
             let ban = (mention + '@s.whatsapp.net')
             global.DATABASE._data.users[ban].Banneduser = true
+            global.DATABASE._data.users[ban].BannedReason = txt
             conn.reply(m.chat, `berhasil banned`, m)
         } else conn.reply(m.chat, 'Siapa yang mau di banned om?', m)
     } catch (e) {
