@@ -275,7 +275,7 @@ module.exports = {
             if (chat.isBanned == true || user.Banneduser == true) {
                 if (name != 'math_answer.js' && name != '_afk.js' && name != 'leveling.js') {       
                     this.reply(m.chat, `
-*Anda Terbanned*
+*Anda Terbanned* ${user.BannedReason ? `*${user.BannedReason}*` : ''}
 Join Official Group *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
 
 ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
