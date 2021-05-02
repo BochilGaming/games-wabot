@@ -333,7 +333,7 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
           if (new Date - global.DATABASE._data.users[m.sender].antispamlastclaim > 5000) {
             global.DATABASE._data.users[m.sender].antispam = 0
             global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
-          } else if (global.DATABASE._data.users[m.sender].antispam > 13) {
+          } else if (global.DATABASE._data.users[m.sender].antispam > 7) {
               
               global.DATABASE._data.users[m.sender].antispam = 0
               global.DATABASE._data.users[m.sender].warn += 1
@@ -347,6 +347,8 @@ ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
 *Atau hubungi*
 ${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
 ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
+              global.DATABASE._data.users[ban].BannedReason = 'Spam!!'
+              global.DATABASE._data.users[ban].Banneduser = 'true'
               for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) this.sendMessage(jid, `${m.sender.split`@`[0]} Spamm!!!`)
               }
           }
