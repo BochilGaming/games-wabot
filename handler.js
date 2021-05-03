@@ -348,7 +348,7 @@ ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
 ${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
 ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
               global.DATABASE._data.users[ban].BannedReason = 'Spam!!'
-              global.DATABASE._data.users[ban].Banneduser = 'true'
+              global.DATABASE._data.users[ban].Banneduser = true
               for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) this.sendMessage(jid, `${m.sender.split`@`[0]} Spamm!!!`)
               }
           }
