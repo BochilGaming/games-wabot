@@ -1,6 +1,9 @@
 let buatall = 1
 let { MessageType } = require('@adiwajshing/baileys')
 let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
+    conn.judi = conn.judi ? conn.judi : {}
+    if (m.chat in conn.judi) return m.reply ('Masih ada yang melakukan judi disini, tunggu sampai selesai!!')
+    else conn.judi[m.chat] = true
     try {
         let randomaku = `${Math.floor(Math.random() * 101)}`.trim()
         let randomkamu = `${Math.floor(Math.random() * 81)}`.trim() //hehe Biar Susah Menang :v
@@ -18,6 +21,9 @@ let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
             } else if (Aku < Kamu) {
                 global.DATABASE._data.users[m.sender].money += count * 2
                 conn.reply(m.chat, `aku roll:${Aku}\nKamu roll: ${Kamu}\n\nkamu *Menang*, kamu Mendapatkan ${count * 2} Money`.trim(), m)
+            } else {
+                global.DATABASE._data.users[m.sender].money += count * 1
+                conn.reply(m.chat, `aku roll:${Aku}\nKamu roll: ${Kamu}\n\nkamu *Seri*, kamu Mendapatkan ${count * 1} Money`.trim(), m)
             }
         } else conn.reply(m.chat, `uang kamu tidak cukup untuk melakukan judi sebesar ${count} Money`.trim(), m)
     } catch (e) {
@@ -28,6 +34,8 @@ let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
                 conn.sendMessage(jid, 'Judi.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
             }
         }
+    } finally {
+        delete conn.judi[m.chat]
     }
 }
     
