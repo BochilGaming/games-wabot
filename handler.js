@@ -12,76 +12,37 @@ module.exports = {
         let user
         if (user = global.DATABASE._data.users[m.sender]) {
             if (!isNumber(user.healt)) user.healt = 0
-            if (!isNumber(user.healtlimit)) user.healtlimit = 10
-            if (!isNumber(user.healtlastclaim)) user.healtlastclaim = 0  
-            
             if (!isNumber(user.level)) user.level = 0
-            if (!isNumber(user.levellimit)) user.levellimit = 10
-            if (!isNumber(user.lastclaimlevel)) user.lastclaimlevel = 0
-            
             if (!isNumber(user.exp)) user.exp = 0
             if (!isNumber(user.limit)) user.limit = 10
             if (!isNumber(user.lastclaim)) user.lastclaim = 0
-            
             if (!isNumber(user.money)) user.money = 0
-            if (!isNumber(user.moneylimit)) user.moneylimit = 10
-            if (!isNumber(user.moneylastclaim)) user.moneylastclaim = 0
             
             if (!isNumber(user.diamond)) user.diamond = 0
-            if (!isNumber(user.diamondlimit)) user.diamondlimit = 10
-            if (!isNumber(user.diamondlastclaim)) user.diamondlastclaim = 0
-            
+
             if (!isNumber(user.common)) user.common = 0
-            if (!isNumber(user.commonlimit)) user.commonlimit = 10
-            if (!isNumber(user.commonlastclaim)) user.commonlastclaim = 0
-            
             if (!isNumber(user.uncommon)) user.uncommon = 0
-            if (!isNumber(user.uncommonlimit)) user.uncommonlimit = 10
-            if (!isNumber(user.uncommonlastclaim)) user.uncommonlastclaim = 0
-            
             if (!isNumber(user.mythic)) user.mythic = 0
-            if (!isNumber(user.mythiclimit)) user.mythiclimit = 10
-            if (!isNumber(user.mythiclastclaim)) user.mythiclastclaim = 0
-            
             if (!isNumber(user.legendary)) user.legendary = 0
-            if (!isNumber(user.legendarylimit)) user.legendarylimit = 10
-            if (!isNumber(user.legendarylastclaim)) user.legendarylastclaim = 0
-        
             if (!isNumber(user.pet)) user.pet = 0
-            if (!isNumber(user.petlimit)) user.petlimit = 10
-            if (!isNumber(user.petlastclaim)) user.petlastclaim = 0
         
             if (!isNumber(user.potion)) user.potion = 0
-            if (!isNumber(user.potionlimit)) user.potionlimit = 10
-            if (!isNumber(user.potionlastclaim)) user.potionlastclaim = 0
             if (!isNumber(user.sampah)) user.sampah = 0
-            if (!isNumber(user.sampahlimit)) user.sampahlimit = 10
-            if (!isNumber(user.sampahlastclaim)) user.sampahlastclaim = 0
-        
             if (!isNumber(user.armor)) user.armor = 0
-            if (!isNumber(user.armorlimit)) user.armorlimit = 10
-            if (!isNumber(user.armorlastclaim)) user.armorlastclaim = 0
-        
+            
             if (!isNumber(user.kucing)) user.kucing = 0
-            if (!isNumber(user.kucinglimit)) user.kucinglimit = 10
             if (!isNumber(user.kucinglastclaim)) user.kucinglastclaim = 0
-        
             if (!isNumber(user.kuda)) user.kuda = 0
-            if (!isNumber(user.kudalimit)) user.kudalimit = 10
             if (!isNumber(user.kudalastclaim)) user.kudalastclaim = 0
-        
             if (!isNumber(user.rubah)) user.rubah = 0
-            if (!isNumber(user.rubahlimit)) user.rubahlimit = 10
             if (!isNumber(user.rubahlastclaim)) user.rubahlastclaim = 0
             if (!isNumber(user.anjing)) user.anjing = 0
-            if (!isNumber(user.anjinglimit)) user.anjinglimit = 10
             if (!isNumber(user.anjinglastclaim)) user.anjinglastclaim = 0
+
             if (!'Banneduser' in user) user.Banneduser = false
             if (!'BannedReason' in user) user.BannedReason = ''
-        
             if (!isNumber(user.warn)) user.warn = 0
-            if (!isNumber(user.warnlimit)) user.warnlimit = 10
-            if (!isNumber(user.warnlastclaim)) user.warnlastclaim = 0
+
             if (!isNumber(user.afk)) user.afk = -1
             if (!'afkReason' in user) user.afkReason = ''
         
@@ -90,69 +51,50 @@ module.exports = {
             if (!isNumber(user.anakrubah)) user.anakrubah = 0
             if (!isNumber(user.anakanjing)) user.anakanjing = 0
             if (!isNumber(user.makananpet)) user.makananpet = 0
+
             if (!isNumber(user.antispam)) user.antispam = 0
             if (!isNumber(user.antispamlastclaim)) user.antispamlastclaim = 0
+
             if (!isNumber(user.kayu)) user.kayu = 0
             if (!isNumber(user.batu)) user.batu = 0
             if (!isNumber(user.string)) user.string = 0
             if (!isNumber(user.sword)) user.sword = 0
+            if (!isNumber(user.pickaxe)) user.pickaxe = 0
+            if (!isNumber(user.fishingrod)) user.fishingrod = 0
+
+            if (!isNumber(user.lastadventure)) user.lastadventure = 0
+            if (!isNumber(user.lastfishing)) user.lastfishing = 0
+            if (!isNumber(user.lastdungeon)) user.lastdungeon = 0
+            if (!isNumber(user.lastduel)) user.lastduel = 0
+            if (!isNumber(user.lastweekly)) user.lastweekly = 0
+            if (!isNumber(user.lastmonthly)) user.lastmontly = 0
         } else global.DATABASE._data.users[m.sender] = {
         healt: 100,
-        healtlimit: 999999,
-        healtlastclaim: 0,
         level: 0,
-        levellimit: 10,
-        lastclaimlevel: 0,
         exp: 0,
         limit: 10,
         lastclaim: 0,
         money: 0,
-        moneylimit: 999999,
-        moneylastclaim: 0,
         diamond: 0,
-        diamondlimit: 999999,
-        diamondlastclaim: 0,
         common: 0,
-        commonlimit: 999999,
-        commonlastclaim: 0,
         uncommon: 0,
-        uncommonlimit: 999999,
-        uncommonlastclaim: 0,
         mythic: 0,
-        mythiclimit: 999999,
-        mythiclastclaim: 0,
         legendary: 0,
-        legendarylimit: 999999,
-        legendarylastclaim: 0,
         pet: 0,
-        petlimit: 999999,
-        petlastclaim: 0,
         potion: 0,
-        potionlimit: 999999,
-        potionlastclaim: 0,
         sampah: 0,
-        sampahlimit: 999999,
-        sampahlastclaim: 0,
         armor: 0,
-        armorlimit: 999999,
-        armorlastclaim: 0,
         kucing: 0,
-        kucinglimit: 999999,
         kucinglastclaim: 0,
         kuda: 0,
-        kudalimit: 999999,
         kudalastclaim: 0,
         rubah: 0,
-        rubahlimit: 999999,
         rubahlastclaim: 0,
         anjing: 0,
-        anjinglimit: 999999,
         anjinglastclaim: 0,
         Banneduser: false,
         BannedReason: '',
         warn: 0,
-        warnlimit: 999999,
-        warnlastclaim: 0,
         afk: -1,
         afkReason: '',
         anakkucing: 0,
@@ -165,7 +107,15 @@ module.exports = {
         kayu: 0,
         batu: 0,
         string: 0,
-        sword: 0
+        sword: 0,
+        pickaxe: 0,
+        fishingrod: 0,
+        lastadventure: 0,
+        lastfishing: 0,
+        lastdungeon: 0,
+        lastduel: 0,
+        lastweekly: 0,
+        lastmonthly: 0
         }
     
         let chat
@@ -174,7 +124,7 @@ module.exports = {
           if (!'welcome' in chat) chat.welcome = false
           if (!'sWelcome' in chat) chat.sWelcome = ''
           if (!'sBye' in chat) chat.sBye = ''
-          if (!'delete' in chat) chat.delete = true
+          if (!'delete' in chat) chat.delete = false
           if (!'antiLink' in chat) chat.antiLink = false
           if (!'antiToxic' in chat) chat.antiToxic = true
           if (!'antiVirtex' in chat) chat.antiVirtex = true
@@ -183,7 +133,7 @@ module.exports = {
           welcome: false,
           sWelcome: '',
           sBye: '',
-          delete: true,
+          delete: false,
           antiLink: false,
           antiToxic: true,
           antiVirtex: true
@@ -275,7 +225,7 @@ module.exports = {
             if (chat.isBanned == true || user.Banneduser == true) {
                 if (name != 'math_answer.js' && name != '_afk.js' && name != 'leveling.js') {       
                     this.reply(m.chat, `
-*Anda Terbanned* ${user.BannedReason ? `*${user.BannedReason}*` : ''}
+*Anda Terbanned* ${user.BannedReason ? `Karena *${user.BannedReason}*` : ''}
 Join Official Group *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
 
 ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
@@ -333,13 +283,15 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
           if (new Date - global.DATABASE._data.users[m.sender].antispamlastclaim > 5000) {
             global.DATABASE._data.users[m.sender].antispam = 0
             global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
-          } else if (global.DATABASE._data.users[m.sender].antispam > 7) {
+          } else if (global.DATABASE._data.users[m.sender].antispam > 8) {
               
               global.DATABASE._data.users[m.sender].antispam = 0
               global.DATABASE._data.users[m.sender].warn += 1
               global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
               this.reply(m.chat, '*You get a warn for being spammed*\n*remember if you get a warn 4 times you will automatically be BANNED*', m)
               if (global.DATABASE._data.users[m.sender].warn == 3) {
+              global.DATABASE._data.users[m.sender].BannedReason = 'Spam!!!'
+              global.DATABASE._data.users[m.sender].Banneduser = true
               this.reply(m.chat, `*You got banned for spam*
 Join Official *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
 ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
@@ -347,8 +299,6 @@ ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
 *Atau hubungi*
 ${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
 ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
-              global.DATABASE._data.users[ban].BannedReason = 'Spam!!'
-              global.DATABASE._data.users[ban].Banneduser = true
               for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) this.sendMessage(jid, `${m.sender.split`@`[0]} Spamm!!!`)
               }
           }
@@ -483,9 +433,19 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
     }
   },
   async delete(m) {
-    if (m.key.fromMe) return
-    let chat = global.DATABASE._data.chats[m.key.remoteJid]
-    if (chat.delete) return
+      if (m.key.fromMe) return
+      let chat = global.DATABASE._data.chats[m.key.remoteJid]
+      if (!chat.delete) return
+      await this.reply(m.key.remoteJid, `
+Terdeteksi @${m.participant.split`@`[0]} telah menghapus pesan
+Untuk mematikan fitur ini, ketik
+*.enable delete*
+`.trim(), m.message, {
+        contextInfo: {
+            mentionedJid: [m.participant]
+        }
+    })
+    this.copyNForward(m.key.remoteJid, m.message).catch(e => console.log(e, m))
   }
 }
 
