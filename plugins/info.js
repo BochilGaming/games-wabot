@@ -48,7 +48,7 @@ ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n�
 }
 handler.help = ['info']
 handler.tags = ['about']
-handler.command = /^(info|bot|hallo|halo|hi)$/i
+handler.command = /^(info(bot)?)$/i
 
 handler.fail = null
 
