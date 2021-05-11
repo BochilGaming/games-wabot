@@ -439,7 +439,7 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
       await this.reply(m.key.remoteJid, `
 Terdeteksi @${m.participant.split`@`[0]} telah menghapus pesan
 Untuk mematikan fitur ini, ketik
-*.enable delete*
+*.disable delete*
 `.trim(), m.message, {
         contextInfo: {
             mentionedJid: [m.participant]
