@@ -13,6 +13,7 @@ let handler = async (m, { conn, usedPrefix, command, text, args, isROwner }) => 
       chat.antiToxic = !isEnable
       break
     case 'antidelete':
+    case 'delete':
       chat.delete = !isEnable
       break
     case 'public':
