@@ -14,7 +14,7 @@ let handler = async (m, { conn, args, DevMode }) => {
         else m.reply('Tag foto/videonya!!')
     } catch (e) {
         console.log(e)
-        m.reply('Error!!')
+        m.reply('Conversasion failed!!')
         if (DevMode) {
             let file = require.resolve(__filename)
             for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
@@ -25,7 +25,6 @@ let handler = async (m, { conn, args, DevMode }) => {
         if (stiker) conn.sendMessage(m.chat, stiker, MessageType.sticker, {
             quoted: m
         })
-        else return m.reply('Conversasion failed!! ')
     }
 }
 handler.help = ['stiker (caption|reply media)', 'sgif (caption|reply media)']
