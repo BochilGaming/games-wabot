@@ -124,7 +124,7 @@ module.exports = {
           if (!'welcome' in chat) chat.welcome = false
           if (!'sWelcome' in chat) chat.sWelcome = ''
           if (!'sBye' in chat) chat.sBye = ''
-          if (!'delete' in chat) chat.delete = false
+          if (!'delete' in chat) chat.delete = true
           if (!'antiLink' in chat) chat.antiLink = false
           if (!'antiToxic' in chat) chat.antiToxic = true
           if (!'antiVirtex' in chat) chat.antiVirtex = true
@@ -133,7 +133,7 @@ module.exports = {
           welcome: false,
           sWelcome: '',
           sBye: '',
-          delete: false,
+          delete: true,
           antiLink: false,
           antiToxic: true,
           antiVirtex: true
@@ -434,6 +434,7 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
   },
   async delete(m) {
       if (m.key.fromMe) return
+      if (m.key.remoteJid === 'status@broadcast') return
       let chat = global.DATABASE._data.chats[m.key.remoteJid]
       if (!chat.delete) return
       await this.reply(m.key.remoteJid, `
