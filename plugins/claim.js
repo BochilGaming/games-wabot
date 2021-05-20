@@ -1,12 +1,12 @@
 let handler = async (m, { conn }) => {
-    let __timers = (new Date - global.DATABASE._data.users[m.sender].moneylastclaim)
+    let __timers = (new Date - global.DATABASE._data.users[m.sender].lastclaim)
     let _timers = (43200000 - __timers)
     let timers = clockString(_timers) 
-    if (new Date - global.DATABASE._data.users[m.sender].moneylastclaim > 43200000) {
+    if (new Date - global.DATABASE._data.users[m.sender].lastclaim > 43200000) {
         conn.reply(m.chat, `Anda sudah mengklaim dan mendapatkan 1000 money dan 1 potion`, m)
         global.DATABASE._data.users[m.sender].money += 1000
         global.DATABASE._data.users[m.sender].potion += 1
-        global.DATABASE._data.users[m.sender].moneylastclaim = new Date * 1
+        global.DATABASE._data.users[m.sender].lastclaim = new Date * 1
     } else conn.reply(m.chat, `silahkan tunggu *${timers}* lagi untuk bisa mengclaim lagi`, m)
 }
 handler.help = ['claim']
