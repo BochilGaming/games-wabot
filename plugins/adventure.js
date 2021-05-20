@@ -5,7 +5,7 @@ let handler = async (m, { conn, usedPrefix, DevMode }) => {
         let _timers = (300000 - __timers) 
         let timers = clockString(_timers)
         if (global.DATABASE._data.users[m.sender].healt > 79) {
-            if (new Date - global.DATABASE._data.users[m.sender].lastclaim > 300000) {
+            if (new Date - global.DATABASE._data.users[m.sender].lastadventure > 300000) {
             let armor = global.DATABASE._data.users[m.sender].armor
             let rubah = global.DATABASE._data.users[m.sender].rubah
             let kuda = global.DATABASE._data.users[m.sender].kuda
@@ -54,7 +54,7 @@ Nyawa mu berkurang -${healt * 1} karena Kamu telah berpetualang sampai ${pickRan
             global.DATABASE._data.users[m.sender].common += common * 1 
             global.DATABASE._data.users[m.sender].uncommon += uncommon * 1
             global.DATABASE._data.users[m.sender].sampah += sampah * 1
-            global.DATABASE._data.users[m.sender].lastclaim = new Date * 1
+            global.DATABASE._data.users[m.sender].lastadventure = new Date * 1
             } else conn.reply(m.chat, `Anda sudah berpetualang dan kelelahan, silahkan coba *${timers}* lagi`, m)
         } else conn.reply(m.chat, 'Minimal 80 health untuk bisa berpetualang, beli nyawa dulu dengan ketik *' + usedPrefix + 'shop buy potion <jumlah>*\ndan ketik *' + usedPrefix + 'use potion <jumlah>*\n\n_Untuk mendapat money dan potion gratis ketik_ *' + usedPrefix + 'claim*', m)
     } catch (e) {
