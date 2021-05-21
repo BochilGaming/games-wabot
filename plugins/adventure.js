@@ -1,7 +1,7 @@
 let { MessageType } = require('@adiwajshing/baileys')
 let handler = async (m, { conn, usedPrefix, DevMode }) => { 
     try { 
-        let __timers = (new Date - global.DATABASE._data.users[m.sender].lastclaim)
+        let __timers = (new Date - global.DATABASE._data.users[m.sender].lastadventure)
         let _timers = (300000 - __timers) 
         let timers = clockString(_timers)
         if (global.DATABASE._data.users[m.sender].healt > 79) {
