@@ -46,7 +46,7 @@ let pname = conn.getName(m.sender)
 
 let cdm = `${MeNit(new Date - player.Thunt)}`
 let cds = `${DeTik(new Date - player.Thunt)}`
-let cd1 = Math.ceil(02 - cdm)
+let cd1 = Math.ceil(01 - cdm)
 let cd2 = Math.ceil(60 - cds)
 
 let area_monsters = monsters.filter(monster => { return  monster.area === player.area })
@@ -60,25 +60,23 @@ let sum = 82 * player.area - 59
 let dmg = player.attack + player.defense - sum
     dmg = dmg < 0 ? Math.abs(dmg) : 0
 
-player.hp -= dmg
-player.Thunt = new Date * 1
+player.healt -= dmg
+player.Thunt = new Date * 1 // waktu hunt 2menit
 
-if (player.hp < 0) {
+if (player.healt < 0) {
 	let msg = `*${pname}* Anda Mati Di Bunuh Oleh ${monsterName}`
 	 if (player.level > 1) {
 	  player.level -= 1
-	  msg += `\nLevel Anda Turun 1 Karena Mati Saat Berburu` 
-          }
-	  player.exp = 0
-	  player.hp = player.max_hp
+	  msg += `\nLevel Anda Turun 1 Karena Mati Saat Berburu!')
+	  player.healt = player.max_healt
           m.reply(msg)
 	  return
 	}
 
-player.coins += coins
+player.money += coins
 player.exp += exp
 
- let pesan = `*${pname}* Menemukan Dan Membunuh *${monsterName}*\nMendapatkan ${new Intl.NumberFormat('en-US').format(coins)} coins & ${new Intl.NumberFormat('en-US').format(exp)} XP\nBerkurang -${dmg}Hp, Tersisa ${player.hp}/${player.max_hp}`
+ let pesan = `*${pname}* Menemukan Dan Membunuh *${monsterName}*\nMendapatkan ${new Intl.NumberFormat('en-US').format(coins)} coins & ${new Intl.NumberFormat('en-US').format(exp)} XP\nBerkurang -${dmg}Hp, Tersisa ${player.healt}/${player.max_healt}`
  m.reply(pesan)
  } else throw `Tunggu *00:${cd1}:${cd2}* Untuk Berburu Lagi`
 }
