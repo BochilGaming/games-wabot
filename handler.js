@@ -68,6 +68,14 @@ module.exports = {
             if (!isNumber(user.lastduel)) user.lastduel = 0
             if (!isNumber(user.lastweekly)) user.lastweekly = 0
             if (!isNumber(user.lastmonthly)) user.lastmontly = 0
+//males ngurusin :vv
+          if (!isNumber(user.Thunt)) user.Thunt = 0
+          if (!isNumber(user.area)) user.area = 1
+          if (!isNumber(user.max_area)) user.max_area = 1
+          if (!isNumber(user.attack)) user.attack = 1
+          if (!isNumber(user.defense)) user.defense = 1
+          if (!isNumber(user.max_hp)) user.max_healt = 100
+
         } else global.DATABASE._data.users[m.sender] = {
         healt: 100,
         level: 0,
