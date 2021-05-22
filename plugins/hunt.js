@@ -68,6 +68,7 @@ if (player.healt < 0) {
 	 if (player.level > 1) {
 	  player.level -= 1
 	  msg += `\nLevel Anda Turun 1 Karena Mati Saat Berburu!')
+          } 
 	  player.healt = player.max_healt
           m.reply(msg)
 	  return
