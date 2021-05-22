@@ -9,8 +9,9 @@ module.exports = {
       m.exp = 0
       m.limit = false
       try {
-        let user
-        if (user = global.DATABASE._data.users[m.sender]) {
+        let user = global.DATABASE._data.users[m.sender]
+        if (typeof user !== 'object') global.DATABASE._data.users[m.sender] = {}
+        if (user) {
             if (!isNumber(user.healt)) user.healt = 0
             if (!isNumber(user.level)) user.level = 0
             if (!isNumber(user.exp)) user.exp = 0
@@ -19,6 +20,7 @@ module.exports = {
             if (!isNumber(user.money)) user.money = 0
             
             if (!isNumber(user.diamond)) user.diamond = 0
+            if (!isNumber(user.iron)) user.iron = 0
 
             if (!isNumber(user.common)) user.common = 0
             if (!isNumber(user.uncommon)) user.uncommon = 0
@@ -52,20 +54,21 @@ module.exports = {
             if (!isNumber(user.anakanjing)) user.anakanjing = 0
             if (!isNumber(user.makananpet)) user.makananpet = 0
 
-            if (!isNumber(user.antispam)) user.antispam = 0
-            if (!isNumber(user.antispamlastclaim)) user.antispamlastclaim = 0
-
             if (!isNumber(user.kayu)) user.kayu = 0
             if (!isNumber(user.batu)) user.batu = 0
             if (!isNumber(user.string)) user.string = 0
             if (!isNumber(user.sword)) user.sword = 0
+            if (!isNumber(user.sworddurability)) user.sworddurability = 0
             if (!isNumber(user.pickaxe)) user.pickaxe = 0
+            if (!isNumber(user.pickaxedurability)) user.pickaxedurability = 0
             if (!isNumber(user.fishingrod)) user.fishingrod = 0
+            if (!isNumber(user.fishingroddurability)) user.fishingroddurability = 0
 
             if (!isNumber(user.lastadventure)) user.lastadventure = 0
             if (!isNumber(user.lastfishing)) user.lastfishing = 0
             if (!isNumber(user.lastdungeon)) user.lastdungeon = 0
             if (!isNumber(user.lastduel)) user.lastduel = 0
+            if (!isNumber(user.lastmining)) user.lastmining = 0
             if (!isNumber(user.lastweekly)) user.lastweekly = 0
             if (!isNumber(user.lastmonthly)) user.lastmontly = 0
         } else global.DATABASE._data.users[m.sender] = {
@@ -76,6 +79,7 @@ module.exports = {
         lastclaim: 0,
         money: 0,
         diamond: 0,
+        iron: 0,
         common: 0,
         uncommon: 0,
         mythic: 0,
@@ -102,29 +106,32 @@ module.exports = {
         anakrubah: 0,
         anakanjing: 0,
         makananpet: 0,
-        antispam: 0,
-        antispamlastclaim: 0,
         kayu: 0,
         batu: 0,
         string: 0,
         sword: 0,
+        sworddurability: 0,
         pickaxe: 0,
+        pickaxedurability: 0,
         fishingrod: 0,
+        fishingroddurability: 0,
         lastadventure: 0,
         lastfishing: 0,
         lastdungeon: 0,
         lastduel: 0,
+        lastmining: 0,
         lastweekly: 0,
         lastmonthly: 0
         }
     
-        let chat
-        if (chat = global.DATABASE._data.chats[m.chat]) {
+        let chat = global.DATABASE._data.chats[m.chat]
+        if (typeof chat !== 'object') global.DATABASE._data.chats[m.chat] = {}
+        if (chat) {
           if (!'isBanned' in chat) chat.isBanned = false
           if (!'welcome' in chat) chat.welcome = false
           if (!'sWelcome' in chat) chat.sWelcome = ''
           if (!'sBye' in chat) chat.sBye = ''
-          if (!'delete' in chat) chat.delete = true
+          if (!'delete' in chat) chat.delete = false
           if (!'antiLink' in chat) chat.antiLink = false
           if (!'antiToxic' in chat) chat.antiToxic = true
           if (!'antiVirtex' in chat) chat.antiVirtex = true
@@ -133,24 +140,16 @@ module.exports = {
           welcome: false,
           sWelcome: '',
           sBye: '',
-          delete: true,
+          delete: false,
           antiLink: false,
           antiToxic: true,
           antiVirtex: true
         }
       } catch (e) {
-        console.log(e, global.DATABASE.data)
+        console.error(e)
       }
       
       if (!m.fromMe && opts['self']) return
-      
-        /*Max Healt And Minimum Health*/
-      if (global.DATABASE._data.users[m.sender].healt > 100) {
-          global.DATABASE._data.users[m.sender].healt = 100
-      }
-      if (global.DATABASE._data.users[m.sender].healt < 0) {
-          global.DATABASE._data.users[m.sender].healt = 0
-      }
       
 /*jika Ada Yang Gunain Bot Di Status, Nanti Gk Akan Muncul Apa Apa*/
       if (m.chat == 'status@broadcast') return
@@ -159,6 +158,15 @@ module.exports = {
       conn.chatRead(m.chat)
       if (typeof m.text !== 'string') m.text = ''
       if (m.isBaileys) return
+
+      for (let name in global.plugins) {
+        let plugin = global.plugins[name]
+        if (!plugin) continue
+        if (plugin.disabled) continue
+        if (!plugin.all) continue
+        await plugin.all.call(this, m)
+      }
+
       m.exp += Math.ceil(Math.random() * 10)
     	let usedPrefix
       let _user = global.DATABASE.data && global.DATABASE.data.users && global.DATABASE.data.users[m.sender]
@@ -278,35 +286,6 @@ ${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').j
             continue
           }
           
-          /*Anti Spamm*/
-          global.DATABASE._data.users[m.sender].antispam += 1
-          if (new Date - global.DATABASE._data.users[m.sender].antispamlastclaim > 5000) {
-            global.DATABASE._data.users[m.sender].antispam = 0
-            global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
-          } else if (global.DATABASE._data.users[m.sender].antispam > 8) {
-              
-              global.DATABASE._data.users[m.sender].antispam = 0
-              global.DATABASE._data.users[m.sender].warn += 1
-              global.DATABASE._data.users[m.sender].antispamlastclaim = new Date * 1
-              this.reply(m.chat, '*You get a warn for being spammed*\n*remember if you get a warn 4 times you will automatically be BANNED*', m)
-              if (global.DATABASE._data.users[m.sender].warn == 3) {
-              global.DATABASE._data.users[m.sender].BannedReason = 'Spam!!!'
-              global.DATABASE._data.users[m.sender].Banneduser = true
-              this.reply(m.chat, `*You got banned for spam*
-Join Official *${conn.getName(conn.user.jid)}* untuk keterangan lebih lanjut
-${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
-
-*Atau hubungi*
-${(global.owner).map((v, i) => 'Owner ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}
-${(global.mods).map((v, i) => 'Moderator ' + (i + 1) + ' *: wa.me/' + v + '*').join`\n`}`.trim(), m)
-              for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) this.sendMessage(jid, `${m.sender.split`@`[0]} Spamm!!!`)
-              }
-          }
-          
-    /*Fix Error Money*/
-          if (global.DATABASE._data.users[m.sender].money > 99999999) {
-              global.DATABASE._data.users[m.sender].money = 99999999
-          }
 
           m.isCommand = true
           let xp = 'exp' in plugin ? parseInt(plugin.exp) : 6 // XP Earning per command
