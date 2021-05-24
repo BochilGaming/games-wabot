@@ -7,7 +7,9 @@ let handler = async (m, { conn, text }) => {
     let img = await ht(text ? text : ':v')
     console.log(img)
     conn.sendFile(m.chat, fs.readFileSync(img), 'Harta Tahta.png', '*© Nurutomo*\nMade with FFmpeg', m)
-    fs.unlinkSync(img)
+    setTimeout(() => {
+      fs.unlinkSync(img)
+    }, 2000);
   } finally {
     delete conn.hartatahta[m.chat]
   }
