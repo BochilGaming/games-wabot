@@ -5,7 +5,9 @@ let handler = async (m, { conn, text }) => {
   m.reply('_Sedang membuat..._\n*Mohon tunggu sekitar 1 menit*')
   try {
     let img = await ht(text ? text : ':v')
-    conn.sendFile(m.chat, img, 'Harta Tahta.png', '*© Nurutomo*\nMade with FFmpeg', m)
+    console.log(img)
+    conn.sendFile(m.chat, fs.readFileSync(img), 'Harta Tahta.png', '*© Nurutomo*\nMade with FFmpeg', m)
+    fs.unlinkSync(img)
   } finally {
     delete conn.hartatahta[m.chat]
   }
@@ -64,8 +66,8 @@ function ht(text = '') {
     .on('error', reject)
     .on('close', () => {
       try {
-        resolve(fs.readFileSync(o))
-        fs.unlinkSync(o)
+        resolve(o)
+        
       } catch (e) {
         reject(e)
       }
