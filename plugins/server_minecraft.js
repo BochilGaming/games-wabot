@@ -1,52 +1,56 @@
 let { MessageType } = require('@adiwajshing/baileys')
-const util = require('minecraft-server-util')
+let fetch = require('node-fetch')
 let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
     try {
         let type = (args[0] || '').toLowerCase()
         switch (type) {
             case 'bedrock':
-                let _data = [args[1], args.length < 3 ? 19132 : args[2] == /([1-9])/i ? args[2] : 19132]
-                let _port = (_data[1] * 1)
-                util.statusBedrock(_data[0], { port: 19132 })
-                    .then((response) => {
-                        console.log(response)
-                        m.reply(`*Info Server Bedrock Edition*\n\nip/host: *${response.host}*\nPort: *${response.port}*\nVersion: *${response.version}*\nProtocol Version: *${response.protocolVersion}*\nGamemode: *${response.gameMode}*\nOnline Player: *${response.onlinePlayers}*\nMax Player: *${response.maxPlayers}*\nMotd: *${response.motdLine1.descriptionText}*`)
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                        if (DevMode) {
-                            for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                                conn.sendMessage(jid, 'Server_Minecraft.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + error + '*', MessageType.text)
-                            }
-                        }
-                        m.reply(`Server *${_data[0]} : ${_data[1]}* Offline`)
-                    })
-                    break
-                case 'java':
-                    util.status(args[1]) // port is default 25565
-                    .then((response) => {
-                        console.log(response)
-                        m.reply(`*Info Server Java Edition*\n\nip/host: *${response.host}*\nPort: *${response.port}*\nVersion: *${response.version}*\nProtocol Version: *${response.protocolVersion}*\nOnline Player: *${response.onlinePlayers}*\nMax Player: *${response.maxPlayers}*\nMotd: *${response.description.descriptionText}*`)
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                        if (DevMode) {
-                            for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                                conn.sendMessage(jid, 'Server_Minecraft.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + error + '*', MessageType.text)
-                            }
-                        }
-                        m.reply(`Server *${args[1]}* Offline`)
-                    })
-                    break
-                default:
-                    return conn.reply(m.chat, `Gunakan format ${usedPrefix}server <bedrock | java> <ip> <port>\ncontoh penggunaan: *${usedPrefix}server bedrock play.nethergames.org 19132*`.trim(), m)
+                let res = await fetch(global.API('bg', '/minecraft', {
+                    server: type, 
+                    ip: args[1],
+                    port: !args[2] || isNaN(args[2]) ? 19132 : parseInt(args[2])
+                }))
+                let json = await res.json()
+                if (json.status !== true) throw json
+                m.reply(`
+*Ip:* ${json.result.ip}
+*Port:* ${json.result.port}
+*Motd:* ${json.result.motd1}
+*Gamemode:* ${json.result.gamemode}
+*Version:* ${json.result.version}
+*ProtocolVersion:* ${json.result.protocolVersion}
+*OnlinePlayer(s):* ${json.result.onlinePlayers}
+*MaxPlayer(s)* ${json.result.maxPlayers}
+`.trim())
+                break
+            case 'java':
+                let _res = await fetch(global.API('bg', '/minecraft', {
+                    server: type, 
+                    ip: args[1],
+                    port: !args[2] || isNaN(args[2]) ? 25565 : parseInt(args[2])
+                }))
+                let _json = await _res.json()
+                if (_json.status !== true) throw _json
+                m.reply(`
+*Ip:* ${_json.result.ip}
+*Port:* ${_json.result.port}
+*Motd:* ${_json.result.motd}
+*Version:* ${_json.result.version}
+*ProtocolVersion:* ${_json.result.protocolVersion}
+*OnlinePlayer(s):* ${_json.result.onlinePlayers}
+*MaxPlayer(s)* ${_json.result.maxPlayers}
+`.trim())
+                break
+            default:
+            return m.reply(`Gunakan format ${usedPrefix}server <bedrock | java> <ip> <port>\ncontoh penggunaan: *${usedPrefix}server bedrock play.nethergames.org 19132*`.trim())
         }
     } catch (e) {
         conn.reply(m.chat, `Gunakan format ${usedPrefix}server <bedrock | java> <ip> <port>\ncontoh penggunaan: *${usedPrefix}server bedrock play.nethergames.org 19132*`.trim(), m)
         console.log(e)
         if (DevMode) {
+            let file = require.resolve(__filename)
             for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'Server_Minecraft.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
+                conn.sendMessage(jid, file + ' error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
             }
         }
     }
@@ -55,16 +59,5 @@ let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
 handler.help = ['server <type> <ip> <port>']
 handler.tags = ['internet']
 handler.command = /^(server)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
-
-handler.admin = false
-handler.botAdmin = false
-
-handler.fail = null
-handler.money = 0
 
 module.exports = handler

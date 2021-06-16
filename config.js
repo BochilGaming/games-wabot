@@ -6,7 +6,8 @@ global.prems = [] // Premium user has unlimited limit
 global.APIs = { // API Prefix
   // name: 'https://website'
   nrtm: 'https://nurutomo.herokuapp.com',
-  xteam: 'https://api.xteam.xyz'
+  xteam: 'https://api.xteam.xyz',
+  bg: 'http://bochil.ddns.net'
 }
 global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
