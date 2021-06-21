@@ -23,6 +23,6 @@ let handler = async (m, { conn, text, isPrems }) => {
 }
 handler.help = ['image'].map(v => v + ' [gambar] | [jumlah]')
 handler.tags = ['internet', 'downloader']
-handler.command = /^((google)?image)$/i
+handler.command = /^((g(oogle)?)?im(g|age)2)$/i
 
 module.exports = handler

@@ -1,46 +1,45 @@
-// ariffb - http:/wa.me/6283128734012
 const translate = require('translate-google-api')
-const { MessageType } = require('@adiwajshing/baileys')
-let handler = async (m, { text, usedPrefix, DevMode }) => {
-    goblok = `contoh: \n${usedPrefix}tr kode bahasa|teks\n${usedPrefix}tr id|thankyou\n\nBahasa yang didukung: https://cloud.google.com/translate/docs/language`
-    if (!text) throw goblok
+const defaultLang = 'en'
+const tld = 'cn'
 
-    let [to, trans] = text.split`|`
+let handler = async (m, { args, usedPrefix, command }) => {
+    let err = `
+Contoh:
+${usedPrefix + command} <lang> [text]
+${usedPrefix + command} id your messages
 
-    if (!to) throw `Silahkan masukan kode bahasa\ncontoh: \n\n${usedPrefix}tr id|thankyou\n\nBahasa yang didukung: https://cloud.google.com/translate/docs/language`
-    if (!trans) throw `Silahkan masukan kalimat yang ingin diterjemahkan\ncontoh: \n\n${usedPrefix}tr id|thankyou`
+Daftar bahasa yang didukung: https://cloud.google.com/translate/docs/languages
+`.trim()
 
+    let lang = args[0]
+    let text = args.slice(1).join(' ')
+    if ((args[0] || '').length !== 2) {
+        lang = defaultLang
+        text = args.join(' ')
+    }
+    if (!text && m.quoted && m.quoted.text) text = m.quoted.text
+
+    let result
     try {
-        const result = await translate(`${trans}`, {
-            tld: "cn",
-            to: `${to}`,
+        result = await translate(`${text}`, {
+            tld,
+            to: lang,
         })
-        m.reply(`Pesan: ${trans}\n\nTerjemahan: ${result[0]}`)
-        console.log(result[0])
     } catch (e) {
-        throw goblok
-        if (DevMode) {
-            for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'Translate.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
-            }
-        }
+        result = await translate(`${text}`, {
+            tld,
+            to: defaultLang,
+        })
+        throw err
+    } finally {
+        m.reply(result[0])
     }
 
 }
-handler.help = ['translate'].map(v => v + ' <to>|<teks>')
+handler.help = ['translate'].map(v => v + ' <lang> <teks>')
 handler.tags = ['tools']
 handler.command = /^(tr(anslate)?)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
-
-handler.admin = false
-handler.botAdmin = false
-
+handler.limit = false
 handler.fail = null
 handler.exp = 0
-
 module.exports = handler
-
