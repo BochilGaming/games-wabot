@@ -1,13 +1,15 @@
 global.DeveloperMode = 'false' //true Or false
-global.linkGC = ['https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM']
+global.linkGC = ['https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM', 'https://chat.whatsapp.com/FrluVyY5kBRIhY6yKfH4DI']
 global.owner = ['6281390658325', '6282256115584', '6285713964963']// Put your number here
-global.mods = [] // Want some help?
+global.mods = ['13479805233'] // Want some help?
 global.prems = [] // Premium user has unlimited limit
 global.APIs = { // API Prefix
   // name: 'https://website'
   nrtm: 'https://nurutomo.herokuapp.com',
   xteam: 'https://api.xteam.xyz',
-  bg: 'http://bochil.ddns.net'
+  nzcha: 'http://nzcha-apii.herokuapp.com',
+  bg: 'http://bochil.ddns.net',
+  fdci: 'https://api.fdci.se'
 }
 global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
@@ -15,10 +17,10 @@ global.APIKeys = { // APIKey Here
 }
 
 // Sticker WM
-global.packname = 'I hope you\'re fine'
-global.author = 'Nurutomo'
+global.packname = 'wa.me/6285713964963'
+global.author = 'Metro Bot Is The Best'
 
-global.multiplier = 69 // The higher, The harder levelup
+global.multiplier = 39 // The higher, The harder levelup
 
 let fs = require('fs')
 let chalk = require('chalk')
