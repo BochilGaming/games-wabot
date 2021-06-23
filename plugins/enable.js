@@ -1,4 +1,4 @@
-let handler = async (m, { conn, usedPrefix, command, text, args, isROwner }) => {
+let handler = async (m, { conn, usedPrefix, command, text, args, isROwner, isOwner, isAdmin }) => {
   let isEnable = /true|enable|(turn)?on|1/i.test(command)
   let chat = global.DATABASE._data.chats[m.chat]
   let user = global.DATABASE._data.users[m.sender]
