@@ -459,6 +459,7 @@ module.exports = {
   },
   async delete(m) {
     if (m.key.fromMe) return
+    if (m.key.remoteJid == 'status@broadcast') return
     let chat = global.DATABASE._data.chats[m.key.remoteJid]
     if (chat.delete) return
     await this.reply(m.key.remoteJid, `
