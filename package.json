@@ -1,6 +1,6 @@
 {
   "name": "games-wabot",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "description": "Customizable WhatsApp Bot",
   "depecrated": false,
   "main": "index.js",
@@ -59,7 +59,6 @@
     "socket.io": "^4.0.1",
     "syntax-error": "^1.4.0",
     "terminal-image": "^1.2.1",
-    "translate-google-api": "^1.0.4",
     "nodemon": "^2.0.7",
     "url-regex": "^5.0.0",
     "xmldom": "^0.5.0",
