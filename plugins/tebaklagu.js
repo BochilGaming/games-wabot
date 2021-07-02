@@ -13,6 +13,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let res = await fetch(global.API('xteam', '/game/tebaklagu/', { id: '3AaKHE9ZMMEdyRadsg8rcy' }, 'APIKEY'))
     if (res.status !== 200) throw await res.text()
     let result = await res.json()
+    console.log(result)
     let json = result.result
     // if (!json.status) throw json
     let caption = `
