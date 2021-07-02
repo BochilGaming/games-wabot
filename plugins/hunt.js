@@ -53,46 +53,38 @@ let handler = async (m, { conn, text }) => {
 	let monster = area_monsters[Math.floor(Math.random() * area_monsters.length)]
 	let monsterName = monster.name.toUpperCase()
 
-	if (new Date - global.DATABASE._data.users[m.sender].Thunt > 120000) {
-		let coins = parseInt((player.area * player.area * 12.67).toFixed())
-		let exp = parseInt((player.area * player.area * 8 * (1 + 51.5 * 1 / 100)).toFixed())
+	if (new Date - global.DATABASE._data.users[m.sender].lasthunt > 120000) {
+		let coins = parseInt(Math.floor(Math.random() * 401))
+		let exp = parseInt(Math.floor(Math.random() * 601))
 		let sum = 82 * player.area - 59
-		let dmg = player.attack + player.defense - sum
+		let dmg = (player.sword  * 5 + player.armor * 5 - sum)
 		dmg = dmg < 0 ? Math.abs(dmg) : 0
 
 		player.healt -= dmg
-		player.Thunt = new Date * 1 // waktu hunt 2menit
+		player.lasthunt = new Date * 1 // waktu hunt 2menit
 
 		if (player.healt < 0) {
 			let msg = `*${pname}* Anda Mati Di Bunuh Oleh ${monsterName}`
-			if (player.level > 1) {
+			if (player.level > 0) {
 				player.level -= 1
 				msg += `\nLevel Anda Turun 1 Karena Mati Saat Berburu!`
 			}
-			player.healt = player.max_healt
+			player.healt = 100
 			m.reply(msg)
 			return
 		}
 
-		player.money += coins
-		player.exp += exp
+		player.money += coins * 1
+		player.exp += exp * 1
 
-		let pesan = `*${pname}* Menemukan Dan Membunuh *${monsterName}*\nMendapatkan ${new Intl.NumberFormat('en-US').format(coins)} coins & ${new Intl.NumberFormat('en-US').format(exp)} XP\nBerkurang -${dmg}Hp, Tersisa ${player.healt}/${player.max_healt}`
+		let pesan = `*${pname}* Menemukan Dan Membunuh *${monsterName}*\nMendapatkan ${new Intl.NumberFormat('en-US').format(coins)} coins & ${new Intl.NumberFormat('en-US').format(exp)} XP\nBerkurang -${dmg}Hp, Tersisa ${player.healt}/${100}`
 		m.reply(pesan)
 	} else throw `Tunggu *00:${cd1}:${cd2}* Untuk Berburu Lagi`
 }
 
 handler.help = ['hunt']
-handler.tags = ['help']
+handler.tags = ['rpg']
 handler.command = /^hunt/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
-
-handler.admin = false
-handler.botAdmin = false
 
 handler.fail = null
 
