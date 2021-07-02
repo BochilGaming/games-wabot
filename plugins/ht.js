@@ -1,3 +1,4 @@
+let fs = require('fs')
 let handler = async (m, { conn, text }) => {
   conn.hartatahta = conn.hartatahta ? conn.hartatahta : {}
   if (m.chat in conn.hartatahta) throw 'Masih ada yang sedang membuat\nTeks Harta Tahta\ndi chat ini... tunggu sampai selesai'
@@ -5,11 +6,10 @@ let handler = async (m, { conn, text }) => {
   m.reply('_Sedang membuat..._\n*Mohon tunggu sekitar 1 menit*')
   try {
     let img = await ht(text ? text : ':v')
-    console.log(img)
-    conn.sendFile(m.chat, fs.readFileSync(img), 'Harta Tahta.png', '*© Nurutomo*\nMade with FFmpeg', m)
+    conn.sendFile(m.chat, img, 'Harta Tahta.png', '*© Nurutomo*\nMade with FFmpeg', m)
     setTimeout(() => {
       fs.unlinkSync(img)
-    }, 2000);
+    }, 5000);
   } finally {
     delete conn.hartatahta[m.chat]
   }
@@ -22,7 +22,6 @@ handler.limit = false
 module.exports = handler
 
 let { spawn } = require('child_process')
-let fs = require('fs')
 let path = require('path')
 let src = path.join(__dirname, '../src/')
 let tmp = path.join(__dirname, '../tmp/')
@@ -68,7 +67,7 @@ function ht(text = '') {
     .on('error', reject)
     .on('close', () => {
       try {
-        resolve(o)
+        resolve(fs.readFileSync(o))
         
       } catch (e) {
         reject(e)
