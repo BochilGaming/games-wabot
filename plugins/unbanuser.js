@@ -1,26 +1,19 @@
-let { MessageType } = require('@adiwajshing/baileys')
-let handler = async (m, { conn, args, DevMode }) => {
-    try {
-        if (args.length > 0) {
-            let mention = args[0].replace(/[@.+-]/g, '').replace(' ', '')
-            let ban = (mention + '@s.whatsapp.net')
-            global.DATABASE._data.users[ban].Banneduser = false
-            global.DATABASE._data.users[ban].BannedReason = ''
-            conn.reply(m.chat, 'Berhasil Unbanned User', m)
-        } else conn.reply(m.chat, 'Siapa yang mau di unbanned om?', m)
-    } catch (e) {
-        console.log(e)
-        m.reply('Error!!')
-        if (DevMode) {
-            for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'Use.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
-            }
-        }
-    }
+let handler = async (m, { conn, args }) => {
+    if (!args || !args[0]) throw 'Yang mau di Unban siapa?'
+    let mention = m.mentionedJid[0] || conn.parseMention(args[0]) || (args[0].replace(/[@.+-]/g, '').replace(' ', '') + '@s.whatsapp.net') || ''
+    if (!mention) throw 'Tag salah satu lah'
+    if (!(mention in global.DATABASE._data.users)) throw 'User tidak terdaftar dalam DATABASE!!'
+    let user = global.DATABASE._data.users[mention]
+    if (!user.Banneduser) throw 'User tidak Terbanned!!'
+    user.Banneduser = false
+    user.BannedReason = ''
+    user.warn = 0
+    await m.reply('Berhasil unbanned!!')
+    m.reply('Kamu telah di Unbanned!!', mention)
 }
 handler.help = ['unban']
 handler.tags = ['owner']
-handler.command = /^unban$/i
+handler.command = /^unban(user)?$/i
 handler.mods = true
 
 module.exports = handler

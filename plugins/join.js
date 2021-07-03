@@ -1,16 +1,18 @@
 let linkRegex = /chat.whatsapp.com\/([0-9A-Za-z]{20,24})/i
 
-let handler = async (m, { conn, text, isMods }) => {
-    if (!isMods) {
-       for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) m.reply(`*No:* ${m.sender}\n*Link:* ${text}`, jid)
-        return m.reply('Sedang di proses oleh owner')
+let handler = async (m, { conn, text, isMods, isOwner }) => {
+    let link = (m.quoted ? m.quoted.text ? m.quoted.text : text : text) || text
+    let [_, code] = link.match(linkRegex) || []
+    if (!code) throw 'Link invalid'
+    if (isMods || isOwner || m.fromMe) {
+        let res = await conn.acceptInvite(code)
+        m.reply(`Berhasil join grup ${res.gid}`)
+    } else {
+        for (let jid in global.owner.map(v => v + '@s.whatsapp.net').filter(u => u !== conn.user.jid)) m.reply('*dari:* ' + m.sender.split('@')[0] + '\n*Link:* ' + text, jid)
+        m.reply('Sedang di process Owner')
     }
-    let [_, code] = text.match(linkRegex) || []
-    if (!code) return m.reply('Link invalid')
-    let res = await conn.acceptInvite(code)
-    m.reply(`Berhasil join grup ${res.gid}`)
 }
-handler.help = ['join <chat.whatsapp.com>']
+handler.help = ['join [chat.whatsapp.com]']
 handler.tags = ['premium']
 
 handler.command = /^join$/i

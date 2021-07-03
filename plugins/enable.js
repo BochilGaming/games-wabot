@@ -69,6 +69,30 @@ let handler = async (m, { conn, usedPrefix, command, text, args, isOwner, isAdmi
       }
       global.opts['self'] = !isEnable
       break
+    case 'restrict':
+      isAll = true
+      if (!isROwner) {
+        global.dfail('rowner', m, conn)
+        throw false
+      }
+      global.opts['restrict'] = isEnable
+      break
+    case 'nyimak':
+      isAll = true
+      if (!isROwner) {
+        global.dfail('rowner', m, conn)
+        throw false
+      }
+      global.opts['nyimak'] = isEnable
+      break
+    case 'self':
+      isAll = true
+      if (!isROwner) {
+        global.dfail('rowner', m, conn)
+        throw false
+      }
+      global.opts['self'] = isEnable
+      break
     case 'antilink':
       if (m.isGroup) {
         if (!(isAdmin || isOwner)) {
@@ -91,9 +115,21 @@ let handler = async (m, { conn, usedPrefix, command, text, args, isOwner, isAdmi
           }
           chat.antiToxic = isEnable
           break
+    case 'mycontact':
+    case 'mycontacts':
+    case 'whitelistcontact':
+    case 'whitelistcontacts':
+    case 'whitelistmycontact':
+    case 'whitelistmycontacts':
+      if (!isOwner) {
+        global.dfail('owner', m, conn)
+        throw false
+      }
+      conn.callWhitelistMode = isEnable
+      break
     default:
       return m.reply(`
-List option: welcome | delete | public | antilink | autolevelup | detect | document
+List option: welcome | delete | public | antilink | autolevelup | detect | document | whitelistmycontacts | restrict | nyimak | self
 Contoh:
 ${usedPrefix}enable welcome
 ${usedPrefix}disable welcome
