@@ -7,7 +7,7 @@ let pp = './src/avatar_contact.png'
   try {
     let package = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
     pp = await conn.getProfilePicture(conn.user.jid)
-    let imgerp = fs.readFileSync(path.join(__dirname , '../src/dzxbot.png')).toString('base64') // (await conn.getFile(await conn.getProfilePicture(conn.user.jid))).data.toString('base64')
+    let imgerp = fs.readFileSync(path.join(__dirname , '../src/dzxbot.jpg')).toString('base64') // (await conn.getFile(await conn.getProfilePicture(conn.user.jid))).data.toString('base64')
     let name = conn.getName(m.sender)
     let d = new Date
     let locale = 'id'
