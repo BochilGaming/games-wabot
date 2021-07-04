@@ -1,3 +1,4 @@
+//created by Scooppt
 let fetch = require('node-fetch')
 
 let handler  = async (m, { conn, args, text }) => {
