@@ -8,7 +8,7 @@ let handler = async (m, { conn, text, isMods, isOwner }) => {
         let res = await conn.acceptInvite(code)
         m.reply(`Berhasil join grup ${res.gid}`)
     } else {
-        for (let jid in global.owner.map(v => v + '@s.whatsapp.net').filter(u => u !== conn.user.jid)) m.reply('*dari:* ' + m.sender.split('@')[0] + '\n*Link:* ' + text, jid)
+        for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) m.reply('*dari:* ' + m.sender.split('@')[0] + '\n*Link:* ' + link, jid)
         m.reply('Sedang di process Owner')
     }
 }
