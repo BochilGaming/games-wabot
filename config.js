@@ -9,7 +9,8 @@ global.APIs = { // API Prefix
   xteam: 'https://api.xteam.xyz',
   nzcha: 'http://nzcha-apii.herokuapp.com',
   bg: 'http://bochil.ddns.net',
-  fdci: 'https://api.fdci.se'
+  fdci: 'https://api.fdci.se',
+  dzx: 'https://api.dhamzxploit.my.id' // apikey nya 'dzxganz' :v
 }
 global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
