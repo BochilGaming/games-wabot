@@ -86,6 +86,8 @@ handler.help = ['hunt']
 handler.tags = ['rpg']
 handler.command = /^hunt/i
 
+handler.disabled = true
+
 handler.fail = null
 
 module.exports = handler

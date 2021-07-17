@@ -35,7 +35,7 @@ if (!global.DATABASE.data.users) global.DATABASE.data = {
 }
 if (!global.DATABASE.data.chats) global.DATABASE.data.chats = {}
 if (!global.DATABASE.data.stats) global.DATABASE.data.stats = {}
-if (!global.DATABASE.data.stats) global.DATABASE.data.msgs = {}
+if (!global.DATABASE.data.msgs) global.DATABASE.data.msgs = {}
 if (!global.DATABASE.data.sticker) global.DATABASE.data.sticker = {}
 global.conn = new WAConnection()
 let authFile = `${opts._[0] || 'session'}.data.json`
