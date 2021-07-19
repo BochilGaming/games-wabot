@@ -2,33 +2,23 @@ let { MessageType } = require('@adiwajshing/baileys')
 
 let handler = async (m, { conn }) => {
     let user = global.DATABASE._data.users[m.sender]
-    let __timers = (new Date - user.lastclaim)
-    let _timers = (86400000 - __timers)
+    let _timers = (604800000 - (new Date - user.lastweekly))
     let timers = clockString(_timers) 
-    if (new Date - user.lastclaim > 86400000) {
-        conn.reply(m.chat, `Anda sudah mengklaim dan mendapatkan 1000 💵money dan 1 potion`, m)
-        global.DATABASE._data.users[m.sender].money += 1000
-        global.DATABASE._data.users[m.sender].potion += 1
-        global.DATABASE._data.users[m.sender].lastclaim = new Date * 1
+    if (new Date - user.lastweekly > 604800000) {
+        conn.reply(m.chat, `Anda sudah mengklaim dan mendapatkan 20000 💵money dan 3 🎁Legendary crate`, m)
+        user.money += 20000
+        user.legendary += 3
+        user.lastweekly= new Date * 1
     } else {
         let buttons = button(`silahkan tunggu *🕒${timers}* lagi untuk bisa mengclaim lagi`, user)
         conn.sendMessage(m.chat, buttons, MessageType.buttonsMessage, { quoted: m })
     }
 }
-handler.help = ['claim']
+handler.help = ['weekly']
 handler.tags = ['rpg']
-handler.command = /^(claim|daily)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
-
-handler.admin = false
-handler.botAdmin = false
+handler.command = /^(weekly)$/i
 
 handler.fail = null
-handler.money = 0
 
 module.exports = handler
 
