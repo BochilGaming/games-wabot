@@ -14,6 +14,6 @@ handler.help = ['limit'].map(v => 'reset' + v)
 handler.tags = ['owner', 'host']
 handler.command = /^(resetlimit)$/i
 
-handler.owner = true
+handler.rowner = true
 
 module.exports = handler
