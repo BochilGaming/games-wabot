@@ -4,7 +4,7 @@ let handler = async(m, { conn, text }) => {
 
   global.prefix = new RegExp('^[' + (opts['prefix'] || `${text}`) + ']')
     await m.reply(`Prefix telah ditukar ke *${text}*`)
-    // conn.fakeReply(m.chat, 'Prefix telah ditukar ke *${text}*', '0@s.whatsapp.net', 'Set Prefix Bot)
+    // conn.fakeReply(m.chat, 'Prefix telah ditukar ke *${text}*', '0@s.whatsapp.net', 'Set Prefix Bot')
 }
 handler.help = ['setprefix <prefix>']
 handler.tags = ['owner']
