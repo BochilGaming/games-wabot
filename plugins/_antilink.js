@@ -1,28 +1,19 @@
 let handler = m => m
 
 let linkRegex = /chat.whatsapp.com\/([0-9A-Za-z]{20,24})/i
-handler.before = function (m, { user, bot, groupMetadata }) {
-  if (m.isBaileys && m.fromMe) return true
+
+handler.before = function (m, { user, isAdmin, isBotAdmin }) {
+
+  if (m.isBaileys && m.fromMe) throw false
   let chat = global.DATABASE.data.chats[m.chat]
+  let name = this.getName(m.sender)
   let isGroupLink = linkRegex.exec(m.text)
 
-  if (chat.antiLink && isGroupLink) {
-    m.reply('*Byee, kamu akan di kick!!*')
-    if (user.isAdmin || user.isSuperAdmin) return m.reply('*Eh maap kamu admin, kamu gk bakal dikick*')
-    let participants = m.isGroup ? groupMetadata.participants : []
-    let bot = m.isGroup ? participants.find(u => u.jid == this.user.jid) : {}
-    if (bot.isAdmin || bot.isSuperAdmin) {
-        let linkGC = this.groupInviteCode(m.chat)
-        let isLinkThisGc = new RegExp(linkGC, 'g')
-        let isgclink = isLinkThisGc.exec(m.text)
-        if (isgclink) { 
-             m.reply('*Lol ngirim link group sendiri :v*')
-        } else {
-             this.groupRemove(m.chat, [m.sender])
-        }
-    } else m.reply('*Bot bukan admin, mana bisa kick orang _-*')
+  if (chat.antiLink && isGroupLink && !isAdmin && !m.isBaileys && m.isGroup && !m.fromMe) {
+ m.reply(`*「 ANTI LINK 」*\n\nTerdeteksi *${name}* kamu telah mengirim link group!\n\nMaaf Kamu akan dikick dari grup ini byee!`)
+   this.groupRemove(m.chat, [m.sender])
   }
-  return true
 }
+handler.group = true
 
 module.exports = handler
