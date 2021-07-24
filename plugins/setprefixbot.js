@@ -6,12 +6,10 @@ let handler = async(m, { conn, text }) => {
     await m.reply(`Prefix telah ditukar ke *${text}*`)
     // conn.fakeReply(m.chat, 'Prefix telah ditukar ke *${text}*', '0@s.whatsapp.net', 'Set Prefix Bot')
 }
-handler.help = ['setprefix <prefix>']
+handler.help = ['setprefix'].map(v => v + ' [prefix]')
 handler.tags = ['owner']
 handler.command = /^(setprefix)$/i
-handler.rowner = true
 
-handler.fail = null
-handler.exp = false
+handler.rowner = true
 
 module.exports = handler
