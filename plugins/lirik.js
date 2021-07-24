@@ -2,7 +2,7 @@ let { MessageType } = require('@adiwajshing/baileys')
 let fetch = require('node-fetch')
 let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
     try {
-        if (!args || !args[0] || args.length < 1) return m.reply('Judul lagunya apa om?')
+        if (!args || !args[0] || args.length < 1) return m.reply('[❗] Format salah\nContoh : ${usedPrefix}lirik sad!')
         let res = await fetch(global.API('bg', '/lirik', { 
             title: args[0],
             artist: args[1] || '' 
@@ -10,12 +10,15 @@ let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
         let json = await res.json()
         if (json.status !== true) throw json
         m.reply(`
-*Lyrics ${args[0]}*
+〘 *Lirik/Lyrics* 〙
+
+_Song Name_ : *${args[0]}*
+Requested by : *${conn.getName(m.sender)}*
 
 \`\`\`${json.result}\`\`\`
 `.trim())
     } catch (e) {
-        m.reply('Error!!')
+        m.reply('Error!')
         console.log(e)
         if (DevMode) {
             let file = require.resolve(__filename)
