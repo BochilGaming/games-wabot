@@ -25,7 +25,7 @@ let pi = conn.prepareMessageFromContent(m.chat, {
 
 handler.help = ['jadikatalog']
 handler.tags = ['tools']
-handler.command = /^(katalog)$/i
+handler.command = /^(jadikatalog)$/i
 handler.owner = true
 handler.fail = null
 handler.exp = 2
