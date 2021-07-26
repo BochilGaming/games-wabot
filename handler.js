@@ -188,8 +188,10 @@ module.exports = {
       if (opts['nyimak']) return
       if (!m.fromMe && opts['self']) return
       if (m.chat == 'status@broadcast') return
+      if (opts['pconly'] && m.chat.endsWith('g.us')) return
+      if (opts['gconly'] && !m.chat.endsWith('g.us')) return
+      if (opts['swonly'] && m.chat !== 'status@broadcast') return
       if (typeof m.text !== 'string') m.text = ''
-      conn.chatRead(m.chat)
       for (let name in global.plugins) {
         let plugin = global.plugins[name]
         if (!plugin) continue
@@ -418,6 +420,9 @@ module.exports = {
       } catch (e) {
         console.log(m, m.quoted, e)
       }
+      
+      //Auto read
+      if (opts['autoread']) await this.chatRead(m.chat)
     }
   },
   async participantsUpdate({ jid, participants, action }) {
