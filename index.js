@@ -1,4 +1,5 @@
 console.log('Starting...')
+let { keep_alive } = require("./keep_alive")
 let { spawn } = require('child_process')
 let path = require('path')
 let fs = require('fs')
