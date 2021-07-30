@@ -1,8 +1,11 @@
 let fs = require ('fs')
 let path = require('path')
 let { MessageType } = require('@adiwajshing/baileys')
-let handler  = async (m, { conn, usedPrefix: _p, DevMode }) => {
+let handler  = async (m, { conn, usedPrefix: _p }) => {
+   let pp = './src/avatar_contact.png'
   try {
+    pp = await conn.getProfilePicture(conn.user.jid)
+    // pp = await conn.getProfilePicture(m.sender)
     let package = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
     let name = conn.getName(m.sender)
     let d = new Date
@@ -101,15 +104,19 @@ let handler  = async (m, { conn, usedPrefix: _p, DevMode }) => {
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).join`|`})`, 'g'), (_, name) => replace[name])
-    conn.reply(m.chat, text.trim(), m)
+    try {
+     await conn.sendFile(m.chat, pp, 'pp.jpg', text.trim(), m)
+    } catch (e) {
+      try {
+        await conn.reply(m.chat, text.trim(), m)
+      } catch (e) {
+        conn.reply(m.chat, 'Maaf, menu sedang error', m)
+        throw e
+      }
+    }
   } catch (e) {
     conn.reply(m.chat, 'Maaf, menu sedang error', m)
     throw e
-    if (DevMode) {
-        for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-            conn.sendMessage(jid, 'Menu.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
-        }
-    }
   }
 }
 handler.help = ['menu','help','?']
