@@ -17,8 +17,22 @@ let handler  = async (m, { conn, text, usedPrefix }) => {
     let img = await q.download()
     if (!img) throw 'Foto/Sticker tidak ditemukan'
     let pi = conn.prepareMessageFromContent(m.chat, {
-	"productMessage": { "product": { "productImage":{ "mimetype": "image/jpeg", "jpegThumbnail": img }, "title": `${text}`, "description": `${text2}`, "currencyCode": "IDR", "priceAmount": "50000", "retailerId": 'DZX Bot', "productImageCount": 1 }, "businessOwnerJid": `13479805233@s.whatsapp.net`
-}}, {})
+	"productMessage": { 
+          "product": { 
+            "productImage":{ 
+	      "mimetype": "image/jpeg", 
+	      "jpegThumbnail": img 
+            }, 
+	    "title": `${text}`, 
+	    "description": `${text2}`, 
+	    "currencyCode": "IDR", 
+            "priceAmount": "50000", 
+	    "retailerId": "games-wabot", 
+	    "productImageCount": 1 
+	  }, 
+	  "businessOwnerJid": conn.user.jid
+	}
+      }, {})
     conn.relayWAMessage(pi, m)
   } else m.reply('FOTO NYA MANA OM?')
 }
