@@ -4,12 +4,12 @@ let handler = async (m, { conn, participants }) => {
     let chat = global.DATABASE._data.chats[m.chat]
     if (chat.isBanned) return m.reply('Chat ini sudah Terbanned!')
     chat.isBanned = true
-    m.reply('Done!')
+    conn.sendButton(m.chat, 'Done!', 'games-wabot', 'UNBANCHAT', '.unbanchat')
   // } else m.reply('Ada nomor host disini...')
 }
 handler.help = ['banchat']
 handler.tags = ['owner']
 handler.command = /^banchat$/i
-handler.mods = true
+handler.owner = true
 
 module.exports = handler
