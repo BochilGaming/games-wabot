@@ -81,6 +81,19 @@ module.exports = {
             if (!isNumber(user.fishingrod)) user.fishingrod = 0
             if (!isNumber(user.fishingroddurability)) user.fishingroddurability = 0
 
+     if (!isNumber(user.paus)) user.paus = 0
+     if (!isNumber(user.kepiting)) user.kepiting = 0
+     if (!isNumber(user.gurita)) user.gurita = 0
+     if (!isNumber(user.cumi)) user.cumi= 0
+     if (!isNumber(user.buntal)) user.buntal = 0
+     if (!isNumber(user.dory)) user.dory = 0
+     if (!isNumber(user.lumba)) user.lumba = 0
+     if (!isNumber(user.lobster)) user.lobster = 0
+     if (!isNumber(user.hiu)) user.hiu = 0
+     if (!isNumber(user.udang)) user.udang = 0
+     if (!isNumber(user.ikan)) user.ikan = 0
+     if (!isNumber(user.orca)) user.orca = 0
+
             if (!isNumber(user.lastadventure)) user.lastadventure = 0
             if (!isNumber(user.lastfishing)) user.lastfishing = 0
             if (!isNumber(user.lastdungeon)) user.lastdungeon = 0
@@ -110,6 +123,19 @@ module.exports = {
             mythic: 0,
             legendary: 0,
             pet: 0,
+            as: 0,
+            paus: 0,
+            kepiting: 0,
+            gurita: 0,
+            cumi: 0,
+            buntal: 0,
+            dory: 0,
+            lumba: 0,
+            lobster: 0,
+            hiu: 0,
+            udang: 0,
+            ikan: 0,
+            orca: 0,
             potion: 0,
             sampah: 0,
             armor: 0,
