@@ -7,9 +7,8 @@ recode by BochilGaming
 let split = '|'
 let handler  = async (m, { conn, text, usedPrefix }) => {
   let lmao = 'emror?'
-  let [text, ...text2] = txt.replace(lmao, '').trimStart().split(split)
-  text2 = text2.join(split)
-  if (!text) throw 'Masukan Judul dan Deskripsi nya'
+  let [txt, ...text2] = text.replace(lmao, '').trimStart().split(split)
+  if (!txt) throw 'Masukan Judul dan Deskripsi nya'
   if (!text2) throw `Contoh : ${usedPrefix}jadikatalog SLAYER?|INI BUKAN SELAYER BANG:>`
   let q = m.quoted ? m.quoted : m 
   let mime = (q.msg || q).mimetype || ''
@@ -23,7 +22,7 @@ let handler  = async (m, { conn, text, usedPrefix }) => {
 	      "mimetype": "image/jpeg", 
 	      "jpegThumbnail": img 
             }, 
-	    "title": `${text}`, 
+	    "title": `${txt}`, 
 	    "description": `${text2}`, 
 	    "currencyCode": "IDR", 
             "priceAmount": "50000", 
