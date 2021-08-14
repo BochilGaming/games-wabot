@@ -11,7 +11,7 @@ let handler = async (m, { conn, text }) => {
   let img = await q.download()
   let url = await uploadImage(img)
   let wanted = `https://api.dhamzxploit.my.id/api/canvas/circle?url=${url}`
-  let stiker = await sticker(null, wanted, 'wanted', '©damzz')
+  let stiker = await sticker(null, wanted, 'circle', 'games-wabot')
   conn.sendMessage(m.chat, stiker, MessageType.sticker, {
     quoted: m
   })
