@@ -20,9 +20,9 @@ let handler = async (m, { conn, text }) => {
    m.reply('Conversion Failed')
   }
 }
-handler.help = ['wanted']
+handler.help = ['rainbow']
 handler.tags = ['sticker']
-handler.command = /^wanted$/i
+handler.command = /^rainbow$/i
 handler.owner = false
 handler.mods = false
 handler.premium = false
