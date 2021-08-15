@@ -55,8 +55,8 @@ module.exports = {
             if (!isNumber(user.anjing)) user.anjing = 0
             if (!isNumber(user.anjinglastclaim)) user.anjinglastclaim = 0
 
-            if (!'Banneduser' in user) user.Banneduser = false
-            if (!'BannedReason' in user) user.BannedReason = ''
+            if (!'banned' in user) user.banned = false
+            if (!'bannedReason' in user) user.bannedReason = ''
             if (!isNumber(user.warn)) user.warn = 0
 
             if (!isNumber(user.afk)) user.afk = -1
@@ -96,6 +96,8 @@ module.exports = {
                 if (!isNumber(user.regTime)) user.regTime = -1
             }
             if (!('autolevelup' in user)) user.autolevelup = true
+            if (!('ah' in user)) user.ah = []
+            if (!('mission' in user)) user.mission = {}
         } else global.DATABASE._data.users[m.sender] = {
             healt: 100,
             level: 0,
@@ -155,6 +157,8 @@ module.exports = {
             age: -1,
             regTime: -1,
             autolevelup: true,
+            ah: [],
+            mission: {},
         }
 
         let chat = global.DATABASE._data.chats[m.chat]
@@ -188,9 +192,6 @@ module.exports = {
       if (opts['nyimak']) return
       if (!m.fromMe && opts['self']) return
       if (m.chat == 'status@broadcast') return
-      if (opts['pconly'] && m.chat.endsWith('g.us')) return
-      if (opts['gconly'] && !m.chat.endsWith('g.us')) return
-      if (opts['swonly'] && m.chat !== 'status@broadcast') return
       if (typeof m.text !== 'string') m.text = ''
       for (let name in global.plugins) {
         let plugin = global.plugins[name]
@@ -221,7 +222,7 @@ module.exports = {
       let bot = m.isGroup ? participants.find(u => u.jid == this.user.jid) : {} // Your Data
       let isAdmin = user.isAdmin || user.isSuperAdmin || false // Is User Admin?
       let isBotAdmin = bot.isAdmin || bot.isSuperAdmin || false // Are you Admin?
-      let DevMode = (global.DeveloperMode.toLowerCase() == 'true') || false
+      let DevMode = /true/i.test(global.DeveloperMode.toLowerCase())
       for (let name in global.plugins) {
         let plugin = global.plugins[name]
         if (!plugin) continue
@@ -281,8 +282,18 @@ module.exports = {
           if (m.chat in global.DATABASE._data.chats || m.sender in global.DATABASE._data.users) {
             let chat = global.DATABASE._data.chats[m.chat]
             let user = global.DATABASE._data.users[m.sender]
-            if (name != 'unbanchat.js' && chat && chat.isBanned) return // Except this
-            if (name != 'unbanuser.js' && user && user.Banneduser) return
+            if (!['unbanchat.js', 'link.js', 'pengumuman.js', 'creator.js'].includes(name) && chat && chat.isBanned && !isROwner) return // Except this
+            if (!['unbanuser.js', 'inv.js', 'link.js', 'creator.js', 'profile.js'].includes(name) && user && user.banned && !isROwner) {
+              if (!opts['msgifbanned']) m.reply(`*ANDA TERBANNED* ${user.bannedReason ? `\nKarena *${user.bannedReason}*` : ''}
+
+Hubungi: 
+${global.owner.map((v, i) => '*Owner ' + (i + 1) + ':* wa.me/' + v).join('\n') + '\n\n' + global.mods.map((v, i) => '*Moderator ' + (i + 1) + ':* wa.me/' + v).join('\n')}
+
+Kuy join group Official *${conn.getName(this.user.jid)}*: 
+${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
+`.trim())
+              return
+            }
           }
           if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
             fail('owner', m, this)
@@ -420,8 +431,6 @@ module.exports = {
       } catch (e) {
         console.log(m, m.quoted, e)
       }
-      
-      //Auto read
       if (opts['autoread']) await this.chatRead(m.chat)
     }
   },
@@ -439,7 +448,7 @@ module.exports = {
               pp = await this.getProfilePicture(user)
             } catch (e) {
             } finally {
-              text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', this.getName(jid)).replace('@desc', groupMetadata.desc) :
+              text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(jid)).replace('@desc', groupMetadata.desc) :
                 (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
               this.sendFile(jid, pp, 'pp.jpg', text, null, false, {
                 contextInfo: {
@@ -480,20 +489,37 @@ Untuk mematikan fitur ini, ketik
     })
     this.copyNForward(m.key.remoteJid, m.message).catch(e => console.log(e, m))
   },
-    async onCall(json) {
-        let { from } = json[2][0][1]
-        let users = global.DATABASE.data.users
-        let user = users[from] || {}
-        if (user.whitelist) return
-        switch (this.callWhitelistMode) {
-            case 'mycontact':
-                if (from in this.contacts && 'short' in this.contacts[from])
-                    return
-                break
-        }
-        await this.sendMessage(from, 'Maaf, Tolong jangan telfon BOT!!', MessageType.extendedText)
-        //await this.blockUser(from, 'add')
+  async onCall(json) {
+    let { from } = json[2][0][1]
+    let ids = 'call-id' in json[2][0][2][0][1] ? Object.entries(json[2][0][2][0][1]) : []
+    let id = ids[0][1]
+    let isOffer = json[2][0][2][0][0] == 'offer' || false
+    let users = global.DATABASE.data.users
+    let user = users[from] || {}
+    if (user.whitelist) return
+    switch (this.callWhitelistMode) {
+      case 'mycontact':
+        if (from in this.contacts && 'short' in this.contacts[from])
+        return
+        break
     }
+      
+    if (from && id && isOffer && json[2][0]) {
+      var tag = this.generateMessageTag()
+      var NodePayload = ["action", "call", ["call", {
+        "from": this.user.jid,
+        "to": from,
+        "id": tag
+      }, [["reject", { 
+        "call-id": id, 
+        "call-creator": from, 
+        "count": "0" 
+      }, null]]]]
+      
+      await this.send(`${tag},${JSON.stringify(NodePayload)}`)
+    }
+    await this.sendMessage(from, 'Maaf, Tolong jangan telfon BOT!!', MessageType.extendedText)
+  }
 }
 
 global.dfail = (type, m, conn) => {
