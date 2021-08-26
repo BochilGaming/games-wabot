@@ -6,5 +6,5 @@ workflows:
   test_syntax:
     jobs:
       - node/test:
-          override-ci-command: npm run test 
+          override-ci-command: npm install
           version: '14.17.5' 
