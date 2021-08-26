@@ -1,0 +1,10 @@
+version: '2.1'
+orbs:
+  node: circleci/node@4.7.0
+
+workflows:
+  test_syntax:
+    jobs:
+      - node/test:
+          override-ci-command: npm run test 
+          version: '14.17.5' 
