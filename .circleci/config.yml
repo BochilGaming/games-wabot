@@ -5,6 +5,18 @@ orbs:
 workflows:
   test_syntax:
     jobs:
+      - node/test: 
+          name: Node 12.13.0
+          override-ci-command: npm install --prefer-offline --no-audit --progress=false
+          run-command: test
+          version: '12.13.0' 
       - node/test:
-          override-ci-command: npm install
+          name: Node 14.17.5
+          override-ci-command: npm install --prefer-offline --no-audit --progress=false
+          run-command: test
           version: '14.17.5' 
+      - node/test:
+          name: Node 16.8.0
+          override-ci-command: npm install --prefer-offline --no-audit --progress=false
+          run-command: test
+          version: '16.8.0' 
