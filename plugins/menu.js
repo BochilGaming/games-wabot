@@ -1,181 +1,168 @@
-let fs = require ('fs')
+let fs = require('fs')
 let path = require('path')
-let { MessageType, Presence } = require('@adiwajshing/baileys')
-
-let handler  = async (m, { conn, usedPrefix: _p, DevMode }) => {
-let botaks = fs.readFileSync(path.join(__dirname , '../src/botstyle.png')).toString('base64')
-await conn.updatePresence(m.chat, Presence.recording)
-let botstyle = './src/avatar_contact.png'
+let levelling = require('../lib/levelling')
+let tags = {
+  'main': 'Main',
+  'rpg': 'Epic RPG',
+  'game': 'Game',
+  'xp': 'Exp & Limit',
+  'sticker': 'Sticker',
+  'kerang': 'Kerang Ajaib',
+  'quotes': 'Quotes',
+  'admin': 'Admin',
+  'group': 'Group',
+  'premium': 'Premium',
+  'internet': 'Internet',
+  'anonymous': 'Anonymous Chat',
+  'nulis': 'MagerNulis & Logo',
+  'downloader': 'Downloader',
+  'tools': 'Tools',
+  'fun': 'Fun',
+  'database': 'Database',
+  'vote': 'Voting',
+  'absen': 'Absen',
+  'quran': 'Al Qur\'an',
+  'jadibot': 'Jadi Bot',
+  'owner': 'Owner',
+  'host': 'Host',
+  'advanced': 'Advanced',
+  'info': 'Info',
+  '': 'No Category',
+}
+const defaultMenu = {
+  before: `
+╭─「 %me 」
+│ Hai, %name!
+│
+│ Tanggal: *%week %weton, %date*
+│ Tanggal Islam: *%dateIslamic*
+│ Waktu: *%time*
+│
+│ Uptime: *%uptime (%muptime)*
+│ Database: %rtotalreg of %totalreg
+│ Github:
+│ %github
+╰────
+%readmore`.trimStart(),
+  header: '╭─「 %category 」',
+  body: '│ • %cmd %islimit %isPremium',
+  footer: '╰────\n',
+  after: `
+*%npmname@^%version*
+${'```%npmdesc```'}
+`,
+}
+let handler = async (m, { conn, usedPrefix: _p }) => {
   try {
-    let package = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
-    let botstyle = await conn.getProfilePicture(conn.user.jid)
-    let tnbot = fs.readFileSync(path.join(__dirname , '../src/dzxbot.jpg')).toString('base64')
+    let package = JSON.parse(await fs.promises.readFile(path.join(__dirname, '../package.json')).catch(_ => '{}'))
     let name = conn.getName(m.sender)
-	let d = new Date(new Date + 3600000)
-    let gmtof = 18000
+    let d = new Date(new Date + 3600000)
     let locale = 'id'
-    /*d.getTimeZoneOffset()
-    Offset -420 is 18.00
-    Offset    0 is  0.00
-    Offset  420 is  7.00*/
-    let gmt = new Date(0).getTime() - new Date('1 January 1970').getTime()
-    let weton = ['Pahing', 'Pon','Wage','Kliwon','Legi'][Math.floor(((d * 1) + gmt) / 84600000) % 5]
+    // d.getTimeZoneOffset()
+    // Offset -420 is 18.00
+    // Offset    0 is  0.00
+    // Offset  420 is  7.00
+    let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
     let week = d.toLocaleDateString(locale, { weekday: 'long' })
     let date = d.toLocaleDateString(locale, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     })
+    let dateIslamic = Intl.DateTimeFormat(locale + '-TN-u-ca-islamic', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).format(d)
     let time = d.toLocaleTimeString(locale, {
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric'
     })
-	let timeSay = msgTime()
-	let timeTod = msgTod()
     let _uptime = process.uptime() * 1000
+    let _muptime
+    if (process.send) {
+      process.send('uptime')
+      _muptime = await new Promise(resolve => {
+        process.once('message', resolve)
+        setTimeout(resolve, 1000)
+      }) * 1000
+    }
+    let muptime = clockString(_muptime)
     let uptime = clockString(_uptime)
     let totalreg = Object.keys(global.DATABASE._data.users).length
-    let tags = {
-      'main': 'Main',
-      'about': 'About And Info',
-      'sound': 'Sound Or Musix',
-      'rpg': 'Rpg',
-      'game': 'Games',
-      'anonymous': 'Anonymous Chat',
-      'sticker': 'Sticker & Image',
-      'audio': 'Audio Tools',
-      'primbon': 'Primbon',
-      'kerang': 'Kerang Ajaib',
-      'quotes': 'Quotes',
-      'nulis': 'Mager Nulis',
-      'database': 'Database',
-      'vote': 'Voting',
-      'islam': 'Islam',
-      'image': 'Image',
-      'anime': 'Anime',
-      'internet': 'Internet',
-      'downloader': 'Downloader',
-      'tools': 'Tools',
-      'audio': 'Audio',
-      'aduhlort': '18+',
-      'expression': 'Expression',
-      'spammer': 'Spammer',
-      'jadibot': 'Jadi Bot',
-      'admin': 'Admin',
-      'group': 'Group',
-      'owner': 'Owner',
-      'host': 'Host',
-      'advanced': 'Advanced',
-      'info': 'Info',
-      '': 'No Category',
-    }
-    for (let plugin of Object.values(global.plugins))
-      if (plugin && 'tags' in plugin)
-        for (let tag of plugin.tags)
-          if (!tag in  tags) tags[tag] = tag
-    let help = Object.values(global.plugins).map(plugin => {
+    let rtotalreg = Object.values(global.DATABASE._data.users).filter(user => user.registered == true).length
+    let help = Object.values(global.plugins).filter(plugin => !plugin.disabled).map(plugin => {
       return {
-        help: plugin.help,
-        tags: plugin.tags,
+        help: Array.isArray(plugin.tags) ? plugin.help : [plugin.help],
+        tags: Array.isArray(plugin.tags) ? plugin.tags : [plugin.tags],
         prefix: 'customPrefix' in plugin,
-        limit: plugin.limit
+        limit: plugin.limit,
+        premium: plugin.premium,
+        enabled: !plugin.disabled,
       }
     })
-    let groups = {}
-    for (let tag in tags) {
-      groups[tag] = []
-      for (let menu of help)
-        if (menu.tags && menu.tags.includes(tag))
-          if (menu.help) groups[tag].push(menu)
-    }
+    for (let plugin of help)
+      if (plugin && 'tags' in plugin)
+        for (let tag of plugin.tags)
+          if (!(tag in tags) && tag) tags[tag] = tag
     conn.menu = conn.menu ? conn.menu : {}
-    let before = conn.menu.before || ` ┌──「 DZX BOTZ 」
-│
-├ Hai %name, %timeTod
-├ Tanggal: *%week,  %date*
-├ Waktu: *%time*
-├ Uptime: *%uptime*
-├ Battery BOT: *${conn.battery ? `${conn.battery.value}% ${conn.battery.live ? '🔌 Charging...' : '⚡ Discharging'}` : 'Unknown'}*
-│
-╰────`
-    let header = conn.menu.header || '◪「 %category 」'
-    let body   = conn.menu.body   || '├❏  %cmd%islimit'
-    let footer = conn.menu.footer || '╰────\n'
-    let after  = conn.menu.after  || '\n'
-    let _text  = before + '\n'
-    for (let tag in groups) {
-      _text += header.replace(/%category/g, tags[tag]) + '\n'
-      for (let menu of groups[tag]) {
-        for (let help of menu.help)
-          _text += body.replace(/%cmd/g, menu.prefix ? help : '%p' + help).replace(/%islimit/g, menu.limit ? ' (Limit)' : '')  + '\n'
-      }
-      _text += footer + '\n'
-    }
-    _text += after
-    text =  typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
+    let before = conn.menu.before || defaultMenu.before
+    let header = conn.menu.header || defaultMenu.header
+    let body = conn.menu.body || defaultMenu.body
+    let footer = conn.menu.footer || defaultMenu.footer
+    let after = conn.menu.after || (conn.user.jid == global.conn.user.jid ? '' : `Powered by https://wa.me/${global.conn.user.jid.split`@`[0]}`) + defaultMenu.after
+    let _text = [
+      before,
+      ...Object.keys(tags).map(tag => {
+        return header.replace(/%category/g, tags[tag]) + '\n' + [
+          ...help.filter(menu => menu.tags && menu.tags.includes(tag) && menu.help).map(menu => {
+            return menu.help.map(help => {
+              return body.replace(/%cmd/g, menu.prefix ? help : '%p' + help)
+                .replace(/%islimit/g, menu.limit ? '(Limit)' : '')
+                .replace(/%isPremium/g, menu.premium ? '(Premium)' : '')
+                .trim()
+            }).join('\n')
+          }),
+          footer
+        ].join('\n')
+      }),
+      after
+    ].join('\n')
+    text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
     let replace = {
       '%': '%',
-      p: _p, uptime, timeSay, timeTod,
+      p: _p, uptime, muptime,
+      me: conn.user.name,
       npmname: package.name,
       npmdesc: package.description,
       version: package.version,
       github: package.homepage ? package.homepage.url || package.homepage : '[unknown github url]',
-      name, weton, week, date, time,
+      name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
       readmore: readMore
     }
-    text = text.replace(new RegExp(`%(${Object.keys(replace).join`|`})`, 'g'), (_, name) => replace[name])
-    conn.sendFile(m.chat, botstyle, 'botstyle.mp4', text.trim(), { 
-      key: { 
-        remoteJid: '13479805233-1626081721@g.us', 
-        participant: '6289643544046@s.whatsapp.net', 
-        fromMe: false 
-      }, 
-	message: {
-			          "productMessage": {
-				          "product": {
-					          "productImage":{
-						          "mimetype": "image/jpeg",
-						          "jpegThumbnail": fs.readFileSync(`./src/botstyle.png`)
-					            },
-					          "title": `${timeSay} 🗿🙏`,
-					          "description": `🔋 = ${conn.battery ? `${conn.battery.value}% ${conn.battery.live ? '🔌 Charging...' : '⚡ Discharging'}` : 'Unknown'}`,
-					         // "currencyCode": "IDR",
-					          //"priceAmount1000": "50000000",
-					          "retailerId": "Self Bot",
-					          "productImageCount": 1
-				             },
-				             "businessOwnerJid": `0@s.whatsapp.net`
-		                   }
-	                    }
-						
-	}, m, { 
-     thumbnail: Buffer.alloc(0), 
-      contextInfo: {
-		forwardingScore: 508, isForwarded: true, mentionedJid: [m.sender]}})
-      
-
-await conn.send2Button(m.chat, 'Reading menu.js', 'Copyright DZX BOTZ', 'PEMILIK BOT', '.owner', 'DONASI', '.donasi', { quoted: m })
-      conn.updatePresence(m.chat, Presence.composing)
-      conn.updatePresence(m.chat, Presence.available)
-      conn.updatePresence(m.chat, Presence.composing)
-  }
-    catch (e) {
+    text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
+    let pp = await conn.getProfilePicture(conn.user.jid).catch(_ => path.join(__dirname, '../src/avatar_contact.png'))
+    conn.sendFile(m.chat, pp, 'menu.jpg', text.trim(), m).catch(_ => conn.reply(m.chat, text.trim(), m))
+  } catch (e) {
     conn.reply(m.chat, 'Maaf, menu sedang error', m)
     throw e
-    if (DevMode) {
-        for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-            conn.sendMessage(jid, 'Menu.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
-        }
-    }
   }
 }
-handler.help = ['menu','help','?']
+handler.help = ['menu', 'help', '?']
 handler.tags = ['main']
 handler.command = /^(menu|help|\?)$/i
+handler.owner = false
+handler.mods = false
+handler.premium = false
+handler.group = false
+handler.private = false
+
+handler.admin = false
+handler.botAdmin = false
 
 handler.fail = null
-handler.exp = 2
+handler.exp = 3
 
 module.exports = handler
 
@@ -183,31 +170,8 @@ const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
 
 function clockString(ms) {
-  let h = Math.floor(ms / 3600000)
-  let m = Math.floor(ms / 60000) % 60
-  let s = Math.floor(ms / 1000) % 60
-  console.log({ms,h,m,s})
-  return [h, m, s].map(v => v.toString().padStart(2, 0) ).join(':')
-}
-
-function msgTime() {
-  let hours = new Date().getHours()
-  let msg = ''
-  if (hours > 18 && hours < 4) msg = 'Malam Tod'
-  else if (hours > 3 && hours < 10) msg = 'Pagi Tod'
-  else if (hours > 9 && hours < 15) msg = 'Siang Tod'
-  else if (hours > 14 && hours < 19) msg = 'Sore Tod'
-  else msg = 'Malam Tod'
-  return msg 
-}
-
-function msgTod() {
-  let hours = new Date().getHours()
-  let msg = ''
-  if (hours > 18 && hours < 4) msg = 'Selamat Malam'
-  else if (hours > 3 && hours < 10) msg = 'Selamat Pagi'
-  else if (hours > 9 && hours < 15) msg = 'Selamat Siang'
-  else if (hours > 14 && hours < 19) msg = 'Selamat Sore'
-  else msg = 'Selamat Malam'
-  return msg 
+  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
+  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
+  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
+  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
 }
