@@ -29,7 +29,7 @@ let handler  = async (m, { conn, usedPrefix }) => {
 ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n║\n`}
 ║
 ║${readMore}
-╠═〘 SYARAT & KETENTUAN METRO BOT 〙 ═
+╠═〘 SYARAT & KETENTUAN Games-wabot 〙 ═
 ╠➥ *KAMI TIDAK BERTANGGUNG*
 ║   *JAWAB ATAS PENYALAH*
 ║   *GUNAAN BOT*
@@ -49,8 +49,6 @@ ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n�
 handler.help = ['info']
 handler.tags = ['about']
 handler.command = /^(info(bot)?)$/i
-
-handler.fail = null
 
 module.exports = handler
 
