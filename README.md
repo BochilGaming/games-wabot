@@ -8,10 +8,19 @@
 <a href="https://github.com/BochilGaming/games-wabot/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/BochilGaming/games-wabot?label=PullRequest&color=success&style=flat-square"></a>
 <a href="https://github.com/BochilGaming/games-wabot/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/BochilGaming/games-wabot?label=PullRequest&color=red&style=flat-square"></a>
 
+#### Deploy to Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/BochilGaming/games-wabot)
+
+#### Heroku Buildpack
+| BuildPack | LINK |
+|--------|--------|
+| **FFMPEG** |[here](https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest) |
+| **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
+
 ## Join Group Bot
 [`Group Whatsapp`](https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM)
 ### FOR TERMUX USER
-```bash
+```cmd
 > pkg update && pkg upgrade
 > pkg install git -y
 > pkg install nodejs -y
@@ -22,7 +31,7 @@
 > npm install
 ```
 ###### Run
-```bash
+```cmd
 > node . [<session name>] (session name is optional)
 ```
 
@@ -33,13 +42,13 @@
 * Download And Install NodeJS [`Click Here`](https://nodejs.org/en/download) <br>
 * Download And Install FFMPEG [`Click Here`](https://ffmpeg.org/download.html) (don't forget to path) 
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php) (if nulis want work,  checklist columns 1,2,3,5,6) 
-```bash
+```cmd
 > git clone https://github.com/BochilGaming/games-wabot
 > cd games-wabot
 > npm install
 ```
 ###### Run
-```bash
+```cmd
 > node index.js
 ```
 --------------
