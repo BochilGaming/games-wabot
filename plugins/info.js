@@ -7,7 +7,7 @@ let handler  = async (m, { conn, usedPrefix }) => {
   let uptime = clockString(_uptime) 
   let totalreg = Object.keys(global.DATABASE._data.users).length
   let old = Math.round(performance.now())
-  await m.reply('wait Kakak!!')
+  await m.reply('Wait Kakak!!')
   let neww = Math.round(performance.now())
   conn.reply(m.chat, `
 ╠═〘 ${package.name} 〙 ═
@@ -25,11 +25,11 @@ let handler  = async (m, { conn, usedPrefix }) => {
 ╠➥ Indosat: 085713964963
 ║
 ╠═ Request? ${package.bugs.url}
-╠═ officiall Group *${conn.getName(conn.user.jid)}* :
+╠═ Official Group *${conn.user.name}* :
 ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n║\n`}
 ║
 ║${readMore}
-╠═〘 PIRACY METRO BOT 〙 ═
+╠═〘 SYARAT & KETENTUAN METRO BOT 〙 ═
 ╠➥ *KAMI TIDAK BERTANGGUNG*
 ║   *JAWAB ATAS PENYALAH*
 ║   *GUNAAN BOT*
@@ -42,7 +42,7 @@ ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n�
 ║ 
 ║ 
 ╠═ ©2021 ${package.name}
-╠═ Scrip original by Norutomo
+╠═ Script original by Nurutomo
 ╠═〘 METRO BOT 〙 ═
 `.trim(), m)
 }
