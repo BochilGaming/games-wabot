@@ -14,16 +14,11 @@ let handler  = async (m, { conn, args, usedPrefix, command }) => {
 `.trim()
 	await conn.groupSettingChange(m.chat, GroupSettingChange.messageSend, isClose)
 }
-handler.help = ['group *open / close*']
+handler.help = ['group [open | close]']
 handler.tags = ['group']
 handler.command = /^(group)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
+handler.group = true
 handler.admin = true
 handler.botAdmin = true
-handler.fail = null
-handler.exp = 0
+
 module.exports = handler
