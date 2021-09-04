@@ -6,7 +6,7 @@ let dude = 'emror?'
 let [text, ...text2] = txt.replace(dude, '').trimStart().split(split)
   text2 = text2.join(split)
 if (!text) throw `Reply foto dengan caption:${usedPrefix + command} Test|Proto`
-let ppnya = await fs.readFileSync(path.join(__dirname , '../src/damzz.jpg')).toString('base64')
+let ppnya = await conn.getProfilePicture(m.sender)
 
 conn.sendMessage(m.chat, 'Gk bisa ya?:v', 'extendedTextMessage', { thumbnail: ppnya, jpegThumbnail: ppnya, contextInfo : { mentionedJid: m.sender,
     externalAdReply: {
