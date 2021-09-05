@@ -25,7 +25,7 @@ fi
 echo -e "\u001b[36mChange working directory!"
 cd games-wabot
 main_dir=$(pwd)
-if [ $main_dir !== $dir ]; then
+if [ $main_dir != $dir ]; then
   echo -e "\u001b[36mDone change working directory!"
   echo -e "\u001b[36mInstalling bot!"
   bash install.sh
@@ -34,7 +34,8 @@ else
   exit 1
 fi
 
-function check() {
+
+check() {
   if [ -e $bin/git ]; then
     echo -e "\u001b[32mGit already installed!"
   else

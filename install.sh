@@ -44,7 +44,7 @@ echo -e "\u001b[32mIf found bug pls report in https://github.com/Nurutomo/wabot-
 npm run start
 
 
-function check() {
+check() {
   if [ -e $bin/node ]; then
     echo -e "\u001b[32mNodejs already installed!"
   else
