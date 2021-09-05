@@ -13,7 +13,7 @@ fi
 if [ -e $bin/ffmpeg ]; then 
   echo "\u001b[32mSkip install ffmpeg but already installed!"
 else
-  echo "\u001b[31mInstaling \u001b[31mnpm!"
+  echo "\u001b[31mInstaling \u001b[31mffmpeg!"
   pkg install ffmpeg -y
   echo "\u001b[32mDone install ffmpeg!"
 fi
@@ -21,7 +21,7 @@ fi
 if [ -e $bin/magick ]; then 
   echo "\u001b[32mSkip install imagemagick but already installed!"
 else
-  echo "\u001b[31mInstaling \u001b[31mnpm!"
+  echo "\u001b[31mInstaling \u001b[31mimagemagick!"
   pkg install imagemagick -y
   echo "\u001b[32mDone install imagemagick!"
 fi
