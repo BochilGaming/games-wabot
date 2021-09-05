@@ -47,7 +47,7 @@ check() {
     echo -e "\u001b[31mImagemagick not installed!!, install manualy using `pkg install imagemagick -y` or `apt install imagemagick -y`"
   fi 
 }
-check
+check()
 echo -e "\u001b[32mDone checking instalation!" 
 
 echo -e "\u001b[33mInstall and update module!"
