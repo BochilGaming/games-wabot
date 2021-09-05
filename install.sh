@@ -27,23 +27,6 @@ else
 fi
 
 echo -e "\u001b[33mChecking instalation!"
-check
-echo -e "\u001b[32mDone checking instalation!" 
-
-echo -e "\u001b[33mInstall and update module!"
-if [ -e $dir/package.json ]; then
-  npm install
-  npm update
-  echo -e "\u001b[32Done Install and update module!" 
-else 
-  echo -e "\u001b[31mPackage.json not found!"
-fi 
-
-echo -e "\u001b[32mStarting bot..."
-echo -e "\u001b[32mIf found bug pls report in \u001b[33;1mhttps://github.com/Nurutomo/wabot-aq/issues/new?assignees=&labels=&template=bug_report.md&title="
-npm run start
-
-
 check() {
   if [ -e $bin/node ]; then
     echo -e "\u001b[32mNodejs already installed!"
@@ -64,3 +47,18 @@ check() {
     echo -e "\u001b[31mImagemagick not installed!!, install manualy using `pkg install imagemagick -y` or `apt install imagemagick -y`"
   fi 
 }
+check
+echo -e "\u001b[32mDone checking instalation!" 
+
+echo -e "\u001b[33mInstall and update module!"
+if [ -e $dir/package.json ]; then
+  npm install
+  npm update
+  echo -e "\u001b[32Done Install and update module!" 
+else 
+  echo -e "\u001b[31mPackage.json not found!"
+fi 
+
+echo -e "\u001b[32mStarting bot..."
+echo -e "\u001b[32mIf found bug pls report in \u001b[33;1mhttps://github.com/Nurutomo/wabot-aq/issues/new?assignees=&labels=&template=bug_report.md&title="
+npm run start

@@ -10,6 +10,14 @@ else
 fi
 
 echo -e "\u001b[33mChecking instalation!"
+check() {
+  if [ -e $bin/git ]; then
+    echo -e "\u001b[32mGit already installed!"
+  else
+    echo -e "\u001b[31mGit not installed!!, install manualy using `pkg install git -y` or `apt install git -y` and after that, type `bash install2.sh`"
+    exit 1
+  fi
+}
 check
 echo -e "\u001b[32mDone checking instalation!" 
 
@@ -33,13 +41,3 @@ else
   echo -e "\u001b[31mFail to change working directory!!"
   exit 1
 fi
-
-
-check() {
-  if [ -e $bin/git ]; then
-    echo -e "\u001b[32mGit already installed!"
-  else
-    echo -e "\u001b[31mGit not installed!!, install manualy using `pkg install git -y` or `apt install git -y` and after that, type `bash install2.sh`"
-    exit 1
-  fi
-}
