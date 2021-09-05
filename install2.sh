@@ -10,6 +10,7 @@ else
 fi
 
 echo -e "\u001b[33mChecking instalation!"
+
 check() {
   if [ -e $bin/git ]; then
     echo -e "\u001b[32mGit already installed!"
@@ -18,7 +19,8 @@ check() {
     exit 1
   fi
 }
-check()
+
+check
 echo -e "\u001b[32mDone checking instalation!" 
 
 echo -e "\u001b[36mCloning reposito!"
