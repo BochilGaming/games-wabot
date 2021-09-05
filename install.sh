@@ -40,7 +40,7 @@ else
 fi 
 
 echo -e "\u001b[32mStarting bot..."
-echo -e "\u001b[32mIf found bug pls report in https://github.com/Nurutomo/wabot-aq/issues/new?assignees=&labels=&template=bug_report.md&title="
+echo -e "\u001b[32mIf found bug pls report in \u001b[33;1mhttps://github.com/Nurutomo/wabot-aq/issues/new?assignees=&labels=&template=bug_report.md&title="
 npm run start
 
 
