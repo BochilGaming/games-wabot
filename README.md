@@ -159,7 +159,7 @@ conn.logger.level = 'debug'
 
 #### Contributor
 [![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
-[![zatu22](https://github.com/zatu22.png?size=100)](https://github.com/zatu22)
+[![zatu22](https://github.com/zatu22.png?size=50)](https://github.com/zatu22)
 [![Adiixyz](https://github.com/Adiixyz.png?size=100)](https://github.com/Adiixyz)
 [![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
 [![arisawali2014](https://github.com/arisawali2014.png?size=100)](https://github.com/arisawali2014)
