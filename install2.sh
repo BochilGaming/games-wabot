@@ -33,10 +33,8 @@ else
 fi
 
 echo -e "\u001b[36mChange working directory!"
-echo $(pwd)
 cd games-wabot
 main_dir=$(pwd)
-echo $main_dir
 if [ $main_dir != $dir ]; then
   echo -e "\u001b[36mDone change working directory!"
   echo -e "\u001b[36mInstalling bot!"
