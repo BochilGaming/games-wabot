@@ -2,8 +2,7 @@ let { MessageType } = require('@adiwajshing/baileys')
 let handler = async (m, { conn, text }) => {
     conn.req = conn.req ? conn.req : {}
     if (!text) return conn.reply(m.chat, 'Mau request apa an?', m) 
-    let _name = m.fromMe ? conn.user : conn.contacts[m.sender]
-    let name = _name.vnmae || _name.notify || _name.name || ('+' + _name.jid.split`@`[0]) || 'undefined'
+    let name = conn.getName(m.sender)
     let _text = ('*dari:* ' + name + '\n*No:* ' + m.sender.split`@`[0] + '\nRequest:')
     conn.reply(m.chat, 'Pesan Anda sudah terkirim', m)
     conn.req[m.sender] = {
