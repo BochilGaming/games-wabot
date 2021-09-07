@@ -9,8 +9,8 @@ let handler = async (m, { conn, text, isMods, isOwner }) => {
         let res = await conn.acceptInvite(code)
         m.reply(`Berhasil join grup ${res.gid}`)
     } else {
-        let _name = m.fromMe ? conn.user : conn.contacts[m.sender]
-        let name = _name.vnmae || _name.notify || _name.name || ('+' + _name.jid.split`@`[0]) || 'undefined'
+    
+        let name = conn.getName(m.sender)
         conn.req[m.sender] = {
             name,
             text: 'Kak join group ku donk, ini linknya \n```https://chat.whatsapp.com/' + code + '```',
