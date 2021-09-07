@@ -16,7 +16,7 @@ handler.all = async function (m) {
             if (this.spam[m.sender].spam > 6) {
                 this.spam[m.sender].spam = 0
                 this.spam[m.sender].lastspam = new Date * 1
-                //global.DATABASE._data.users[m.sender].banned = true
+                //global.DATABASE._data.users[m.sender].Banneduser = true
                 m.reply('*Jangan Spam!!*')
             } else {
                 this.spam[m.sender].spam = 0

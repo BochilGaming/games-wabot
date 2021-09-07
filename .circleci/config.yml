@@ -1,0 +1,22 @@
+version: '2.1'
+orbs:
+  node: circleci/node@4.7.0
+
+workflows:
+  test_syntax:
+    jobs:
+      - node/test: 
+          name: Node 12.13.0
+          override-ci-command: echo \"Skip install dependencies\"
+          run-command: test
+          version: '12.13.0' 
+      - node/test:
+          name: Node 14.17.5
+          override-ci-command: echo \"Skip install dependencies\"
+          run-command: test
+          version: '14.17.5' 
+      - node/test:
+          name: Node 16.8.0
+          override-ci-command: echo \"Skip install dependencies\"
+          run-command: test
+          version: '16.8.0' 
