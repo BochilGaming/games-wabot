@@ -1,6 +1,23 @@
 global.DeveloperMode = 'false' //true Or false
 global.linkGC = ['https://chat.whatsapp.com/Lb4Emjih98rBiCZiZoS2eM', 'https://chat.whatsapp.com/FrluVyY5kBRIhY6yKfH4DI']
-global.owner = ['6281390658325', '6282256115584', '6285713964963']// Put your number here
+global.Owner = {
+  '6281390658325': {
+    name: 'Owner Metro Bot/Creator games-wabot',
+    isDev: true, // if true this number will send if bot have bug and developer mode true
+    isReport: true, // if true this number will send if user use command /report or /join
+    isCreator: true // if true this number will send if user use command /owner or /creator
+  },
+  '6282256115584': {
+    name: 'Dave',
+    isDev: false, // if true this number will send if bot have bug and developer mode true
+    isReport: true, // if true this number will send if user use command /report or /join
+    isCreator: false // if true this number will send if user use command /owner or /creator
+  },
+  '6285713964963': {
+    isReport: true
+  },
+  '13479805233': {} // ignore if you don't want anything, like name dll
+}
 global.mods = ['13479805233'] // Want some help?
 global.prems = [] // Premium user has unlimited limit
 global.APIs = { // API Prefix
