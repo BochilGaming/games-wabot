@@ -13,6 +13,10 @@ global.Owner = {
     isReport: true, // if true this number will send if user use command /report or /join
     isCreator: false // if true this number will send if user use command /owner or /creator
   },
+  '60199782326': {
+    name: 'Adiixyz',
+    isReport: true, // if true this number will send if user use command /report or /join
+  },
   '6285713964963': {
     isReport: true
   },
