@@ -26,18 +26,18 @@ wget -O - https://raw.githubusercontent.com/BochilGaming/games-wabot/main/instal
 
 [ INSTALLING UBUNTU ]
 
-```bash
+```cmd
 apt update && apt full-upgrade
 apt install wget curl git proot-distro
-proot-distro install ubuntu
-echo "proot-distro login ubuntu" > $PREFIX/bin/ubuntu
-ubuntu
+git clone https://github.com/Adiixyz/ubuntu_termux
+cd ubuntu_termux
+bash install.sh
 ```
 ---------
 
 [ INSTALLING REQUIRED PACKAGES ]
 
-```bash
+```cmd
 ubuntu
 apt update && apt full-upgrade
 apt install wget curl git ffmpeg imagemagick build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev dbus-x11 ffmpeg2theora ffmpegfs ffmpegthumbnailer ffmpegthumbnailer-dbg ffmpegthumbs libavcodec-dev libavcodec-extra libavcodec-extra58 libavdevice-dev libavdevice58 libavfilter-dev libavfilter-extra libavfilter-extra7 libavformat-dev libavformat58 libavifile-0.7-bin libavifile-0.7-common libavifile-0.7c2 libavresample-dev libavresample4 libavutil-dev libavutil56 libpostproc-dev libpostproc55 graphicsmagick graphicsmagick-dbg graphicsmagick-imagemagick-compat graphicsmagick-libmagick-dev-compat groff imagemagick-6.q16hdri imagemagick-common libchart-gnuplot-perl libgraphics-magick-perl libgraphicsmagick++-q16-12 libgraphicsmagick++1-dev
@@ -47,7 +47,7 @@ apt install wget curl git ffmpeg imagemagick build-essential libcairo2-dev libpa
 
 [ INSTALLING NODEJS & GAMES-WABOT ]
 
-```bash
+```cmd
 ubuntu
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 apt install -y nodejs gcc g++ make
@@ -66,7 +66,7 @@ npm update
 * Download And Install FFmpeg [`Click Here`](https://ffmpeg.org/download.html) (**Don't Forget Add FFmpeg to PATH enviroment variables**)
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php)
 
-```bash
+```cmd
 git clone https://github.com/BochilGaming/games-wabot
 cd games-wabot
 npm install
@@ -77,7 +77,7 @@ npm update
 
 ## Run
 
-```bash
+```cmd
 node .
 ```
 
