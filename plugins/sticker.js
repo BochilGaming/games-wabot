@@ -19,13 +19,16 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         else if (/video/g.test(mime)) out = await uploadFile(img)
         stiker = await sticker(false, out, global.packname, global.author)
       } catch (e) {
-          console.error(e)
-          stiker = await sticker(img, false, global.packname, global.author)
+        console.error(e)
+        stiker = await sticker(img, false, global.packname, global.author)
       }
     } else if (args[0]) {
       if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
       else return m.reply('URL tidak valid!')
     }
+  } catch (e) {
+    console.error(e)
+    if (Buffer.isBuffer(e)) stiker = e
   } finally {
     if (stiker) await conn.sendMessage(m.chat, stiker, MessageType.sticker, {
       quoted: m
