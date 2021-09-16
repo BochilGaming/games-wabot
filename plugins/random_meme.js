@@ -1,21 +1,36 @@
-//created by Scooppt
-let fetch = require('node-fetch')
+//created by zatu22, WilfredAlmeida
 
-let handler  = async (m, { conn, text }) => {
- try {
-    let res = await fetch('https://meme-api.herokuapp.com/gimme')
-    let json = await res.json()
-    if (json.status) throw json
-    let caption = `
-©Reddit
-Author: ${json.author} Subreddit: ${json.subreddit}
-${json.postLink}
-`.trim()
-    conn.sendFile(m.chat, json.url, 'test.jpg', caption, m)
-   } catch (e) {
-        console.log(e)
-        throw '_*Erro!*_'
-    }
+let fetch = require('node-fetch');
+let fs = require('fs');
+let path = require('path');
+
+let { MessageType } = require('@adiwajshing/baileys')
+
+let handler = async(m, { conn, text }) => {
+ 
+    var IMAGE__URL = ""
+    await fetch("https://meme-api.herokuapp.com/gimme").then(res => res.text()).then(text => {
+        jso = JSON.parse(text)
+        IMAGE__URL = jso.url
+        IMAGE__title = jso.title
+        console.log(`Image URL ${IMAGE__URL}`);
+    }).catch((error) => console.log("ERROR: ", error));
+
+    let buttons = button('©Reddit')
+    let msgtitel = IMAGE__title
+
+    await conn.sendFile(
+            m.chat,
+            IMAGE__URL,
+            '*',
+            msgtitel,
+            m,
+       ),           
+        conn.sendMessage(
+            m.chat,
+            buttons,
+            MessageType.buttonsMessage,
+        )
 }
 
 handler.help = ['meme']
@@ -25,3 +40,20 @@ handler.command = /^meme$/i
 handler.fail = null
 
 module.exports = handler
+
+function button(teks) {
+
+    const buttons = [
+        { buttonId: 'id1', buttonText: { displayText: '/menu' }, type: 1 },
+        { buttonId: 'id2', buttonText: { displayText: '/meme' }, type: 1 }
+    ]
+
+    const buttonMessage = {
+        contentText: teks,
+        footerText: '©Chatbot',
+        buttons: buttons,
+        headerType: 1
+    }
+
+    return buttonMessage
+}
