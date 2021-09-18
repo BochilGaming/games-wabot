@@ -66,7 +66,6 @@
     "warn": "^1.0.1",
     "yargs": "^16.2.0",
     "node-webpmux": "^2.0.3",
-    "wa-sticker-formatter": "4.0.3",
     "yt-search": "^2.7.6",
     "g-i-s": "^2.1.6"
   }
