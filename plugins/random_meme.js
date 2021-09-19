@@ -1,3 +1,5 @@
+//created by zatu22, WilfredAlmeida
+
 let fetch = require('node-fetch');
 let fs = require('fs');
 let path = require('path');
