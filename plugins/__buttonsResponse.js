@@ -50,7 +50,7 @@ module.exports = {
             }
 
         }
-        m.reply(util.format(isIdMessage ? m.msg.selectedButtonId : m.msg.selectedDisplayText))
+        // m.reply(util.format(isIdMessage ? m.msg.selectedButtonId : m.msg.selectedDisplayText))
         this.emit('chat-update', {
             ...chatUpdate,
             messages: newMessagesDB([
