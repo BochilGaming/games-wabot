@@ -1,4 +1,4 @@
-//created by zatu22, WilfredAlmeida
+//created by zatu22, WilfredAlmeida, idhamthoriqbot
 
 let fetch = require('node-fetch');
 let fs = require('fs');
@@ -16,7 +16,11 @@ let handler = async(m, { conn, text }) => {
         console.log(`Image URL ${IMAGE__URL}`);
     }).catch((error) => console.log("ERROR: ", error));
     
-    conn.sendButton(m.chat, titel = IMAGE__title, footer = ('ChatBot'), buffer = IMAGE__URL, button = [["/meme"]])
+ conn.sendButton(m.chat, IMAGE__title, 'ChatBot', IMAGE__URL, [
+        ['MENU', '/menu'],
+        ['MORE MEME', '/meme']
+
+    ])
 }
 
 handler.help = ['meme']
