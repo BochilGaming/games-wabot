@@ -1,6 +1,5 @@
 let fs = require('fs')
 let path = require('path')
-let moment = require('moment-timezone')
 let levelling = require('../lib/levelling')
 let tags = {
   'main': 'Main',
@@ -177,8 +176,8 @@ function clockString(ms) {
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
 }
 function ucapan() {
-  const time = moment.tz('Asia/Jakarta').format('HH')
-  res = "Pagi"
+  const time = (new Date().getUTCHours() + 7) % 24
+  res = "Woi. Pagi"
   if (time >= 4) {
     res = "Selamat Pagi"
   }
