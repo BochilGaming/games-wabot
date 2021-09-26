@@ -36,6 +36,7 @@ const defaultMenu = {
 │
 │ Tanggal: *%week %weton, %date*
 │ Tanggal Islam: *%dateIslamic*
+│ Waktu Sholat: *${waktusholat()}*
 │ Waktu: *%time*
 │
 │ Uptime: *%uptime (%muptime)*
@@ -191,4 +192,24 @@ function ucapan() {
     res = "Selamat Malam"
   }
   return res
+}
+function waktusholat() {
+  const sholat = (new Date().getUTCHours() + 7) % 24
+  wsid = "undefined"
+  if (sholat >= 4) {
+    wsid = "Waktu Shubuh"
+  }
+  if (sholat >= 11) {
+    wsid = "Waktu Dzuhur"
+  }
+  if (sholat >= 14) {
+    wsid = "Waktu Ashr"
+  }
+  if (sholat >= 17) {
+    wsid = "Waktu Maghrib"
+  }
+  if (sholat >= 19) {
+    wsid = "Waktu Isya"
+  }
+  return wsid
 }
