@@ -182,10 +182,10 @@ function ucapan() {
     res = "Selamat Pagi"
   }
   if (time >= 12) {
-    res = "Selamat Tengah Hari"
+    res = "Selamat Siang"
   }
   if (time >= 15) {
-    res = "Selamat Petang"
+    res = "Selamat Sore"
   }
   if (time >= 19) {
     res = "Selamat Malam"
