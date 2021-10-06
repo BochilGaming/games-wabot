@@ -32,7 +32,7 @@ let tags = {
 const defaultMenu = {
   before: `
 ╭─「 %me 」
-│ ${ucapan()}, %name!
+│ %ucapan, %name!
 │
 │ Tanggal: *%week %weton, %date*
 │ Tanggal Islam: *%dateIslamic*
@@ -134,6 +134,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       '%': '%',
       p: _p, uptime, muptime,
       me: conn.user.name,
+      ucapan: ucapan(),
       npmname: package.name,
       npmdesc: package.description,
       version: package.version,
