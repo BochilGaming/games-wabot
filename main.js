@@ -1,157 +1,145 @@
-require('./config.js')
-let { WAConnection: _WAConnection } = require('@adiwajshing/baileys')
-let { generate } = require('qrcode-terminal')
-let syntaxerror = require('syntax-error')
-let simple = require('./lib/simple')
-//  let logs = require('./lib/logs')
-let { promisify } = require('util')
-let yargs = require('yargs/yargs')
-let Readline = require('readline')
-let cp = require('child_process')
-let path = require('path')
-let fs = require('fs')
+require('./config')
+const {
+  default: makeWASocket,
+  BufferJSON,
+  initInMemoryKeyStore,
+  DisconnectReason
+} = require('@adiwajshing/baileys-md')
+const path = require('path')
+const fs = require('fs')
+const yargs = require('yargs/yargs')
+const Readline = require('readline')
+const cp = require('child_process')
+const _ = require('lodash')
+const syntaxerror = require('syntax-error')
+const cloudDBAdapter = require('./lib/cloudDBAdapter')
+const simple = require('./lib/simple')
+var low
+try {
+  low = require('lowdb')
+} catch (e) {
+  low = require('./lib/lowdb')
+}
+const { Low, JSONFile } = low
 
-let rl = Readline.createInterface(process.stdin, process.stdout)
-let WAConnection = simple.WAConnection(_WAConnection)
+const rl = Readline.createInterface(process.stdin, process.stdout)
 
-global.owner = Object.keys(global.Owner)
+
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
+global.callFunction = (Function, conn = global.conn, ...args) => Function.call(conn, ...args)
 global.timestamp = {
   start: new Date
 }
-// global.LOGGER = logs()
+
 const PORT = process.env.PORT || 3000
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 
 global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
 
-global.DATABASE = new (require('./lib/database'))(`${opts._[0] ? opts._[0] + '_' : ''}database.json`, null, 2)
-if (!global.DATABASE.data.users) global.DATABASE.data = {
-  users: {},
-  chats: {},
-  stats: {},
-  msgs: {},
-  sticker: {},
-}
-if (!global.DATABASE.data.chats) global.DATABASE.data.chats = {}
-if (!global.DATABASE.data.stats) global.DATABASE.data.stats = {}
-if (!global.DATABASE.data.msgs) global.DATABASE.data.msgs = {}
-if (!global.DATABASE.data.sticker) global.DATABASE.data.sticker = {}
-global.conn = new WAConnection()
-let authFile = `${opts._[0] || 'session'}.data.json`
-if (fs.existsSync(authFile)) conn.loadAuthInfo(authFile)
-if (opts['trace']) conn.logger.level = 'trace'
-if (opts['debug']) conn.logger.level = 'debug'
-if (opts['big-qr'] || opts['server']) conn.on('qr', qr => generate(qr, { small: false }))
-let lastJSON = JSON.stringify(global.DATABASE.data)
-if (!opts['test']) setInterval(() => {
-  conn.logger.info('Saving database . . .')
-  if (JSON.stringify(global.DATABASE.data) == lastJSON) conn.logger.info('Database is up to date')
-  else {
-    global.DATABASE.save()
-    conn.logger.info('Done saving database!')
-    lastJSON = JSON.stringify(global.DATABASE.data)
-  }
-}, 60 * 1000) // Save every minute
-if (opts['server']) require('./server')(global.conn, PORT)
+global.db = new Low(
+  /https?:\/\//.test(opts['db'] || '') ?
+    new cloudDBAdapter(opts['db']) :
+    new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`)
+)
+global.DATABASE = global.db // Backwards Compatibility
 
-conn.connectOptions.maxQueryResponseTime = 60_000
-if (opts['test']) {
-  conn.user = {
-    jid: '2219191@s.whatsapp.net',
-    name: 'test',
-    phone: {}
-  }
-  conn.prepareMessageMedia = (buffer, mediaType, options = {}) => {
-    return {
-      [mediaType]: {
-        url: '',
-        mediaKey: '',
-        mimetype: options.mimetype || '',
-        fileEncSha256: '',
-        fileSha256: '',
-        fileLength: buffer.length,
-        seconds: options.duration,
-        fileName: options.filename || 'file',
-        gifPlayback: options.mimetype == 'image/gif' || undefined,
-        caption: options.caption,
-        ptt: options.ptt
-      }
+global.authFile = `${opts._[0] || 'session'}.data.json`
+const auth = () => {
+  if (!fs.existsSync(authFile)) return undefined
+  try {
+    const value = JSON.parse(
+      fs.readFileSync(authFile, { encoding: 'utf-8' }),
+      BufferJSON.reviver
+    )
+    const state = {
+      creds: value.creds,
+      // stores pre-keys, session & other keys in a JSON object
+      // we deserialize it here
+      keys: initInMemoryKeyStore(value.keys)
     }
+    return state
+  } catch (e) {
+    console.error(e)
   }
+}
 
-  conn.sendMessage = async (chatId, content, type, opts = {}) => {
-    let message = await conn.prepareMessageContent(content, type, opts)
-    let waMessage = await conn.prepareMessageFromContent(chatId, message, opts)
-    if (type == 'conversation') waMessage.key.id = require('crypto').randomBytes(16).toString('hex').toUpperCase()
-    conn.emit('chat-update', {
-      jid: conn.user.jid,
-      hasNewMessage: true,
-      count: 1,
-      messages: {
-        all() {
-          return [waMessage]
-        }
-      }
-    })
-  }
-  rl.on('line', line => conn.sendMessage('123@s.whatsapp.net', line.trim(), 'conversation'))
-} else {
+global.conn = simple.makeWASocket({
+  printQRInTerminal: true,
+  auth: auth()
+})
+
+if (!opts['test']) {
+  if (global.db) setInterval(async () => {
+    await global.db.write()
+  }, 60 * 1000)
   rl.on('line', line => {
-    global.DATABASE.save()
     process.send(line.trim())
   })
-  conn.connect().then(() => {
-    fs.writeFileSync(authFile, JSON.stringify(conn.base64EncodedAuthInfo(), null, '\t'))
-    global.timestamp.connect = new Date
-  })
 }
+
+conn.auth = auth
+conn.connection_update = async (update) => {
+  const { connection, lastDisconnect } = update
+  if (!global.db.data) {
+    await global.db.read()
+    global.db.data = {
+      users: {},
+      chats: {},
+      stats: {},
+      msgs: {},
+      sticker: {},
+      ...(global.db.data || {})
+    }
+    global.db.chain = _.chain(global.db.data)
+  }
+  global.timestamp.connect = new Date
+  if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut) {
+    console.log(global.reloadHandler(true))
+  }
+}
+
+conn.auth_state_update = () => {
+  const state = conn.authState
+  fs.writeFileSync(
+    global.authFile,
+    // BufferJSON replacer utility saves buffers nicely
+    JSON.stringify(state, BufferJSON.replacer, 2)
+  )
+}
+
 process.on('uncaughtException', console.error)
 // let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
 let isInit = true
-global.reloadHandler = function () {
-  let handler = require('./handler')
-  if (!isInit) {
-    conn.off('chat-update', conn.handler)
-    conn.off('message-delete', conn.onDelete)
-    conn.off('group-participants-update', conn.onParticipantsUpdate)
-    conn.off('CB:action,,call', conn.onCall)
-  }
-  conn.welcome = 'Hai, @user!\nSelamat datang di grup @subject'
-  conn.bye = 'Selamat tinggal @user!'
-  conn.spromote = '@user sekarang admin!'
-  conn.sdemote = '@user sekarang bukan admin!'
-  conn.handler = handler.handler
-  conn.onDelete = handler.delete
-  conn.onParticipantsUpdate = handler.participantsUpdate
-  conn.onCall = handler.onCall
-  conn.on('chat-update', conn.handler)
-  conn.on('message-delete', conn.onDelete)
-  conn.on('group-participants-update', conn.onParticipantsUpdate)
-  conn.on('CB:action,,call', conn.onCall)
-  if (isInit) {
-    conn.on('error', conn.logger.error)
-    conn.on('close', () => {
-      setTimeout(async () => {
-        try {
-          if (conn.state === 'close') {
-            if (fs.existsSync(authFile)) await conn.loadAuthInfo(authFile)
-            await conn.connect()
-            fs.writeFileSync(authFile, JSON.stringify(conn.base64EncodedAuthInfo(), null, '\t'))
-            global.timestamp.connect = new Date
-          }
-        } catch (e) {
-          conn.logger.error(e)
-        }
-      }, 5000)
+global.reloadHandler = function (restatConn) {
+  if (restatConn) {
+    try { global.conn.ws.close() } catch { }
+    global.conn = null
+    global.conn = simple.makeWASocket({
+      printQRInTerminal: true,
+      auth: auth()
     })
   }
+  let handler = require('./handler')
+  if (!isInit) {
+    conn.event.off('messages.upsert', conn.handler)
+    conn.event.off('group-participants.update', conn.participantsUpdate)
+    conn.event.off('groups.update', conn.groupsUpdate)
+    conn.event.off('connection.update', conn.connection_update)
+    conn.event.off('auth-state.update', conn.auth_state_update)
+  }
+  conn.handler = handler.handler
+  conn.participantsUpdate = handler.participantsUpdate
+  conn.groupsUpdate = handler.groupsUpdate
+  conn.event.on('messages.upsert', conn.handler)
+  conn.event.on('group-participants.update', conn.participantsUpdate)
+  conn.event.on('groups.update', conn.groupsUpdate)
+  conn.event.on('connection.update', conn.connection_update)
+  conn.event.on('auth-state.update', conn.auth_state_update)
   isInit = false
   return true
 }
 
-// Plugin Loader
 let pluginFolder = path.join(__dirname, 'plugins')
 let pluginFilter = filename => /\.js$/.test(filename)
 global.plugins = {}
@@ -175,7 +163,7 @@ global.reload = (_event, filename) => {
         return delete global.plugins[filename]
       }
     } else conn.logger.info(`requiring new plugin '${filename}'`)
-    let err = syntaxerror(fs.readFileSync(dir), fs.existsSync(dir) ? filename : 'Execution Function')
+    let err = syntaxerror(fs.readFileSync(dir), filename)
     if (err) conn.logger.error(`syntax error while loading '${filename}'\n${err}`)
     else try {
       global.plugins[filename] = require(dir)
@@ -189,9 +177,6 @@ global.reload = (_event, filename) => {
 Object.freeze(global.reload)
 fs.watch(path.join(__dirname, 'plugins'), global.reload)
 global.reloadHandler()
-process.on('exit', () => global.DATABASE.save())
-
-
 
 // Quick Test
 async function _quickTest() {
@@ -224,7 +209,7 @@ async function _quickTest() {
     magick,
     gm
   }
-  require('./lib/sticker').support = s
+  // require('./lib/sticker').support = s
   Object.freeze(global.support)
 
   if (!s.ffmpeg) conn.logger.warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
