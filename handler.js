@@ -28,6 +28,7 @@ module.exports = {
         if (user) {
             if (!isNumber(user.healt)) user.healt = 0
             if (!isNumber(user.level)) user.level = 0
+            if (!user.role) user.role = 'Warrior'
             if (!isNumber(user.exp)) user.exp = 0
             if (!isNumber(user.limit)) user.limit = 10
             if (!isNumber(user.lastclaim)) user.lastclaim = 0
@@ -101,6 +102,7 @@ module.exports = {
         } else global.DATABASE._data.users[m.sender] = {
             healt: 100,
             level: 0,
+            role: 'Warrior',
             exp: 0,
             limit: 10,
             lastclaim: 0,
