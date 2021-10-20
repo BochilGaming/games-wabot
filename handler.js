@@ -1,6 +1,6 @@
 let util = require('util')
 let simple = require('./lib/simple')
-let { MessageType } = require('@adiwajshing/baileys')
+let { MessageType, Presence } = require('@adiwajshing/baileys')
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
@@ -395,6 +395,7 @@ ${(global.linkGC).map((v, i) => '*Group ' + (i + 1) + '*\n' + v).join`\n\n`}
       }
     } finally {
       //console.log(global.DATABASE._data.users[m.sender])
+        await this.updatePresence(m.chat, Presence.recording)
       let user, stats = global.DATABASE._data.stats
       if (m) {
         if (m.sender && (user = global.DATABASE._data.users[m.sender])) {
