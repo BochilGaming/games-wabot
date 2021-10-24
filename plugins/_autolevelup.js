@@ -9,6 +9,13 @@ handler.before = m => {
     if (!user.autolevelup) return
     if (m.sender === global.conn.user.jid) return
     let before = user.level * 1
+    let d = new Date(new Date + 3600000)
+    let locale = 'id'
+    let time = d.toLocaleTimeString(locale, {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    })
     while (levelling.canLevelUp(user.level, user.exp, global.multiplier)) user.level++
     if (before !== user.level) {
         let str = `Selamat *${name}* naik level \n• Level Sebelumnya : ${before}\n• Level Baru : ${user.level}\n• Pada Jam : ${time}\n\n*_Semakin sering berinteraksi dengan bot Semakin Tinggi level kamu_*`.trim()
