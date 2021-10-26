@@ -3,8 +3,7 @@ m.reply(`${m.quoted.isBaileys}`)
 }
 
 handler.help = ['isbaileys', 'baileys']
-handler.tags = ['owner']
+handler.tags = [''] //mau apa yah??
 handler.command = ['isbaileys', 'baileys']
-handler.owner = true
 
 module.exports = handler
