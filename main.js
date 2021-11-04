@@ -5,6 +5,7 @@ const {
   initInMemoryKeyStore,
   DisconnectReason
 } = require('@adiwajshing/baileys-md')
+const WebSocket = require('ws')
 const path = require('path')
 const fs = require('fs')
 const yargs = require('yargs/yargs')
@@ -13,7 +14,7 @@ const cp = require('child_process')
 const _ = require('lodash')
 const syntaxerror = require('syntax-error')
 const cloudDBAdapter = require('./lib/cloudDBAdapter')
-const simple = require('./lib/simple')
+let simple = require('./lib/simple')
 var low
 try {
   low = require('lowdb')
@@ -21,12 +22,12 @@ try {
   low = require('./lib/lowdb')
 }
 const { Low, JSONFile } = low
-
+const mongoDB = require('./lib/mongoDB')
 const rl = Readline.createInterface(process.stdin, process.stdout)
 
 
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
-global.callFunction = (Function, conn = global.conn, ...args) => Function.call(conn, ...args)
+global.Fn = (fn, ...args) => fn.call(global.conn, ...args)
 global.timestamp = {
   start: new Date
 }
@@ -38,17 +39,18 @@ global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°
 
 global.db = new Low(
   /https?:\/\//.test(opts['db'] || '') ?
-    new cloudDBAdapter(opts['db']) :
-    new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`)
+    new cloudDBAdapter(opts['db']) : /mongodb/.test(opts['db']) ?
+      new mongoDB(opts['db']) :
+      new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`)
 )
 global.DATABASE = global.db // Backwards Compatibility
 
 global.authFile = `${opts._[0] || 'session'}.data.json`
-const auth = () => {
-  if (!fs.existsSync(authFile)) return undefined
+const auth = (auth = null) => {
+  if (!fs.existsSync(authFile) && !auth) return undefined
   try {
     const value = JSON.parse(
-      fs.readFileSync(authFile, { encoding: 'utf-8' }),
+      auth || fs.readFileSync(authFile, { encoding: 'utf-8' }),
       BufferJSON.reviver
     )
     const state = {
@@ -60,6 +62,7 @@ const auth = () => {
     return state
   } catch (e) {
     console.error(e)
+    return null
   }
 }
 
@@ -71,35 +74,24 @@ global.conn = simple.makeWASocket({
 if (!opts['test']) {
   if (global.db) setInterval(async () => {
     await global.db.write()
-  }, 60 * 1000)
+  }, 10 * 1000)
   rl.on('line', line => {
     process.send(line.trim())
   })
 }
 
-conn.auth = auth
-conn.connection_update = async (update) => {
+const connection_update = async (update) => {
   const { connection, lastDisconnect } = update
-  if (!global.db.data) {
-    await global.db.read()
-    global.db.data = {
-      users: {},
-      chats: {},
-      stats: {},
-      msgs: {},
-      sticker: {},
-      ...(global.db.data || {})
-    }
-    global.db.chain = _.chain(global.db.data)
-  }
+  if (global.db.data == null) await loadDatabase()
   global.timestamp.connect = new Date
-  if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut) {
+  if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut && conn.ws.readyState !== WebSocket.CONNECTING) {
     console.log(global.reloadHandler(true))
   }
 }
 
-conn.auth_state_update = () => {
-  const state = conn.authState
+const auth_state_update = () => {
+  const state = conn && conn.authState
+  if (!state) return
   fs.writeFileSync(
     global.authFile,
     // BufferJSON replacer utility saves buffers nicely
@@ -110,32 +102,71 @@ conn.auth_state_update = () => {
 process.on('uncaughtException', console.error)
 // let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
+loadDatabase()
+async function loadDatabase() {
+  await global.db.read()
+  global.db.data = {
+    users: {},
+    chats: {},
+    stats: {},
+    msgs: {},
+    sticker: {},
+    ...(global.db.data || {})
+  }
+  global.db.chain = _.chain(global.db.data)
+}
+const imports = (path) => {
+  let modules, retry = 0
+  while ((!modules || (Array.isArray(modules) || modules instanceof String) ? !(modules || []).length : typeof modules == 'object' && !Buffer.isBuffer(modules) ? !(Object.keys(modules || {})).length : true) && retry <= 10) {
+    modules = require(path)
+    retry++
+  }
+  return modules
+}
 let isInit = true
 global.reloadHandler = function (restatConn) {
+  simple = imports('./lib/simple')
+  let handler = imports('./handler')
   if (restatConn) {
     try { global.conn.ws.close() } catch { }
-    global.conn = null
     global.conn = simple.makeWASocket({
       printQRInTerminal: true,
       auth: auth()
     })
   }
-  let handler = require('./handler')
+  conn.welcome = 'Hai, @user!\nSelamat datang di grup @subject\n\n@desc'
+  conn.bye = 'Selamat tinggal @user!'
+  conn.spromote = '@user sekarang admin!'
+  conn.sdemote = '@user sekarang bukan admin!'
+  conn.handler = (...args) => Fn(handler.handler, ...args)
+  conn.participantsUpdate = (...args) => Fn(handler.participantsUpdate, ...args)
+  conn.groupsUpdate = (...args) => Fn(handler.groupsUpdate, ...args)
+  conn.contacts_upsert = (...args) => Fn(handler.contacts_upsert, ...args)
+  conn.connection_update = (...args) => Fn(connection_update, ...args)
+  conn.auth_state_update = (...args) => Fn(auth_state_update, ...args)
+  conn.auth = auth
+
   if (!isInit) {
-    conn.event.off('messages.upsert', conn.handler)
-    conn.event.off('group-participants.update', conn.participantsUpdate)
-    conn.event.off('groups.update', conn.groupsUpdate)
-    conn.event.off('connection.update', conn.connection_update)
-    conn.event.off('auth-state.update', conn.auth_state_update)
+    conn.ev.removeAllListeners('messages.upsert')
+    conn.ev.removeAllListeners('group-participants.update')
+    conn.ev.removeAllListeners('groups.update')
+    conn.ev.removeAllListeners('connection.update')
+    conn.ev.removeAllListeners('auth-state.update')
+    conn.ev.removeAllListeners('contacts.upsert')
+    // conn.ev.off('messages.upsert', conn.handler)
+    // conn.ev.off('group-participants.update', conn.participantsUpdate)
+    // conn.ev.off('groups.update', conn.groupsUpdate)
+    // conn.ev.off('connection.update', conn.connection_update)
+    // conn.ev.off('auth-state.update', conn.auth_state_update)
+    // conn.ev.off('contacts.upsert', conn.contacts_upsert)
   }
-  conn.handler = handler.handler
-  conn.participantsUpdate = handler.participantsUpdate
-  conn.groupsUpdate = handler.groupsUpdate
-  conn.event.on('messages.upsert', conn.handler)
-  conn.event.on('group-participants.update', conn.participantsUpdate)
-  conn.event.on('groups.update', conn.groupsUpdate)
-  conn.event.on('connection.update', conn.connection_update)
-  conn.event.on('auth-state.update', conn.auth_state_update)
+
+  conn.ev.on('messages.upsert', conn.handler)
+  conn.ev.on('group-participants.update', conn.participantsUpdate)
+  conn.ev.on('groups.update', conn.groupsUpdate)
+  conn.ev.on('connection.update', conn.connection_update)
+  conn.ev.on('auth-state.update', conn.auth_state_update)
+  conn.ev.on('contacts.upsert', conn.contacts_upsert)
   isInit = false
   return true
 }
@@ -152,7 +183,7 @@ for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
   }
 }
 console.log(Object.keys(global.plugins))
-global.reload = (_event, filename) => {
+global.reload = (_ev, filename) => {
   if (pluginFilter(filename)) {
     let dir = path.join(pluginFolder, filename)
     if (dir in require.cache) {
