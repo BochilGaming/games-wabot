@@ -13,7 +13,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         let hasil = json
         let iggs = `
 ▢ *Username:* ${json.username}
-▢ *Nicname:* ${json.fullName}
+▢ *Nickname:* ${json.fullName}
 ▢ *Followers:* ${json.followers}
 ▢ *Following:* ${json.following}
 ▢ *Posting:* ${json.postsCount}
