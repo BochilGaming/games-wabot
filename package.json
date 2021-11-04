@@ -38,6 +38,7 @@
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "awesome-phonenumber": "^2.47.0",
+    "adii-api": "git+https://github.com/IAmAdyy/Adii-Api",
     "brainly-scraper-v2": "^1.1.2",
     "cfonts": "^2.9.3",
     "chalk": "^4.1.0",
