@@ -26,6 +26,10 @@ else
   echo -e "\u001b[32mDone install imagemagick!"
 fi
 
+echo -e "\u001b[32mUpdate npm version"
+npm install -g npm@6.14.14
+echo -e "\u001b[32mDone Update npm version!"
+
 echo -e "\u001b[33mChecking instalation!"
 check() {
   if [ -e $bin/node ]; then
