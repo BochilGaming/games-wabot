@@ -10,7 +10,7 @@ let au = `${data}`
 console.log(data)
 let buf = await getBuffer(data);
 conn.reply(m.chat, '_tunggu sebentar. . ._',m)
-conn.sendMessage(m.chat, buf, MessageType.image, { quoted: m, caption: 'nihhhh!!!!'} )
+conn.sendMessage(m.chat, buf, MessageType.image, { quoted: m, caption: 'nihhhh!!!'} )
 })
 .catch(error => console.log(error));
 }
