@@ -3,8 +3,7 @@ const { sticker } = require('../lib/sticker')
 let handler = async (m, { conn, text }) => {
   if (text.length > 7) throw 'Max. 7 huruf!'
   if (!text) text = await conn.getName(m.sender)
-  await m.reply(global.wait)
-  let namaguwe = conn.getName(m.sender)
+  let namaguwe = conn.getName(m.sender) || global.author
   let apiUrl = global.API('hardianto', '/api/bot/gura', {
     nama: text
   }, 'apikey')
