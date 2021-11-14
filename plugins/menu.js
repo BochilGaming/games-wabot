@@ -7,6 +7,7 @@ let tags = {
   'game': 'Game',
   'xp': 'Exp & Limit',
   'sticker': 'Sticker',
+  'textpro': 'Textpro',
   'kerang': 'Kerang Ajaib',
   'quotes': 'Quotes',
   'admin': 'Admin',
