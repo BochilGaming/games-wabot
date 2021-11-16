@@ -64,8 +64,8 @@ async function fbdl(url) {
   let results = {
     thumbnail: $('div.wsmd_preview_holder > a').attr('href')
   }
-  $('body > div.wsmd_result_table_holder > div.wsmd_tabcontent').each(async function (n, element) {
-    $(element).find('table.wsmd_result_table > tbody > tr').each(async function (i, el) {
+  $('body > div.wsmd_result_table_holder > div.wsmd_tabcontent').each(function (n, element) {
+    $(element).find('table.wsmd_result_table > tbody > tr').each(function (i, el) {
       if (i > 0) {
         let type = $(el).find('td:nth-child(1)').text()
         type = /\//.test(type) ? type.split('/')[0] : type
