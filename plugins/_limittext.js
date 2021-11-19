@@ -11,7 +11,7 @@ handler.before = function(m, { text }) {
   let users = m.sender
 
     if (m.text > 5000) {
-  this.reply(m.chat, `Virus Text (Virtex) Detected!
+  this.reply(m.chat, `kamu mengirim pesan dengan 5000 ketikan
 
 User : ${pushname}
 ${m.key}`, m)
