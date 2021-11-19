@@ -9,7 +9,7 @@ let [surat, ayat] = text.split('|')
 ( Q.S ${res.data.result.data.surah.name.transliteration.id} : ${res.data.result.data.number.inSurah} )`
  //let before = `${res.data.result.data.audio.primary}`
 // let audio = await ${before}.download()
-   conn.sendButton(m.chat, hasil, 'DZX', 'TAFSIR PANJANG', `.qptafsir ${surat}|${ayat}`)
+   conn.sendButton(m.chat, hasil, 'DZX', null, [['TAFSIR PANJANG', `.qptafsir ${surat}|${ayat}`]])
 	//conn.sendFile(m.chat, before, 'a.mp4', { ptt:true, duration: 999 })
 	})
 }
