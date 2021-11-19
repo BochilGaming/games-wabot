@@ -12,7 +12,7 @@ ${res.data.result.data.translation.id}
 ( Q.S ${res.data.result.data.surah.name.transliteration.id} : ${res.data.result.data.number.inSurah} )`
  //let before = `${res.data.result.data.audio.primary}`
 // let audio = await ${before}.download()
-    conn.send2Button(m.chat, hasil, 'DZX', 'AUDIO', `.qaudio ${surat}|${ayat}`, 'TAFSIR', `.qtafsir ${surat}|${ayat}` )
+    conn.send2Button(m.chat, hasil, 'DZX', null, [['AUDIO', `.qaudio ${surat}|${ayat}`], ['TAFSIR', `.qtafsir ${surat}|${ayat}`]] )
 	//conn.sendFile(m.chat, before, 'a.mp4', { ptt:true, duration: 999 })
 	})
 }
