@@ -1,51 +1,21 @@
-let handler = async (m, { conn, text }) => {
-	function no(number){
-    return number.replace(/\s/g,'').replace(/([@+-])/g,'')
-  }
-
-	text = no(text)
-
-  if(isNaN(text)) {
-		var number = text.split`@`[1]
-  } else if(!isNaN(text)) {
-		var number = text
-  }
-
-  if(!text && !m.quoted) return conn.reply(m.chat, `*❏ DELETE USER*\n\nTag user, tulis nomor, atau balas member yang ingin di RESET`, m)
-  //let exists = await conn.isOnWhatsApp(number)
-  // if (exists) return conn.reply(m.chat, `*Nomor target tidak terdaftar di WhatsApp*`, m)
-  if(isNaN(number)) return conn.reply(m.chat, `*❏ DELETE USER*\n\nNomor yang kamu masukkan tidak valid !`, m)
-  if(number.length > 15) return conn.reply(m.chat, `*❏ DELETE USER*\n\nNomor yang kamu masukkan tidak valid !`, m)
-  try {
-		if(text) {
-			var user = number + '@s.whatsapp.net'
-		} else if(m.quoted.sender) {
-			var user = m.quoted.sender
-		} else if(m.mentionedJid) {
-  		  var user = number + '@s.whatsapp.net'
-			}  
-		} catch (e) {
-  } finally {
-  
-	let groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat) : {}
-  let participants = m.isGroup ? groupMetadata.participants : []
-	let users = m.isGroup ? participants.find(u => u.jid == user) : {}
-	let number = user.split('@')[0]
-  
-	delete global.DATABASE._data.users[user]
- 	
- 	conn.reply(m.chat, `*❏ DELETE USER*\n\nBerhasil menghapus @${number} dari *DATABASE*`, null, {contextInfo: {
-    mentionedJid: [user]
- 	}})
-
- 
- }
+let confirmation = {}
+let handler = async (m, { usedPrefix, command, text }) => {
+    let isChat = /chat/gi.test(command)
+    let number = isChat ? text ? text.replace(/\s/g, '').replace(/([@+-])/g, '') : m.chat : m.mentionedJid.length ? m.mentionedJid[0] : m.quoted && m.quoted.sender ? m.quoted.sender : text ? text.replace(/\s/g, '').replace(/([@+-])/g, '') : ''
+    if (!number) throw `Use format: ${usedPrefix}${command} <jid>
+Example: ${usedPrefix}${command} 62xxxxxx
+`.trim()
+    if (!isChat && !/@s\.whatsapp\.net/i.test(number)) number = number + '@s.whatsapp.net'
+    else if (isChat && !/@g\.us/i.test(number)) number = number + '@g.us'
+    let db = global.DATABASE._data[isChat ? 'chats' : 'users']
+    if (!(number in db)) throw 'Jid not in database!'
+    delete db[number]
+    m.reply(`Succes delete ${isChat ? 'chat' : 'user'} ${number} from database`)
 }
-handler.help = ['reset *628xxxxxxxxxxx*']
+handler.help = ['user', 'chat'].map(v => 'reset' + v + ' <jid>')
 handler.tags = ['owner']
-handler.command = /^reset$/i
-handler.admin = false
+handler.command = /^reset(user|chat)(d(atabase|b))?$/i
+
 handler.rowner = true
-handler.group = false
-handler.botAdmin = false
+
 module.exports = handler
