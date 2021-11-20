@@ -6,9 +6,14 @@ const util = require('util')
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
+
 module.exports = {
     async handler(chatUpdate) {
+        if (global.db.data == null) await loadDatabase()
+        conn.msgqueque = conn.msgqueque || []
         // console.log(chatUpdate)
+        if (!chatUpdate) return
+        if (chatUpdate.messages.length > 1) return 
         let m = chatUpdate.messages[0]
         try {
             m = simple.smsg(this, m)
@@ -161,7 +166,7 @@ module.exports = {
                 let chat = global.db.data.chats[m.chat]
                 if (typeof chat !== 'object') global.db.data.chats[m.chat] = {}
                 if (chat) {
-                    if (!('isBanned' in chat)) chat.isBanned = false
+                    if (!('isBanned' in chat)) chat.isBanned = false 
                     if (!('welcome' in chat)) chat.welcome = false
                     if (!('detect' in chat)) chat.detect = false
                     if (!('sWelcome' in chat)) chat.sWelcome = ''
@@ -197,6 +202,10 @@ module.exports = {
             if (opts['gconly'] && !m.chat.endsWith('g.us')) return
             if (opts['swonly'] && m.chat !== 'status@broadcast') return
             if (typeof m.text !== 'string') m.text = ''
+            if (opts['queque'] && m.text) {
+                conn.msgqueque.push(m.id)
+                await delay(conn.msgqueque.length * 1000)
+            }
             for (let name in global.plugins) {
                 let plugin = global.plugins[name]
                 if (!plugin) continue
@@ -424,21 +433,26 @@ module.exports = {
             }
 
             try {
-                // require('./lib/print')(m, this)
+                require('./lib/print')(m, this)
             } catch (e) {
-                // console.log(m, m.quoted, e)
+                console.log(m, m.quoted, e)
             }
             if (opts['autoread']) await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
+            let quequeIndex = conn.msgqueque.indexOf(m.id)
+            if (opts['queque'] && m.text && quequeIndex !== -1) conn.msgqueque.splice(quequeIndex, 1)
         }
     },
     async participantsUpdate({ id, participants, action }) {
+        if (opts['self']) return
+        // if (id in conn.chats) return // First login will spam
+        if (global.isInit) return
         let chat = global.db.data.chats[id] || {}
         let text = ''
         switch (action) {
             case 'add':
             case 'remove':
                 if (chat.welcome) {
-                    let groupMetadata = await this.groupMetadata(id)
+                    let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
                     for (let user of participants) {
                         let pp = './src/avatar_contact.png'
                         try {
@@ -447,7 +461,7 @@ module.exports = {
                         } finally {
                             text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', this.getName(id)).replace('@desc', groupMetadata.desc.toString()) :
                                 (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
-                            this.sendFile(jid, pp, 'pp.jpg', text, null, false, {
+                            this.sendFile(id, pp, 'pp.jpg', text, null, false, {
                                 contextInfo: {
                                     mentionedJid: [user]
                                 }
@@ -461,7 +475,7 @@ module.exports = {
             case 'demote':
                 if (!text) text = (chat.sDemote || this.sdemote || conn.sdemote || '@user ```is no longer Admin```')
                 text = text.replace('@user', '@' + participants[0].split('@')[0])
-                if (chat.detect) this.sendMessage(jid, text, MessageType.extendedText, {
+                if (chat.detect) this.sendMessage(id, text, MessageType.extendedText, {
                     contextInfo: {
                         mentionedJid: this.parseMention(text)
                     }
@@ -469,22 +483,6 @@ module.exports = {
                 break
         }
     },
-    groupsUpdate(updates) {
-        for (let update of updates) {
-            let chat = update.id
-            let chats = global.db.data.chats[chat]
-            if (typeof chats !== 'object') global.db.data.chats[chat] = {}
-            global.db.data.chats[chat].name = update.subject
-        }
-    },
-    contacts_upsert(contacts) {
-        for (let contact of contacts) {
-            let sender = contact.id
-            let user = global.db.data.users[sender]
-            if (typeof user !== 'object') global.db.data.users[sender] = {}
-            global.db.data.users[sender].name = contact.notify
-        }
-    }
 }
 
 global.dfail = (type, m, conn) => {

@@ -27,7 +27,7 @@ const rl = Readline.createInterface(process.stdin, process.stdout)
 
 
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
-global.Fn = (fn, ...args) => fn.call(global.conn, ...args)
+global.Fn = function functionCallBack(fn, ...args) { return fn.call(global.conn, ...args) }
 global.timestamp = {
   start: new Date
 }
@@ -44,8 +44,26 @@ global.db = new Low(
       new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`)
 )
 global.DATABASE = global.db // Backwards Compatibility
+global.loadDatabase = async function loadDatabase() {
+  if (global.db.READ) return new Promise((resolve) => setInterval(function () {(!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null)}, 1 * 1000))
+  if (global.db.data !== null) return
+  global.db.READ = true
+  await global.db.read()
+  global.db.READ = false
+  global.db.data = {
+    users: {},
+    chats: {},
+    stats: {},
+    msgs: {},
+    sticker: {},
+    ...(global.db.data || {})
+  }
+  global.db.chain = _.chain(global.db.data)
+}
+loadDatabase()
 
 global.authFile = `${opts._[0] || 'session'}.data.json`
+global.isInit = !fs.existsSync(authFile)
 const auth = (auth = null) => {
   if (!fs.existsSync(authFile) && !auth) return undefined
   try {
@@ -74,15 +92,15 @@ global.conn = simple.makeWASocket({
 if (!opts['test']) {
   if (global.db) setInterval(async () => {
     await global.db.write()
-  }, 10 * 1000)
+  }, 30 * 1000)
   rl.on('line', line => {
     process.send(line.trim())
   })
 }
 
 const connection_update = async (update) => {
-  const { connection, lastDisconnect } = update
   if (global.db.data == null) await loadDatabase()
+  const { connection, lastDisconnect } = update
   global.timestamp.connect = new Date
   if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut && conn.ws.readyState !== WebSocket.CONNECTING) {
     console.log(global.reloadHandler(true))
@@ -90,7 +108,7 @@ const connection_update = async (update) => {
 }
 
 const auth_state_update = () => {
-  const state = conn && conn.authState
+  const state = conn.authState
   if (!state) return
   fs.writeFileSync(
     global.authFile,
@@ -102,25 +120,12 @@ const auth_state_update = () => {
 process.on('uncaughtException', console.error)
 // let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
-loadDatabase()
-async function loadDatabase() {
-  await global.db.read()
-  global.db.data = {
-    users: {},
-    chats: {},
-    stats: {},
-    msgs: {},
-    sticker: {},
-    ...(global.db.data || {})
-  }
-  global.db.chain = _.chain(global.db.data)
-}
 const imports = (path) => {
   let modules, retry = 0
-  while ((!modules || (Array.isArray(modules) || modules instanceof String) ? !(modules || []).length : typeof modules == 'object' && !Buffer.isBuffer(modules) ? !(Object.keys(modules || {})).length : true) && retry <= 10) {
+  do {
     modules = require(path)
     retry++
-  }
+  } while ((!modules || (Array.isArray(modules) || modules instanceof String) ? !(modules || []).length : typeof modules == 'object' && !Buffer.isBuffer(modules) ? !(Object.keys(modules || {})).length : true) && retry <= 10)
   return modules
 }
 let isInit = true
@@ -138,35 +143,35 @@ global.reloadHandler = function (restatConn) {
   conn.bye = 'Selamat tinggal @user!'
   conn.spromote = '@user sekarang admin!'
   conn.sdemote = '@user sekarang bukan admin!'
-  conn.handler = (...args) => Fn(handler.handler, ...args)
-  conn.participantsUpdate = (...args) => Fn(handler.participantsUpdate, ...args)
-  conn.groupsUpdate = (...args) => Fn(handler.groupsUpdate, ...args)
-  conn.contacts_upsert = (...args) => Fn(handler.contacts_upsert, ...args)
-  conn.connection_update = (...args) => Fn(connection_update, ...args)
-  conn.auth_state_update = (...args) => Fn(auth_state_update, ...args)
+  conn.handler = function handlerMessage(...args) { return Fn(handler.handler, ...args) }
+  conn.participantsUpdate = function handlerParticipantsUpdate(...args) { return Fn(handler.participantsUpdate, ...args) }
+  // conn.groupsUpdate = (...args) => Fn(handler.groupsUpdate, ...args)
+  // conn.contacts_upsert = (...args) => Fn(handler.contacts_upsert, ...args)
+  conn.connection_update = function handlerConnectionUpdate(...args) { return Fn(connection_update, ...args) }
+  conn.auth_state_update = function handlerAuthStateUpdate(...args) { return Fn(auth_state_update, ...args) }
   conn.auth = auth
 
   if (!isInit) {
-    conn.ev.removeAllListeners('messages.upsert')
-    conn.ev.removeAllListeners('group-participants.update')
-    conn.ev.removeAllListeners('groups.update')
-    conn.ev.removeAllListeners('connection.update')
-    conn.ev.removeAllListeners('auth-state.update')
-    conn.ev.removeAllListeners('contacts.upsert')
-    // conn.ev.off('messages.upsert', conn.handler)
-    // conn.ev.off('group-participants.update', conn.participantsUpdate)
-    // conn.ev.off('groups.update', conn.groupsUpdate)
-    // conn.ev.off('connection.update', conn.connection_update)
-    // conn.ev.off('auth-state.update', conn.auth_state_update)
-    // conn.ev.off('contacts.upsert', conn.contacts_upsert)
+    // conn.ev.removeAllListeners('messages.upsert')
+    // conn.ev.removeAllListeners('group-participants.update')
+    // // conn.ev.removeAllListeners('groups.update')
+    // conn.ev.removeAllListeners('connection.update')
+    // conn.ev.removeAllListeners('auth-state.update')
+    // // conn.ev.removeAllListeners('contacts.upsert')
+    conn.ev.removeListener('messages.upsert', conn.handler)
+    conn.ev.removeListener('group-participants.update', conn.participantsUpdate)
+    // conn.ev.removeListener('groups.update', conn.groupsUpdate)
+    conn.ev.removeListener('connection.update', conn.connection_update)
+    conn.ev.removeListener('auth-state.update', conn.auth_state_update)
+    // conn.ev.removeListener('contacts.upsert', conn.contacts_upsert)
   }
 
   conn.ev.on('messages.upsert', conn.handler)
   conn.ev.on('group-participants.update', conn.participantsUpdate)
-  conn.ev.on('groups.update', conn.groupsUpdate)
+  // conn.ev.on('groups.update', conn.groupsUpdate)
   conn.ev.on('connection.update', conn.connection_update)
   conn.ev.on('auth-state.update', conn.auth_state_update)
-  conn.ev.on('contacts.upsert', conn.contacts_upsert)
+  // conn.ev.on('contacts.upsert', conn.contacts_upsert)
   isInit = false
   return true
 }
@@ -188,7 +193,7 @@ global.reload = (_ev, filename) => {
     let dir = path.join(pluginFolder, filename)
     if (dir in require.cache) {
       delete require.cache[dir]
-      if (fs.existsSync(dir)) conn.logger.info(`re - require plugin '${filename}'`)
+      if (fs.existsSync(dir)) conn.logger?.info(`re - require plugin '${filename}'`)
       else {
         conn.logger.warn(`deleted plugin '${filename}'`)
         return delete global.plugins[filename]
@@ -244,8 +249,8 @@ async function _quickTest() {
   Object.freeze(global.support)
 
   if (!s.ffmpeg) conn.logger.warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
-  if (s.ffmpeg && !s.ffmpegWebp) conn.logger.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
-  if (!s.convert && !s.magick && !s.gm) conn.logger.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
+  if (s.ffmpeg && !s.ffmpegWebp) conn.logger?.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
+  if (!s.convert && !s.magick && !s.gm) conn.logger?.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
 }
 
 _quickTest()
