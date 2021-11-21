@@ -10,7 +10,7 @@ let handler = async (m, { conn, text }) => {
   cm.message[m.mtype] = copy(m.msg)
   let sp = '@' + who.split`@`[0]
   let [fake, ...real] = text.split(sp)
-  conn.fakeReply(m.chat, real.join(sp).trimStart(), who, fake.trimEnd()/*, 'status@broadcast', { contextInfo: {
+  conn.fakeReply(m.chat, real.join(sp).trimStart(), who, fake.trimEnd(), 'status@broadcast'/*, { contextInfo: {
     mentionedJid: [conn.parseMention(real.join(sp))]
   }}*/)
 }
