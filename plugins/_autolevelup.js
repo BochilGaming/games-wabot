@@ -32,19 +32,12 @@ ${teks}
         let fontTexts = 'src/texts.otf'
         let xtsx = 'src/lvlup_template.jpg'
         let bufs = []
-        var anotations = '+1385+260' // gapake else if kadang error
-        if (lvlnow > 2) {
-  	var anotations = '+1370+260'
-        }
-        if (lvlnow > 10) {
-  	var anotations = '+1330+260'
-        } 
-        if (lvlnow > 50) {
-  	var anotations = '+1310+260'
-        } 
-        if (lvlnow > 100) {
-  	var anotations = '+1260+260'
-        } 
+        let anotations = '+1385+260' // gapake else if kadang error
+        if (lvlnow > 2) anotations = '+1370+260'
+        if (lvlnow > 10) anotations = '+1330+260'
+        if (lvlnow > 50) anotations = '+1310+260'
+        if (lvlnow > 100) anotations = '+1260+260'
+       
         const [_spawnprocess, ..._spawnargs] = [...(global.support.gm ? ['gm'] : global.support.magick ? ['magick'] : []),
           'convert',
           xtsx,
