@@ -1,7 +1,6 @@
 require('./config')
 const {
   useSingleFileAuthState,
-  BufferJSON,
   DisconnectReason
 } = require('@adiwajshing/baileys-md')
 const WebSocket = require('ws')
@@ -66,7 +65,7 @@ const { state, saveState } = useSingleFileAuthState(global.authFile)
 global.conn = simple.makeWASocket({
   printQRInTerminal: true,
   auth: state,
-  logger: P({ level: 'debug' })
+  // logger: P({ level: 'debug' })
 })
 
 if (!opts['test']) {
@@ -108,7 +107,7 @@ global.reloadHandler = function (restatConn) {
       ...global.conn, ...simple.makeWASocket({
         printQRInTerminal: true,
         auth: state,
-        logger: P({ level: 'debug' })
+        // logger: P({ level: 'debug' })
       })
     }
   }
@@ -156,7 +155,7 @@ global.reload = (_ev, filename) => {
     let dir = path.join(pluginFolder, filename)
     if (dir in require.cache) {
       delete require.cache[dir]
-      if (fs.existsSync(dir)) conn.logger?.info(`re - require plugin '${filename}'`)
+      if (fs.existsSync(dir)) conn.logger.info(`re - require plugin '${filename}'`)
       else {
         conn.logger.warn(`deleted plugin '${filename}'`)
         return delete global.plugins[filename]
