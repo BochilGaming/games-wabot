@@ -205,3 +205,4 @@ use this [branch](https://github.com/BochilGaming/games-wabot/tree/multi-device)
 [![ryznxx](https://github.com/ryznxx.png?size=100)](https://github.com/ryznxx)
 <a href="https://github.com/apps/dependabot"><img src="https://avatars.githubusercontent.com/in/29110?v=4" width="100" height="100" alt="@dependabot[bot]"/></a>
 [![itsmeR1F4I](https://github.com/itsmeR1F4I.png?size=100)](https://github.com/itsmeR1F4I)
+[![ZeroChanBot](https://github.com/ZeroChanBot.png?size=100)](https://github.com/ZeroChanBot)
