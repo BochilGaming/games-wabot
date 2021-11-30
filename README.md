@@ -162,10 +162,10 @@ conn.logger.level = 'debug'
 ### `--presence <Presence>`
 
 when the bot executes the command, the bot will type, record, etc.
+
 Presence avaible: available, composing, recording, paused
 
 ---------
-
 
 ### want to contribute?
 1. fork this repository
@@ -174,16 +174,19 @@ Presence avaible: available, composing, recording, paused
 4. make a pull req!
 5. if your pull req is already in **acc/merge**, you can delete your branch or you can create pull req again :)
 
+---------
 
 ### want to use multi-device (md)?
 now games-wabot already support MD, but of course there are still many **bugs** and there are still many that have not been **implemented**
 use this [branch](https://github.com/BochilGaming/games-wabot/tree/multi-device) if you want to use MD!
 
-
+---------
 
 ### Thanks To 
-**Allah SWT**
-**Orang Tua**
+**Allah SWT**,
+
+**Orang Tua**,
+
 **Semua yang selalu mendukung**
 
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
