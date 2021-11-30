@@ -10,13 +10,16 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, m
 module.exports = {
     async handler(chatUpdate) {
         if (global.db.data == null) await loadDatabase()
-        conn.msgqueque = conn.msgqueque || []
+        this.msgqueque = this.msgqueque || []
         // console.log(chatUpdate)
         if (!chatUpdate) return
-        if (chatUpdate.messages.length > 1) return 
-        let m = chatUpdate.messages[0]
+        // if (chatUpdate.messages.length > 2 || !chatUpdate.messages.length) return
+        // if (chatUpdate.messages.length > 1) console.log(chatUpdate.messages)
+        let m = chatUpdate.messages[chatUpdate.messages.length - 1]
+        // console.log(JSON.stringify(m, null, 4))
         try {
-            m = simple.smsg(this, m)
+            m = simple.smsg(this, m) || m
+            if (!m) return
             // console.log(m)
             m.exp = 0
             m.limit = false
@@ -166,7 +169,7 @@ module.exports = {
                 let chat = global.db.data.chats[m.chat]
                 if (typeof chat !== 'object') global.db.data.chats[m.chat] = {}
                 if (chat) {
-                    if (!('isBanned' in chat)) chat.isBanned = false 
+                    if (!('isBanned' in chat)) chat.isBanned = false
                     if (!('welcome' in chat)) chat.welcome = false
                     if (!('detect' in chat)) chat.detect = false
                     if (!('sWelcome' in chat)) chat.sWelcome = ''
@@ -177,7 +180,6 @@ module.exports = {
                     if (!('antiLink' in chat)) chat.antiLink = false
                     if (!('viewonce' in chat)) chat.viewonce = false
                     if (!('antiToxic' in chat)) chat.antiToxic = false
-                    if (!('name' in chat)) chat.name = m.isGroup ? (await conn.groupMetadata(m.chat).catch(_ => '{}')).subject : (m.name || user && user.name || '')
                 } else global.db.data.chats[m.chat] = {
                     isBanned: false,
                     welcome: false,
@@ -190,9 +192,7 @@ module.exports = {
                     antiLink: false,
                     viewonce: false,
                     antiToxic: true,
-                    name: m.isGroup ? (await conn.groupMetadata(m.chat).catch(_ => '{}')).subject : (m.name || user && user.name || '')
                 }
-                // console.log('Hello world!')
             } catch (e) {
                 console.error(e)
             }
@@ -203,8 +203,8 @@ module.exports = {
             if (opts['swonly'] && m.chat !== 'status@broadcast') return
             if (typeof m.text !== 'string') m.text = ''
             if (opts['queque'] && m.text) {
-                conn.msgqueque.push(m.id)
-                await delay(conn.msgqueque.length * 1000)
+                this.msgqueque.push(m.id)
+                await delay(this.msgqueque.length * 1000)
             }
             for (let name in global.plugins) {
                 let plugin = global.plugins[name]
@@ -229,10 +229,10 @@ module.exports = {
             let isOwner = isROwner || m.fromMe
             let isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
             let isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-            let groupMetadata = m.isGroup ? await this.groupMetadata(m.chat) : {} || {}
-            let participants = m.isGroup ? groupMetadata.participants : [] || []
-            let user = m.isGroup ? participants.find(u => u.id == m.sender) : {} || {} // User Data
-            let bot = m.isGroup ? participants.find(u => u.id == this.user.id) : {} || {} // Your Data
+            let groupMetadata = (m.isGroup ? (conn.chats[m.chat] || {}).metadata : {}) || {}
+            let participants = (m.isGroup ? groupMetadata.participants : []) || []
+            let user = (m.isGroup ? participants.find(u => u.id == m.sender) : {}) || {} // User Data
+            let bot = (m.isGroup ? participants.find(u => u.id == this.user.id) : {}) || {} // Your Data
             let isAdmin = user && user.admin || false // Is User Admin?
             let isBotAdmin = bot && bot.admin || false // Are you Admin?
             for (let name in global.plugins) {
@@ -260,7 +260,7 @@ module.exports = {
                 ).find(p => p[1])
                 if (typeof plugin.before === 'function') if (await plugin.before.call(this, m, {
                     match,
-                    conn,
+                    conn: this,
                     participants,
                     groupMetadata,
                     user,
@@ -358,7 +358,7 @@ module.exports = {
                         args,
                         command,
                         text,
-                        conn,
+                        conn: this,
                         participants,
                         groupMetadata,
                         user,
@@ -438,8 +438,8 @@ module.exports = {
                 console.log(m, m.quoted, e)
             }
             if (opts['autoread']) await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
-            let quequeIndex = conn.msgqueque.indexOf(m.id)
-            if (opts['queque'] && m.text && quequeIndex !== -1) conn.msgqueque.splice(quequeIndex, 1)
+            let quequeIndex = this.msgqueque.indexOf(m.id)
+            if (opts['queque'] && m.text && quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
         }
     },
     async participantsUpdate({ id, participants, action }) {
@@ -483,6 +483,22 @@ module.exports = {
                 break
         }
     },
+    async delete({ remoteJid, fromMe, id, participant }) {
+        if (fromMe) return
+        let chats = Object.entries(conn.chats).find(([user, data]) => data.messages && data.messages[id])
+        if (!chats) return
+        let msg = JSON.parse(chats[1].messages[id])
+        let chat = global.db.data.chats[msg.key.remoteJid] || {}
+        if (chat.delete) return
+        await this.reply(msg.key.remoteJid, `
+Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
+Untuk mematikan fitur ini, ketik
+*.enable delete*
+`.trim(), msg, {
+            mentions: [participant]
+        })
+        this.copyNForward(msg.key.remoteJid, msg).catch(e => console.log(e, msg))
+    }
 }
 
 global.dfail = (type, m, conn) => {

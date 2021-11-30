@@ -1,19 +1,17 @@
 require('./config')
 const {
-  default: makeWASocket,
+  useSingleFileAuthState,
   BufferJSON,
-  initInMemoryKeyStore,
   DisconnectReason
 } = require('@adiwajshing/baileys-md')
 const WebSocket = require('ws')
 const path = require('path')
 const fs = require('fs')
 const yargs = require('yargs/yargs')
-const Readline = require('readline')
 const cp = require('child_process')
 const _ = require('lodash')
 const syntaxerror = require('syntax-error')
-const cloudDBAdapter = require('./lib/cloudDBAdapter')
+const P = require('pino')
 let simple = require('./lib/simple')
 var low
 try {
@@ -23,18 +21,17 @@ try {
 }
 const { Low, JSONFile } = low
 const mongoDB = require('./lib/mongoDB')
-const rl = Readline.createInterface(process.stdin, process.stdout)
 
 
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
-global.Fn = function functionCallBack(fn, ...args) { return fn.call(global.conn, ...args) }
+// global.Fn = function functionCallBack(fn, ...args) { return fn.call(global.conn, ...args) }
 global.timestamp = {
   start: new Date
 }
 
 const PORT = process.env.PORT || 3000
-global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 
+global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
 
 global.db = new Low(
@@ -45,7 +42,7 @@ global.db = new Low(
 )
 global.DATABASE = global.db // Backwards Compatibility
 global.loadDatabase = async function loadDatabase() {
-  if (global.db.READ) return new Promise((resolve) => setInterval(function () {(!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null)}, 1 * 1000))
+  if (global.db.READ) return new Promise((resolve) => setInterval(function () { (!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null) }, 1 * 1000))
   if (global.db.data !== null) return
   global.db.READ = true
   await global.db.read()
@@ -64,65 +61,39 @@ loadDatabase()
 
 global.authFile = `${opts._[0] || 'session'}.data.json`
 global.isInit = !fs.existsSync(authFile)
-const auth = (auth = null) => {
-  if (!fs.existsSync(authFile) && !auth) return undefined
-  try {
-    const value = JSON.parse(
-      auth || fs.readFileSync(authFile, { encoding: 'utf-8' }),
-      BufferJSON.reviver
-    )
-    const state = {
-      creds: value.creds,
-      // stores pre-keys, session & other keys in a JSON object
-      // we deserialize it here
-      keys: initInMemoryKeyStore(value.keys)
-    }
-    return state
-  } catch (e) {
-    console.error(e)
-    return null
-  }
-}
+const { state, saveState } = useSingleFileAuthState(global.authFile)
 
 global.conn = simple.makeWASocket({
   printQRInTerminal: true,
-  auth: auth()
+  auth: state,
+  logger: P({ level: 'debug' })
 })
 
 if (!opts['test']) {
   if (global.db) setInterval(async () => {
-    await global.db.write()
+    if (global.db.data) await global.db.write()
   }, 30 * 1000)
-  rl.on('line', line => {
-    process.send(line.trim())
-  })
 }
 
-const connection_update = async (update) => {
-  if (global.db.data == null) await loadDatabase()
+async function connectionUpdate(update) {
   const { connection, lastDisconnect } = update
   global.timestamp.connect = new Date
   if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut && conn.ws.readyState !== WebSocket.CONNECTING) {
     console.log(global.reloadHandler(true))
   }
+  if (global.db.data == null) await loadDatabase()
+  console.log(update)
 }
 
-const auth_state_update = () => {
-  const state = conn.authState
-  if (!state) return
-  fs.writeFileSync(
-    global.authFile,
-    // BufferJSON replacer utility saves buffers nicely
-    JSON.stringify(state, BufferJSON.replacer, 2)
-  )
-}
 
 process.on('uncaughtException', console.error)
 // let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
 
 const imports = (path) => {
+  path = require.resolve(path)
   let modules, retry = 0
   do {
+    if (path in require.cache) delete require.cache[path]
     modules = require(path)
     retry++
   } while ((!modules || (Array.isArray(modules) || modules instanceof String) ? !(modules || []).length : typeof modules == 'object' && !Buffer.isBuffer(modules) ? !(Object.keys(modules || {})).length : true) && retry <= 10)
@@ -130,48 +101,40 @@ const imports = (path) => {
 }
 let isInit = true
 global.reloadHandler = function (restatConn) {
-  simple = imports('./lib/simple')
   let handler = imports('./handler')
   if (restatConn) {
     try { global.conn.ws.close() } catch { }
-    global.conn = simple.makeWASocket({
-      printQRInTerminal: true,
-      auth: auth()
-    })
+    global.conn = {
+      ...global.conn, ...simple.makeWASocket({
+        printQRInTerminal: true,
+        auth: state,
+        logger: P({ level: 'debug' })
+      })
+    }
   }
+  if (!isInit) {
+    conn.ev.off('messages.upsert', conn.handler)
+    conn.ev.off('group-participants.update', conn.participantsUpdate)
+    conn.ev.off('message.delete', conn.onDelete)
+    conn.ev.off('connection.update', conn.connectionUpdate)
+    conn.ev.off('creds.update', conn.credsUpdate)
+  }
+
   conn.welcome = 'Hai, @user!\nSelamat datang di grup @subject\n\n@desc'
   conn.bye = 'Selamat tinggal @user!'
   conn.spromote = '@user sekarang admin!'
   conn.sdemote = '@user sekarang bukan admin!'
-  conn.handler = function handlerMessage(...args) { return Fn(handler.handler, ...args) }
-  conn.participantsUpdate = function handlerParticipantsUpdate(...args) { return Fn(handler.participantsUpdate, ...args) }
-  // conn.groupsUpdate = (...args) => Fn(handler.groupsUpdate, ...args)
-  // conn.contacts_upsert = (...args) => Fn(handler.contacts_upsert, ...args)
-  conn.connection_update = function handlerConnectionUpdate(...args) { return Fn(connection_update, ...args) }
-  conn.auth_state_update = function handlerAuthStateUpdate(...args) { return Fn(auth_state_update, ...args) }
-  conn.auth = auth
-
-  if (!isInit) {
-    // conn.ev.removeAllListeners('messages.upsert')
-    // conn.ev.removeAllListeners('group-participants.update')
-    // // conn.ev.removeAllListeners('groups.update')
-    // conn.ev.removeAllListeners('connection.update')
-    // conn.ev.removeAllListeners('auth-state.update')
-    // // conn.ev.removeAllListeners('contacts.upsert')
-    conn.ev.removeListener('messages.upsert', conn.handler)
-    conn.ev.removeListener('group-participants.update', conn.participantsUpdate)
-    // conn.ev.removeListener('groups.update', conn.groupsUpdate)
-    conn.ev.removeListener('connection.update', conn.connection_update)
-    conn.ev.removeListener('auth-state.update', conn.auth_state_update)
-    // conn.ev.removeListener('contacts.upsert', conn.contacts_upsert)
-  }
+  conn.handler = handler.handler.bind(conn)
+  conn.participantsUpdate = handler.participantsUpdate.bind(conn)
+  conn.onDelete = handler.delete.bind(conn)
+  conn.connectionUpdate = connectionUpdate.bind(conn)
+  conn.credsUpdate = saveState.bind(conn)
 
   conn.ev.on('messages.upsert', conn.handler)
   conn.ev.on('group-participants.update', conn.participantsUpdate)
-  // conn.ev.on('groups.update', conn.groupsUpdate)
-  conn.ev.on('connection.update', conn.connection_update)
-  conn.ev.on('auth-state.update', conn.auth_state_update)
-  // conn.ev.on('contacts.upsert', conn.contacts_upsert)
+  conn.ev.on('message.delete', conn.onDelete)
+  conn.ev.on('connection.update', conn.connectionUpdate)
+  conn.ev.on('creds.update', conn.credsUpdate)
   isInit = false
   return true
 }
@@ -249,8 +212,8 @@ async function _quickTest() {
   Object.freeze(global.support)
 
   if (!s.ffmpeg) conn.logger.warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
-  if (s.ffmpeg && !s.ffmpegWebp) conn.logger?.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
-  if (!s.convert && !s.magick && !s.gm) conn.logger?.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
+  if (s.ffmpeg && !s.ffmpegWebp) conn.logger.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
+  if (!s.convert && !s.magick && !s.gm) conn.logger.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
 }
 
 _quickTest()
