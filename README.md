@@ -159,19 +159,40 @@ conn.logger.level = 'trace'
 conn.logger.level = 'debug'
 ```
 
+### `--presence <Presence>`
+
+when the bot executes the command, the bot will type, record, etc.
+Presence avaible: available, composing, recording, paused
+
 ---------
 
+### want to contribute?
+1. fork this repository
+2. Change/edit/create what you want. for example you can add features, fix bug, etc
+3. **test** before making a pull req!!
+4. make a pull req!
+5. if your pull req is already in **acc/merge**, you can delete your branch or you can create pull req again :)
+
+### want to use multi-device (md)?
+now games-wabot already support MD, but of course there are still many **bugs** and there are still many that have not been **implemented**
+use this [branch](https://github.com/BochilGaming/games-wabot/tree/multi-device) if you want to use MD!
 
 ### Thanks To 
 **Allah SWT**
+**Orang Tua**
+**Semua yang selalu mendukung**
 
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
 [![BochilGaming](https://github.com/BochilGaming.png?size=100)](https://github.com/BochilGaming)
 
 #### Contributor
 [![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
-[![zatu22](https://github.com/zatu22)](https://github.com/zatu22)
 [![Adiixyz](https://github.com/Adiixyz.png?size=100)](https://github.com/Adiixyz)
-[![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
+[![zatu22](https://avatars.githubusercontent.com/u/74061098?v=4)](https://github.com/zatu22)
 [![arisawali2014](https://github.com/arisawali2014.png?size=100)](https://github.com/arisawali2014)
-[![botstylee](https://github.com/botstylee)](https://github.com/botstylee)
+[![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
+[![botstylee](https://avatars.githubusercontent.com/u/85060672?v=4)](https://github.com/botstylee)
+[![unx21](https://avatars.githubusercontent.com/u/84166927?v=4)](https://github.com/unx21)
+[![qisyana](https://avatars.githubusercontent.com/u/79745902?v=4)](https://github.com/qisyana)
+[![ryznxx](https://avatars.githubusercontent.com/u/81517573?v=4)](https://github.com/ryznxx)
+[![itsmeR1F4I](https://avatars.githubusercontent.com/u/76506048?v=4)](https://github.com/itsmeR1F4I)
