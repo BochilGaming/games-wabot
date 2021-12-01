@@ -1,27 +1,11 @@
-let fetch = require('node-fetch')
-let handler = async (m, { conn, args }) => {
-  if (!args[0]) throw 'Uhm...url nya mana?'
-  let res = await fetch(global.API('xteam', '/dl/igs', {
-    nama: args[0]
-  }, 'APIKEY'))
-  let json = await res.json()
-  if (res.status != 200) throw json
-  if (json.result.error) throw json.result.message
-  let { username, storylist } = json.result
-  let dateConfig = {
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }
-  for (let { url, type, taken_at } of storylist)
+let handler = async (m, { usedPrefix, command, conn, args }) => {
+  if (!args[0]) throw `Gunakan format: ${usedPrefix}${command} instagram`
+  let res = await igstory(args[0])
+  if (!res.length) throw 'User no have story!'
+  for (let { url, type } of res)
     conn.sendFile(m.chat, url, 'ig' + (type == 'video' ? '.mp4' : '.jpg'), `
-@${username}
-Memposting pada ${new Date(taken_at * 1000).toLocaleDateString('id', dateConfig)}
-`, m)
-  throw json.result
+@${args[0]}
+`.trim(), m)
 }
 handler.help = ['igstory'].map(v => v + ' <username>')
 handler.tags = ['downloader']
@@ -29,3 +13,20 @@ handler.tags = ['downloader']
 handler.command = /^(igs(tory)?)$/i
 
 module.exports = handler
+
+const axios = require('axios')
+const cheerio = require('cheerio')
+const fetch = require('node-fetch')
+async function igstory(username) {
+  username = username.replace(/https:\/\/instagram.com\//g, '')
+  let { data } = await axios.get(`https://www.instadownloader.org/data.php?username=${username}&t=${new Date * 1}`)
+  const $ = cheerio.load(data)
+  let results = []
+  $('body > center').each(function (i, el) {
+    results.push({
+      url: $(el).find('a.download-btn').attr('href'),
+      type: $(el).find('video').html() ? 'video' : 'image'
+    })
+  })
+  return results
+}

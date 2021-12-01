@@ -159,19 +159,50 @@ conn.logger.level = 'trace'
 conn.logger.level = 'debug'
 ```
 
+### `--presence <Presence>`
+
+when the bot executes the command, the bot will type, record, etc.
+
+Presence avaible: available, composing, recording, paused
+
 ---------
 
+### want to contribute?
+1. fork this repository
+2. Change/edit/create what you want. for example you can add features, fix bug, etc
+3. **test** before making a pull req!!
+4. make a pull req!
+5. if your pull req is already in **acc/merge**, you can delete your branch or you can create pull req again :)
+
+---------
+
+### want to use multi-device (md)?
+now games-wabot already support MD, but of course there are still many **bugs** and there are still many that have not been **implemented**,
+
+use this [branch](https://github.com/BochilGaming/games-wabot/tree/multi-device) if you want to use MD!
+
+---------
 
 ### Thanks To 
-**Allah SWT**
+**Allah SWT**,
+
+**Orang Tua**,
+
+**Semua yang selalu mendukung**
 
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
 [![BochilGaming](https://github.com/BochilGaming.png?size=100)](https://github.com/BochilGaming)
 
 #### Contributor
 [![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
-[![zatu22](https://github.com/zatu22)](https://github.com/zatu22)
 [![Adiixyz](https://github.com/Adiixyz.png?size=100)](https://github.com/Adiixyz)
-[![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
+<a href="https://github.com/zatu22"><img src="https://github.com/zatu22.png" width="100" height="100" alt="zatu22"/></a>
 [![arisawali2014](https://github.com/arisawali2014.png?size=100)](https://github.com/arisawali2014)
-[![botstylee](https://github.com/botstylee)](https://github.com/botstylee)
+[![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
+[![unx21](https://github.com/unx21.png?size=100)](https://github.com/unx21)
+[![botstylee](https://github.com/botstylee.png?size=100)](https://github.com/botstylee)
+[![qisyana](https://github.com/qisyana.png?size=100)](https://github.com/qisyana)
+[![ryznxx](https://github.com/ryznxx.png?size=100)](https://github.com/ryznxx)
+<a href="https://github.com/apps/dependabot"><img src="https://avatars.githubusercontent.com/in/29110?v=4" width="100" height="100" alt="@dependabot[bot]"/></a>
+[![itsmeR1F4I](https://github.com/itsmeR1F4I.png?size=100)](https://github.com/itsmeR1F4I)
+[![ZeroChanBot](https://github.com/ZeroChanBot.png?size=100)](https://github.com/ZeroChanBot)
