@@ -5,22 +5,23 @@
 
 const fs = require('fs')
 const ffmpeg = require('fluent-ffmpeg')
-const { MessageType } = require('@adiwajshing/baileys')
+const { MessageType } = require('@adiwajshing/baileys-md')
 const { exec } = require('child_process')
 
-let handler = async (m, { conn }) => {
+let handler = async(m, { conn }) => {
     try {
-        let q = m.quoted ? { message: { [m.quoted.mtype]: m.quoted }} : m  
+        let q = m.quoted ? { message: {
+                [m.quoted.mtype]: m.quoted } } : m
         let mime = ((m.quoted ? m.quoted : m.msg).mimetype || '')
         if (/audio/.test(mime)) {
             let media = await conn.downloadAndSaveMediaMessage(q)
             let ran = getRandom('.mp3')
             exec(`ffmpeg -i ${media} -af equalizer=f=94:width_type=o:width=2:g=30 ${ran}`, (err, stderr, stdout) => {
                 fs.unlinkSync(media)
-						if (err) return m.reply('Error!')
-						let buff = fs.readFileSync(ran)
-						conn.sendFile(m.chat, buff, ran, null, m, true)
-						fs.unlinkSync(ran)
+                if (err) return m.reply('Error!')
+                let buff = fs.readFileSync(ran)
+                conn.sendFile(m.chat, buff, ran, null, m, true)
+                fs.unlinkSync(ran)
             })
         } else m.reply('Kirim audio atau tag audio!!')
     } catch (e) {
@@ -45,7 +46,5 @@ handler.fail = null
 module.exports = handler
 
 const getRandom = (ext) => {
-  return `${Math.floor(Math.random() * 10000)}${ext}`
+    return `${Math.floor(Math.random() * 10000)}${ext}`
 }
-
-					

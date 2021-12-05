@@ -1,12 +1,12 @@
 //made by Anshul
 const uploadImage = require('../lib/uploadImage')
 const { sticker } = require('../lib/sticker')
-const { MessageType } = require('@adiwajshing/baileys')
+const { MessageType } = require('@adiwajshing/baileys-md')
 const effects = ['greyscale', 'invert', 'brightness', 'threshold', 'sepia', 'red', 'green', 'blue', 'blurple', 'pixelate', 'blur']
 
-let handler = async (m, { conn, usedPrefix, text }) => {
-  let effect = text.trim().toLowerCase()
-  if (!effects.includes(effect)) throw `
+let handler = async(m, { conn, usedPrefix, text }) => {
+        let effect = text.trim().toLowerCase()
+        if (!effects.includes(effect)) throw `
 *Usage:* ${usedPrefix}stickfilter <effectname>
 *Example:* ${usedPrefix}stickfilter invert
 

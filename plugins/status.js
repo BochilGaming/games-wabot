@@ -1,7 +1,7 @@
-let { MessageType } = require('@adiwajshing/baileys')
+let { MessageType } = require('@adiwajshing/baileys-md')
 let { performance } = require('perf_hooks')
 let osu = require('node-os-utils')
-let handler  = async (m, { conn, usedPrefix, DevMode }) => {
+let handler = async(m, { conn, usedPrefix, DevMode }) => {
     try {
         let NotDetect = 'Not Detect'
         let old = performance.now()
@@ -15,37 +15,37 @@ let handler  = async (m, { conn, usedPrefix, DevMode }) => {
         let cpuPer
         let p1 = cpu.usage().then(cpuPercentage => {
             cpuPer = cpuPercentage
-        }).catch(() => { 
+        }).catch(() => {
             cpuPer = NotDetect
         })
         let driveTotal, driveUsed, drivePer
         let p2 = drive.info().then(info => {
             driveTotal = (info.totalGb + ' GB'),
-            driveUsed = info.usedGb,
-            drivePer = (info.usedPercentage + '%')
-         }).catch(() => { 
+                driveUsed = info.usedGb,
+                drivePer = (info.usedPercentage + '%')
+        }).catch(() => {
             driveTotal = NotDetect,
-            driveUsed = NotDetect,
-            drivePer = NotDetect
+                driveUsed = NotDetect,
+                drivePer = NotDetect
         })
         let ramTotal, ramUsed
         let p3 = mem.info().then(info => {
             ramTotal = info.totalMemMb,
-            ramUsed = info.usedMemMb
-        }).catch(() => { 
+                ramUsed = info.usedMemMb
+        }).catch(() => {
             ramTotal = NotDetect,
-            ramUsed = NotDetect
+                ramUsed = NotDetect
         })
         let netsIn, netsOut
         let p4 = netstat.inOut().then(info => {
             netsIn = (info.total.inputMb + ' MB'),
-            netsOut = (info.total.outputMb + ' MB')
-        }).catch(() => { 
+                netsOut = (info.total.outputMb + ' MB')
+        }).catch(() => {
             netsIn = NotDetect,
-            netsOut = NotDetect
+                netsOut = NotDetect
         })
         await Promise.all([p1, p2, p3, p4])
-        await m.reply('Tunggu bentar') 
+        await m.reply('Tunggu bentar')
         let _ramTotal = (ramTotal + ' MB')
         let neww = performance.now()
         conn.reply(m.chat, `
@@ -61,13 +61,13 @@ Ping: *${Math.round(neww - old)} ms*
 Internet IN: *${netsIn}*
 Internet OUT: *${netsOut}*
 `.trim(), m)
-          console.log(OS)
+        console.log(OS)
     } catch (e) {
         console.log(e)
         m.reply('Error!!')
         if (DevMode) {
             for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'Status.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
+                conn.sendMessage(jid, 'Status.js error\nNo: *' + m.sender.split `@` [0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
             }
         }
     }
@@ -89,10 +89,9 @@ handler.fail = null
 module.exports = handler
 
 function clockString(ms) {
-  let h = Math.floor(ms / 3600000)
-  let m = Math.floor(ms / 60000) % 60
-  let s = Math.floor(ms / 1000) % 60
-  console.log({ms,h,m,s})
-  return [h, m, s].map(v => v.toString().padStart(2, 0) ).join(':')
+    let h = Math.floor(ms / 3600000)
+    let m = Math.floor(ms / 60000) % 60
+    let s = Math.floor(ms / 1000) % 60
+    console.log({ ms, h, m, s })
+    return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
 }
-

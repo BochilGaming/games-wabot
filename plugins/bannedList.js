@@ -1,8 +1,8 @@
-let handler = async (m, { conn, usedPrefix }) => {
-    let chats = Object.entries(global.DATABASE.data.chats).filter(chat => chat[1].isBanned)
-    let users = Object.entries(global.DATABASE.data.users).filter(user => user[1].Banneduser)
-    
-    m.reply(`
+let handler = async(m, { conn, usedPrefix }) => {
+        let chats = Object.entries(global.db.data.chats).filter(chat => chat[1].isBanned)
+        let users = Object.entries(global.db.data.users).filter(user => user[1].Banneduser)
+
+        m.reply(`
 ┌ *Daftar Chat Terbanned*
 │ Total : ${chats.length} Chat${chats ? '\n' + chats.map(([jid], i) => `
 │ ${i + 1}. ${conn.getName(jid) == undefined ? 'Unknown' : conn.getName(jid)}

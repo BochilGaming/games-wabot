@@ -1,4 +1,4 @@
-let { MessageType } = require('@adiwajshing/baileys')
+let { MessageType } = require('@adiwajshing/baileys-md')
 
 let confirm = {}
 
@@ -6,7 +6,7 @@ async function handler(m, { conn, args, isROwner }) {
     //if (!isROwner) throw 'Dalam perbaikan'
     if (m.sender in confirm) throw 'Kamu masih melakukan judi, tunggu sampai selesai!!'
     try {
-        let user = global.DATABASE._data.users[m.sender]
+        let user = global.db.data.users[m.sender]
         let count = (args[0] && number(parseInt(args[0])) ? Math.max(parseInt(args[0]), 1) : /all/i.test(args[0]) ? Math.floor(parseInt(user.money)) : 1) * 1
         if ((user.money * 1) < count) return conn.sendMessage(m.chat, button('💵Uang kamu tidak cukup!!', user), MessageType.buttonsMessage, { quoted: m })
         if (!(m.sender in confirm)) {
@@ -17,8 +17,8 @@ async function handler(m, { conn, args, isROwner }) {
             }
             let txt = '⚠️Warning⚠️\n*Jangan judi karena tidak akan menang, BENERAN!!*\nApakah anda yakin (pikirkan baik-baik) mau melakukan judi (Y/n) (60s Timeout)'
             const buttons = [
-                {buttonId: `id1`, buttonText: {displayText: 'y'}, type: 1},
-                {buttonId: `id2`, buttonText: {displayText: 'n'}, type: 1}
+                { buttonId: `id1`, buttonText: { displayText: 'y' }, type: 1 },
+                { buttonId: `id2`, buttonText: { displayText: 'n' }, type: 1 }
             ]
 
             const buttonMessage = {
@@ -40,27 +40,27 @@ async function handler(m, { conn, args, isROwner }) {
 }
 
 handler.before = async m => {
-    if (!(m.sender in confirm)) return 
-    if (m.isBaileys) return 
-    let { timeout, count } = confirm[m.sender]
-    let user = global.DATABASE._data.users[m.sender]
-    let moneyDulu = user.money * 1
-    let txt = (m.msg && m.msg.selectedDisplayText ? m.msg.selectedDisplayText : m.text ? m.text : '').toLowerCase()
-    try {
-        if (/^y(es|a)?$/i.test(txt)) {
-            let Bot = (Math.ceil(Math.random() * 100)) * 1
-            let Kamu = (Math.floor(Math.random() * 86)) * 1
-            let status = 'Kalah'
-            if (Bot < Kamu) {
-                user.money += count * 1
-                status = 'Menang'
-            } else if (Bot > Kamu) {
-                user.money -= count * 1
-            } else {
-                status = 'Seri'
-                user.money += (Math.floor(count / 1.5)) * 1
-            }
-            m.reply(`
+        if (!(m.sender in confirm)) return
+        if (m.isBaileys) return
+        let { timeout, count } = confirm[m.sender]
+        let user = global.db.data.users[m.sender]
+        let moneyDulu = user.money * 1
+        let txt = (m.msg && m.msg.selectedDisplayText ? m.msg.selectedDisplayText : m.text ? m.text : '').toLowerCase()
+        try {
+            if (/^y(es|a)?$/i.test(txt)) {
+                let Bot = (Math.ceil(Math.random() * 100)) * 1
+                let Kamu = (Math.floor(Math.random() * 86)) * 1
+                let status = 'Kalah'
+                if (Bot < Kamu) {
+                    user.money += count * 1
+                    status = 'Menang'
+                } else if (Bot > Kamu) {
+                    user.money -= count * 1
+                } else {
+                    status = 'Seri'
+                    user.money += (Math.floor(count / 1.5)) * 1
+                }
+                m.reply(`
 Bot roll: *${Bot}*
 Kamu roll: *${Kamu}*
 

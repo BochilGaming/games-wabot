@@ -1,12 +1,12 @@
 //made by Anshul
 const uploadImage = require('../lib/uploadImage')
 const { sticker } = require('../lib/sticker')
-const { MessageType } = require('@adiwajshing/baileys')
-const effects = ['jail', 'gay', 'glass', 'wasted' ,'triggered']
+const { MessageType } = require('@adiwajshing/baileys-md')
+const effects = ['jail', 'gay', 'glass', 'wasted', 'triggered']
 
-let handler = async (m, { conn, usedPrefix, text }) => {
-    let effect = text.trim().toLowerCase()
-  if (!effects.includes(effect)) throw `
+let handler = async(m, { conn, usedPrefix, text }) => {
+        let effect = text.trim().toLowerCase()
+        if (!effects.includes(effect)) throw `
 *Usage:* ${usedPrefix}stickmaker <effectname>
 *Example:* ${usedPrefix}stickmaker jail
 

@@ -1,12 +1,13 @@
-const { MessageType } = require('@adiwajshing/baileys')
+const { MessageType } = require('@adiwajshing/baileys-md')
 const fetch = require('node-fetch')
 
-let handler = async (m, { conn }) => {
+let handler = async(m, { conn }) => {
     try {
         let res = await fetch(global.API('xteam', '/randomimage/wpmobile', {}, 'APIKEY'))
         let img = await res.buffer()
         conn.sendMessage(m.chat, img, MessageType.image, {
-            quoted: m, caption: '*© Astrobot*'
+            quoted: m,
+            caption: '*© Astrobot*'
         })
     } catch (e) {
         console.log(e)

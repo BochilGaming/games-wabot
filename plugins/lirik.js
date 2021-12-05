@@ -1,11 +1,11 @@
-let { MessageType } = require('@adiwajshing/baileys')
+let { MessageType } = require('@adiwajshing/baileys-md')
 let fetch = require('node-fetch')
-let handler = async (m, { conn, args, usedPrefix, DevMode }) => {
+let handler = async(m, { conn, args, usedPrefix, DevMode }) => {
     try {
         if (!args || !args[0] || args.length < 1) return m.reply('[❗] Format salah\nContoh : ${usedPrefix}lirik sad!')
-        let res = await fetch(global.API('bg', '/lirik', { 
+        let res = await fetch(global.API('bg', '/lirik', {
             title: args[0],
-            artist: args[1] || '' 
+            artist: args[1] || ''
         }))
         let json = await res.json()
         if (json.status !== true) throw json
@@ -23,12 +23,12 @@ Requested by : *${conn.getName(m.sender)}*
         if (DevMode) {
             let file = require.resolve(__filename)
             for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, file + ' error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
+                conn.sendMessage(jid, file + ' error\nNo: *' + m.sender.split `@` [0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
             }
         }
     }
 }
-    
+
 handler.help = ['lirik', 'lyrics'].map(v => ' [title] [artist]')
 handler.tags = ['internet']
 handler.command = /^(l(irik|yrics))$/i

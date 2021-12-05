@@ -1,13 +1,13 @@
-let { MessageType } = require('@adiwajshing/baileys')
-let handler = async (m, { conn, command, args, usedPrefix, DevMode }) => { 
+let { MessageType } = require('@adiwajshing/baileys-md')
+let handler = async(m, { conn, command, args, usedPrefix, DevMode }) => {
     conn.slots = conn.slots ? conn.slots : {}
     if (m.chat in conn.slots) return m.reply('Masih ada yang melakukan slots disini, tunggu sampai selesai!!')
     else conn.slots[m.chat] = true
-    try { 
+    try {
         if (args.length < 1) return m.reply(`Gunakan format *${usedPrefix}${command} [jumlah]*
 contoh *${usedPrefix}${command} 999*`)
         let count = (typeof args[0] == 'number' ? Math.round(Math.max(args[0], 1)) : 1)
-        let _spin1 = pickRandom(['1', '2', '3', '4', '5']) 
+        let _spin1 = pickRandom(['1', '2', '3', '4', '5'])
         let _spin2 = pickRandom(['1', '2', '3', '4', '5'])
         let _spin3 = pickRandom(['1', '2', '3', '4', '5'])
         let _spin4 = pickRandom(['1', '2', '3', '4', '5'])
@@ -33,8 +33,8 @@ contoh *${usedPrefix}${command} 999*`)
         let spins6 = (spin6 == 1 ? '🍊' : spin6 == 2 ? '🍇' : spin6 == 3 ? '🍉' : spin6 == 4 ? '🍌' : spin6 == 5 ? '🍍' : '')
         let spins7 = (spin7 == 1 ? '🍊' : spin7 == 2 ? '🍇' : spin7 == 3 ? '🍉' : spin7 == 4 ? '🍌' : spin7 == 5 ? '🍍' : '')
         let spins8 = (spin8 == 1 ? '🍊' : spin8 == 2 ? '🍇' : spin8 == 3 ? '🍉' : spin8 == 4 ? '🍌' : spin8 == 5 ? '🍍' : '')
-        let spins9 = (spin9 == 1 ? '🍊' : spin9 == 2 ? '🍇' : spin9 == 3 ? '🍉' : spin9 == 4 ? '🍌' : spin9 == 5 ? '🍍' : '' )
-        let user = global.DATABASE._data.users[m.sender]
+        let spins9 = (spin9 == 1 ? '🍊' : spin9 == 2 ? '🍇' : spin9 == 3 ? '🍉' : spin9 == 4 ? '🍌' : spin9 == 5 ? '🍍' : '')
+        let user = global.db.data.users[m.sender]
         user.money -= count * 1
         for (let i = 0; i < 3; i++) {
             m.reply(`
@@ -51,17 +51,17 @@ ${pickRandom(['🍊', '🍇', '🍉', '🍌', '🍍'])}|${pickRandom(['🍊', '�
             WinOrLose = 'BIG JACKPOT'
             Hadiah = `+${count * 4}`
             user.money += count * 4
-        } else if (spin4 == spin5 && spin5  == spin6) {
-           WinOrLose = 'JACKPOT' 
-           Hadiah = `+${count * 2}`
-           user.money += count * 2
-        } else if ((spin1 == spin2 && spin2 == spin3) || (spin7 == spin8 && spin8 == spin9)) {  
+        } else if (spin4 == spin5 && spin5 == spin6) {
+            WinOrLose = 'JACKPOT'
+            Hadiah = `+${count * 2}`
+            user.money += count * 2
+        } else if ((spin1 == spin2 && spin2 == spin3) || (spin7 == spin8 && spin8 == spin9)) {
             Hadiah = `-${count * 1}`
             WinOrLose = 'DIKIT LAGI!!'
         } else {
-             Hadiah = `-${count * 1}`
-             WinOrLose = 'YOU LOSE'
-        } 
+            Hadiah = `-${count * 1}`
+            WinOrLose = 'YOU LOSE'
+        }
         conn.reply(m.chat, `
        *🎰VIRTUAL SLOTS🎰*
 
@@ -76,7 +76,7 @@ ${spins7}|${spins8}|${spins9}
         conn.reply(m.chat, 'Error', m)
         if (DevMode) {
             for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'Menu.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
+                conn.sendMessage(jid, 'Menu.js error\nNo: *' + m.sender.split `@` [0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
             }
         }
     } finally {

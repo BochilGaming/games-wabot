@@ -1,6 +1,6 @@
-let handler = async (m, { usedPrefix, command }) => {
+let handler = async(m, { usedPrefix, command }) => {
     let which = command.replace(/(daftar|list)/i, '')
-    let msgs = global.DATABASE._data.msgs
+    let msgs = global.db.data.msgs
     let split = Object.entries(msgs).map(([nama, isi]) => { return { nama, ...isi } })
     let fltr
     if (/audio/i.test(command)) fltr = split
