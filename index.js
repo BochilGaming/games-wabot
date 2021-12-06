@@ -1,7 +1,7 @@
 console.log('Starting...')
+let cluster = require('cluster')
 let path = require('path')
 let fs = require('fs')
-let cluster = require('cluster')
 let package = require('./package.json')
 const CFonts = require('cfonts')
 const Readline = require('readline')
@@ -34,7 +34,7 @@ function start(file) {
     gradient: ['red', 'magenta']
   })
   cluster.setupMaster({
-    exec: args[0],
+    exec: path.join(__dirname, file),
     args: args.slice(1),
   })
   let p = cluster.fork()

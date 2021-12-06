@@ -1,6 +1,3 @@
-const {
-    BufferJSON,
-} = require('@adiwajshing/baileys-md')
 const simple = require('./lib/simple')
 const util = require('util')
 
@@ -14,9 +11,10 @@ module.exports = {
         // console.log(chatUpdate)
         if (!chatUpdate) return
         // if (chatUpdate.messages.length > 2 || !chatUpdate.messages.length) return
-        // if (chatUpdate.messages.length > 1) console.log(chatUpdate.messages)
+        if (chatUpdate.messages.length > 1) console.log(chatUpdate.messages)
         let m = chatUpdate.messages[chatUpdate.messages.length - 1]
-        // console.log(JSON.stringify(m, null, 4))
+        if (!m) return
+        console.log(JSON.stringify(m, null, 4))
         try {
             m = simple.smsg(this, m) || m
             if (!m) return
@@ -203,7 +201,7 @@ module.exports = {
             if (opts['swonly'] && m.chat !== 'status@broadcast') return
             if (typeof m.text !== 'string') m.text = ''
             if (opts['queque'] && m.text) {
-                this.msgqueque.push(m.id)
+                this.msgqueque.push(m.id || m.key.id)
                 await delay(this.msgqueque.length * 1000)
             }
             for (let name in global.plugins) {
@@ -231,8 +229,8 @@ module.exports = {
             let isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
             let groupMetadata = (m.isGroup ? (conn.chats[m.chat] || {}).metadata : {}) || {}
             let participants = (m.isGroup ? groupMetadata.participants : []) || []
-            let user = (m.isGroup ? participants.find(u => u.id == m.sender) : {}) || {} // User Data
-            let bot = (m.isGroup ? participants.find(u => u.id == this.user.id) : {}) || {} // Your Data
+            let user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {} // User Data
+            let bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {} // Your Data
             let isAdmin = user && user.admin || false // Is User Admin?
             let isBotAdmin = bot && bot.admin || false // Are you Admin?
             for (let name in global.plugins) {
@@ -432,13 +430,13 @@ module.exports = {
                 }
             }
 
-            try {
-                require('./lib/print')(m, this)
-            } catch (e) {
-                console.log(m, m.quoted, e)
-            }
+            // try {
+            //     require('./lib/print')(m, this)
+            // } catch (e) {
+            //     console.log(m, m.quoted, e)
+            // }
             if (opts['autoread']) await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
-            let quequeIndex = this.msgqueque.indexOf(m.id)
+            let quequeIndex = this.msgqueque.indexOf(m.id || m.key.id)
             if (opts['queque'] && m.text && quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
         }
     },
