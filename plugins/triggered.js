@@ -6,9 +6,9 @@
 const imgbb = require('imgbb-uploader')
 const fs = require('fs')
 const { exec } = require('child_process')
-const { MessageType } = require('@adiwajshing/baileys')
+const { MessageType } = require('@adiwajshing/baileys-md')
 
-let handler = async (m, { conn, args }) => {
+let handler = async(m, { conn, args }) => {
     const content = JSON.stringify(m.message)
     const type = Object.keys(m.message)[0]
     const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')

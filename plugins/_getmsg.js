@@ -1,10 +1,10 @@
 module.exports = {
     async all(m) {
         if (m.chat.endsWith('broadcast')) return
-        if (global.DATABASE._data.chats[m.chat].isBanned) return
-        if (global.DATABASE._data.users[m.sender].banned) return
+        if (global.db.data.chats[m.chat].isBanned) return
+        if (global.db.data.users[m.sender].banned) return
         if (m.isBaileys) return
-        let msgs = global.DATABASE._data.msgs
+        let msgs = global.db.data.msgs
         if (!(m.text in msgs)) return
         let _m = conn.serializeM(JSON.parse(JSON.stringify(msgs[m.text]), (_, v) => {
             if (

@@ -11,6 +11,7 @@ const cp = require('child_process')
 const _ = require('lodash')
 const syntaxerror = require('syntax-error')
 const P = require('pino')
+const os = require('os')
 let simple = require('./lib/simple')
 var low
 try {
@@ -31,6 +32,7 @@ global.timestamp = {
 const PORT = process.env.PORT || 3000
 
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
+// console.log({ opts })
 global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
 
 global.db = new Low(
@@ -58,19 +60,25 @@ global.loadDatabase = async function loadDatabase() {
 }
 loadDatabase()
 
+// if (opts['cluster']) {
+//   require('./lib/cluster').Cluster()
+// }
 global.authFile = `${opts._[0] || 'session'}.data.json`
 global.isInit = !fs.existsSync(authFile)
 const { state, saveState } = useSingleFileAuthState(global.authFile)
 
-global.conn = simple.makeWASocket({
+const connectionOptions = {
   printQRInTerminal: true,
   auth: state,
-  // logger: P({ level: 'debug' })
-})
+  logger: P({ level: 'debug' })
+}
+
+global.conn = simple.makeWASocket(connectionOptions)
 
 if (!opts['test']) {
   if (global.db) setInterval(async () => {
     if (global.db.data) await global.db.write()
+    if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))
   }, 30 * 1000)
 }
 
@@ -81,7 +89,7 @@ async function connectionUpdate(update) {
     console.log(global.reloadHandler(true))
   }
   if (global.db.data == null) await loadDatabase()
-  console.log(update)
+  console.log(JSON.stringify(update, null, 4))
 }
 
 
@@ -104,11 +112,7 @@ global.reloadHandler = function (restatConn) {
   if (restatConn) {
     try { global.conn.ws.close() } catch { }
     global.conn = {
-      ...global.conn, ...simple.makeWASocket({
-        printQRInTerminal: true,
-        auth: state,
-        // logger: P({ level: 'debug' })
-      })
+      ...global.conn, ...simple.makeWASocket(connectionOptions)
     }
   }
   if (!isInit) {
@@ -185,6 +189,7 @@ async function _quickTest() {
     cp.spawn('convert'),
     cp.spawn('magick'),
     cp.spawn('gm'),
+    cp.spawn('find', ['--version'])
   ].map(p => {
     return Promise.race([
       new Promise(resolve => {
@@ -197,7 +202,7 @@ async function _quickTest() {
       })
     ])
   }))
-  let [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm] = test
+  let [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test
   console.log(test)
   let s = global.support = {
     ffmpeg,
@@ -205,7 +210,8 @@ async function _quickTest() {
     ffmpegWebp,
     convert,
     magick,
-    gm
+    gm,
+    find
   }
   // require('./lib/sticker').support = s
   Object.freeze(global.support)

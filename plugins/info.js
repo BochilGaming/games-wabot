@@ -1,15 +1,15 @@
 let { performance } = require('perf_hooks')
-let fs = require ('fs')
+let fs = require('fs')
 let path = require('path')
-let handler  = async (m, { conn, usedPrefix }) => { 
-  let package = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
-  let _uptime = process.uptime() * 1000
-  let uptime = clockString(_uptime) 
-  let totalreg = Object.keys(global.DATABASE._data.users).length
-  let old = Math.round(performance.now())
-  await m.reply('Wait Kakak!!')
-  let neww = Math.round(performance.now())
-  conn.reply(m.chat, `
+let handler = async(m, { conn, usedPrefix }) => {
+        let package = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
+        let _uptime = process.uptime() * 1000
+        let uptime = clockString(_uptime)
+        let totalreg = Object.keys(global.db.data.users).length
+        let old = Math.round(performance.now())
+        await m.reply('Wait Kakak!!')
+        let neww = Math.round(performance.now())
+        conn.reply(m.chat, `
 ╠═〘 ${package.name} 〙 ═
 ╠➥ *Versi:* ${package.version}
 ╠➥ *HomePage:* ${(package.homepage ? package.homepage.url || package.homepage : '[unknown github url]')}

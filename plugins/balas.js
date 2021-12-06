@@ -1,5 +1,5 @@
-let { MessageType } = require('@adiwajshing/baileys')
-let handler = async (m, { conn, args, text }) => {
+let { MessageType } = require('@adiwajshing/baileys-md')
+let handler = async(m, { conn, args, text }) => {
     conn.req = conn.req ? conn.req : {}
     if (!args || !text) return m.reply('nomor ama teksny?')
     let lmfao = args[0]
@@ -11,7 +11,7 @@ let handler = async (m, { conn, args, text }) => {
     conn.reply(m.chat, 'Pesan Anda sudah terkirim', m)
     conn.sendMessage(bruh, _text, MessageType.text)
     delete conn.req[bruh]
-    
+
 }
 handler.help = ['balas'].map(v => v + ' [nomor] [teks]')
 handler.tags = ['owner']
