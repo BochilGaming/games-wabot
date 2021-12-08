@@ -7,7 +7,7 @@ handler.before = function (m, { user }) {
   let chat = global.DATABASE.data.chats[m.chat]
   let isGroupToxic = linkRegex.exec(m.text)
 
-  if (!chat.antiToxic && isGroupToxic) {
+  if (chat.antiToxic && isGroupToxic) {
     m.reply('Jangan Toxic ya!!\n' + readMore + '\nMau Matikan? ketik */disable antitoxic*')
     if (global.opts['restrict']) {
       // if (!user.isAdmin) return true
