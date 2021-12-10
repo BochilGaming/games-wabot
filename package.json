@@ -9,10 +9,13 @@
     "src": "src",
     "plugins": "plugins"
   },
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
+  },
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js",
-    "test2": "nodemon index.js"
+    "test": "node test.js"
   },
   "keywords": [
     "termux-whatsapp-bot",
@@ -29,19 +32,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nurutomo/wabot-aq.git"
+    "url": "git+https://github.com/BochilGaming/games-wabot.git"
   },
   "bugs": {
     "url": "https://github.com/BochilGaming/games-wabot/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@adiwajshing/baileys": "github:adiwajshing/baileys",
-    "awesome-phonenumber": "^2.47.0",
+    "@adiwajshing/baileys": "github:BochilGaming/Baileys#fix",
+    "awesome-phonenumber": "^2.65.0",
     "brainly-scraper-v2": "^1.1.2",
     "cfonts": "^2.9.3",
     "chalk": "^4.1.0",
-    "cheerio": "^1.0.0-rc.5",
+    "cheerio": "^1.0.0-rc.10",
     "dotenv": "10.0.0",
     "express": "^4.17.1",
     "file-type": "^16.4.0",
