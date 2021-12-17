@@ -36,7 +36,7 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@adiwajshing/baileys-md": "github:adiwajshing/baileys#multi-device",
+        "@adiwajshing/baileys-md": "github:ilmanhdyt/baileys#multi-device",
         "awesome-phonenumber": "^2.64.0",
         "axios": "^0.24.0",
         "cfonts": "^2.10.0",
