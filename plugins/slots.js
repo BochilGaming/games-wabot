@@ -3,7 +3,7 @@ let num = /([0-9])$/i
 let handler = async (m, { conn, text }) => {
     if (!text) throw 'Masukkan Jumlah Uang Yang Ingin Anda Slot'
     if (!num.test(text)) throw 'Hanya Angka'
-    let money = `${text}`
+    let money = text * 1
     let jackpot = Math.ceil(money * 5)
     let win = Math.ceil(money * 2)
     if (money < 10) throw 'Minimal 10'
@@ -56,10 +56,5 @@ let handler = async (m, { conn, text }) => {
 handler.help = ['slot']
 handler.tags = ['game']
 handler.command = /^(slot)$/i
-handler.group = true
-handler.register = true
-
-handler.exp = 10
-handler.limit = false
 
 module.exports = handler
