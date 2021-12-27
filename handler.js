@@ -231,8 +231,8 @@ module.exports = {
             let participants = (m.isGroup ? groupMetadata.participants : []) || []
             let user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {} // User Data
             let bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {} // Your Data
-            let isAdmin = user && user.admin || false // Is User Admin?
-            let isBotAdmin = bot && bot.admin || false // Are you Admin?
+            let isAdmin = user.isAdmin || user.isSuperAdmin || false // Is User Admin?
+             let isBotAdmin = bot.isAdmin || bot.isSuperAdmin || false // Are you Admin?
             for (let name in global.plugins) {
                 let plugin = global.plugins[name]
                 if (!plugin) continue
@@ -408,7 +408,7 @@ module.exports = {
 
                 let stat
                 if (m.plugin) {
-                    let now = + new Date
+                    let now = +new Date
                     if (m.plugin in stats) {
                         stat = stats[m.plugin]
                         if (!isNumber(stat.total)) stat.total = 1
@@ -430,11 +430,11 @@ module.exports = {
                 }
             }
 
-            // try {
-            //     require('./lib/print')(m, this)
-            // } catch (e) {
-            //     console.log(m, m.quoted, e)
-            // }
+            try {
+                 require('./lib/print')(m, this)
+             } catch (e) {
+                 console.log(m, m.quoted, e)
+            }
             if (opts['autoread']) await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
             let quequeIndex = this.msgqueque.indexOf(m.id || m.key.id)
             if (opts['queque'] && m.text && quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
@@ -473,7 +473,7 @@ module.exports = {
             case 'demote':
                 if (!text) text = (chat.sDemote || this.sdemote || conn.sdemote || '@user ```is no longer Admin```')
                 text = text.replace('@user', '@' + participants[0].split('@')[0])
-                if (chat.detect) this.sendMessage(id, text, MessageType.extendedText, {
+                if (chat.detect) this.sendMessage(id, { text: text }, {
                     contextInfo: {
                         mentionedJid: this.parseMention(text)
                     }
