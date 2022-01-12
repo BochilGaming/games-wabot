@@ -20,7 +20,7 @@ global.Owner = {
     isCreator: false // if true this number will send if user use command /owner or /creator
   },
   '6285713964963': {
-    isReport: true
+    isReport: true // if true this number will send if user use command /report or /join
   },
   '13479805233': {} // ignore if you don't want anything, like name dll
 }
