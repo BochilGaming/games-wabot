@@ -6,14 +6,8 @@ wa.me/62896543604477?text=.menu
 Bantu ramein iya 🙏
 */
 
-/*
-Made by Aine
-Anonymous Chat
-wa.me/62896543604477?text=.menu
-Bantu ramein iya 🙏
-*/
 
-let { MessageType, Preslet { MessageType, Presence } = require('@adiwajshing/baileys')
+let { MessageType, Presence } = require('@adiwajshing/baileys')
 
 async function handler(m, { command, conn, text }) {
 	await conn.updatePresence(m.chat, Presence.composing)
