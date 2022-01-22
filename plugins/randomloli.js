@@ -1,7 +1,7 @@
 let handler = async (m, { conn }) => {
     let yh = global.loli
     let url = yh[Math.floor(Math.random() * yh.length)]
-    let buffer = (await conn.getPath(url)).data
+    let buffer = (await conn.getFile(url)).data
     conn.sendButton(m.chat, 'pedo :v', author, buffer, [[
         'loli', '/loli'
     ]], { quoted: m })
