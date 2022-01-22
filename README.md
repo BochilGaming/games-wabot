@@ -84,6 +84,22 @@ npm install
 npm update
 ```
 
+#### Installing the FFmpeg
+* Download one of the FFmpeg versions [here](https://ffmpeg.org/download.html).
+* Extract file to `C:\` path.
+* Rename the extracted folder to `ffmpeg`.
+* Run Command Prompt as Administrator.
+* Run the following command:
+```cmd
+> setx /m PATH "C:\ffmpeg\bin;%PATH%"
+```
+If successful, it will give you a message like:
+`SUCCESS: specified value was saved`.
+
+* Now that you have FFmpeg installed, verify that it worked by running this command to see the version:
+```cmd
+> ffmpeg -version
+```
 ---------
 
 ## Run
