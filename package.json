@@ -40,7 +40,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@adiwajshing/baileys": "github:BochilGaming/Baileys#fix",
-    "@bochilteam/scraper": "^0.0.4",
+    "@bochilteam/scraper": "latest",
     "awesome-phonenumber": "^2.65.0",
     "brainly-scraper-v2": "^1.1.2",
     "cfonts": "^2.9.3",
