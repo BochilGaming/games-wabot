@@ -32,7 +32,7 @@ let tags = {
 const defaultMenu = {
   before: `
 ╭─「 %me 」
-│ %ucapan, %name!
+│ %ucapan, %tagorang!
 │
 │ Tanggal: *%week %weton, %date*
 │ Tanggal Islam: *%dateIslamic*
@@ -56,6 +56,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
   try {
     let package = JSON.parse(await fs.promises.readFile(path.join(__dirname, '../package.json')).catch(_ => '{}'))
     let name = conn.getName(m.sender)
+    let tagnoob = `@${m.sender.split`@`[0]}`
     let d = new Date(new Date + 3600000)
     let locale = 'id'
     // d.getTimeZoneOffset()
@@ -135,6 +136,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       p: _p, uptime, muptime,
       me: conn.user.name,
       ucapan: ucapan(),
+      tagorang: tagnoob,
       npmname: package.name,
       npmdesc: package.description,
       version: package.version,
