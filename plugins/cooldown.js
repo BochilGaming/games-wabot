@@ -31,6 +31,3 @@ handler.help = ['cd', 'cooldown']
 handler.tags = ['rpg']
 handler.command = /^(cd|cooldown)$/i
 module.exports = handler
-
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4201)
