@@ -1,4 +1,3 @@
-const { MessageType } = require('@adiwajshing/baileys')
 const { sticker } = require('../lib/sticker')
 const uploadFile = require('../lib/uploadFile')
 const uploadImage = require('../lib/uploadImage')
@@ -17,10 +16,12 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         if (/webp/g.test(mime)) out = await webp2png(img)
         else if (/image/g.test(mime)) out = await uploadImage(img)
         else if (/video/g.test(mime)) out = await uploadFile(img)
+        if (typeof out !== 'string') out = await uploadImage(img)
         stiker = await sticker(false, out, global.packname, global.author)
       } catch (e) {
         console.error(e)
-        stiker = await sticker(img, false, global.packname, global.author)
+      } finally {
+        if (!stiker) stiker = await sticker(img, false, global.packname, global.author)
       }
     } else if (args[0]) {
       if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
@@ -28,15 +29,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
   } catch (e) {
     console.error(e)
-    if (Buffer.isBuffer(e)) stiker = e
+    if (!stiker) stiker = e
   } finally {
-    if (stiker) await conn.sendMessage(m.chat, stiker, MessageType.sticker, {
-      quoted: m
-    })
-    else throw `Gagal${m.isGroup ? ', balas gambarnya!' : ''}`
+    if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
+    else throw 'Conversion failed'
   }
 }
-handler.help = ['stiker ', 'stiker <url>']
+handler.help = ['stiker (caption|reply media)', 'stiker <url>', 'stikergif (caption|reply media)', 'stikergif <url>']
 handler.tags = ['sticker']
 handler.command = /^s(tic?ker)?(gif)?(wm)?$/i
 
