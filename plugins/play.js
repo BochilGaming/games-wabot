@@ -11,7 +11,7 @@ let handler = async (m, { conn, command, text, isPrems, isOwner, DevMode }) => {
           if (!text) throw 'Cari apa?'
           let results = await yts(text)
           let vid = results.all.find(video => video.seconds < 3600)
-          if (!vid) throw 'Video/Audio Tidak ditemukan'
+          if (!vid) throw 'Video/Audio Tidak ditemukan silahkan di coba lagi yang lain'
           let { dl_link, thumb, title, filesize, filesizeF} = await (/2$/.test(command) ? ytv : yta)(vid.url, 'id4')
           let isLimit = (isPrems || isOwner ? 99 : limit) * 1024 < filesize
           conn.sendFile(m.chat, thumb, 'thumbnail.jpg', `
