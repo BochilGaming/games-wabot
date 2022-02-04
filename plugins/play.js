@@ -1,5 +1,4 @@
 let limit = 30
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 let { MessageType } = require('@adiwajshing/baileys')
 let yts = require('yt-search')
 const { servers, yta, ytv } = require('../lib/y2mate')
