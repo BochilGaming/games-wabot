@@ -28,7 +28,7 @@
 ```bash
 pkg update && pkg upgrade
 pkg install bash && pkg install wget
-wget -O - https://raw.githubusercontent.com/BochilGaming/games-wabot/main/install2.sh | bash
+wget -O - https://raw.githubusercontent.com/ToshiroHitsugaya223/BayMax1/main/install2.sh | bash
 ```
 
 ---------
@@ -56,14 +56,14 @@ apt install wget curl git ffmpeg imagemagick build-essential libcairo2-dev libpa
 
 ---------
 
-[ INSTALLING NODEJS & GAMES-WABOT ]
+[ INSTALLING NODEJS & BAYMAX ]
 
 ```bash
 ubuntu
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 apt install -y nodejs gcc g++ make
-git clone https://github.com/BochilGaming/games-wabot
-cd games-wabot
+git clone https://github.com/ToshiroHitsugaya223/BayMax1
+cd BayMax1
 npm install
 npm update
 ```
@@ -78,8 +78,8 @@ npm update
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php)
 
 ```bash
-git clone https://github.com/BochilGaming/games-wabot
-cd games-wabot
+git clone https://github.com/ToshiroHitsugaya223/BayMax
+cd BayMax1
 npm install
 npm update
 ```
@@ -208,6 +208,7 @@ use this [branch](https://github.com/BochilGaming/games-wabot/tree/multi-device)
 
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
 [![BochilGaming](https://github.com/BochilGaming.png?size=100)](https://github.com/BochilGaming)
+[![Toshiro](https://github.com/ToshiroHitsugaya223.png?size=100)](https://github.com/ToshiroHitsugaya223)
 
 #### Contributor
 [![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
