@@ -13,7 +13,7 @@ let handler = async (m, { conn, text, isMods, isOwner }) => {
         let name = conn.getName(m.sender)
         conn.req[m.sender] = {
             name,
-            text: 'Kak join group ku donk, ini linknya \n```https://chat.whatsapp.com/' + code + '```',
+            text: 'join my group, here's the link \n```https://chat.whatsapp.com/' + code + '```',
             date: new Date * 1
         }
         for (let jid of Object.entries(global.Owner).filter(v => v[1].isReport).map(v => v[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) m.reply('*dari:* ' + m.sender.split('@')[0] + '\n*Link:* ' + link, jid)
