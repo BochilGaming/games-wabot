@@ -33,7 +33,7 @@ else
 fi
 
 echo -e "\u001b[36mChange working directory!"
-cd games-wabot
+cd BayMax
 main_dir=$(pwd)
 if [ $main_dir != $dir ]; then
   echo -e "\u001b[36mDone change working directory!"
