@@ -28,16 +28,15 @@ let handler  = async (m, { conn, usedPrefix }) => {
 ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n║\n`}
 ║
 ║${readMore}
-╠═〘 SYARAT & KETENTUAN Games-wabot 〙 ═
-╠✩ *KAMI TIDAK BERTANGGUNG*
-║   *JAWAB ATAS PENYALAH*
-║   *GUNAAN BOT*
-╠☆ *KAMI TIDAK BERTANGGUNG*
-║   *JAWAB ATAS KEBOCORAN DATA*
-║   *PRIBADI ANDA*
-╠☆ *KAMI AKAN MENYIMPAN DATA*
-║   *SEPERTI NOMER TELEPON*
-║   *ANDA DI DATABASE KAMI*
+╠═〘 TERMS AND CONDITIONS BayMax Bot 〙 ═
+╠✩ *WE ARE NOT RESPONSIBLE*
+║   ANSWER TO BLAME BOT USE*
+║   *WE ARE NOT RESPONSIBLE*
+╠☆ *ANSWER FOR DATA LEAK*
+║   *YOUR PERSONAL*
+║   *WE WILL SAVE THE DATA*
+║   *LIKE PHONE NUMBER*
+╠☆ *YOU ARE IN OUR DATABASE**
 ║ 
 ║ 
 ╠═ ©2022 ${package.name}
