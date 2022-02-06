@@ -17,7 +17,7 @@ let handler = async (m, { conn, text, isMods, isOwner }) => {
             date: new Date * 1
         }
         for (let jid of Object.entries(global.Owner).filter(v => v[1].isReport).map(v => v[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) m.reply('*dari:* ' + m.sender.split('@')[0] + '\n*Link:* ' + link, jid)
-        m.reply('Sedang di process Owner')
+        m.reply('In process Owner')
     }
 }
 handler.help = ['join [chat.whatsapp.com]']
