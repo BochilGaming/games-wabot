@@ -9,9 +9,9 @@ ${command} *${text}*
     }
   } : {})
 }
-handler.help = ['gay', 'pintar', 'cantik', 'ganteng', 'gabut', 'gila', 'lesbi', 'stress', 'bucin', 'jones', 'sadboy'].map(v => 'how' + v + ' siapa?')
+handler.help = ['gay', 'madarchoad', 'chakka', 'betichoad', 'lavda', 'bsdk', 'lasbian', 'stress', 'puka', 'modda', 'sadboy'].map(v => 'how' + v + ' siapa?')
 handler.tags = ['kerang']
-handler.command = /^how(gay|pintar|cantik|ganteng|gabut|gila|lesbi|stress?|bucin|jones|sadboy)/i
+handler.command = /^how(gay|madarchod|chakka|betichoad|lavda|bsdk|lesbian|stress?|puka|modda|sadboy)/i
 handler.owner = false
 handler.mods = false
 handler.premium = false
