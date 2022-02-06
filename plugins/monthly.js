@@ -5,13 +5,13 @@ let handler = async (m, { conn }) => {
     let _timers = (cooldown - (new Date - user.lastmonthly))
     let timers = clockString(_timers)
     if (new Date - user.lastmonthly > cooldown) {
-        conn.reply(m.chat, `Anda sudah mengklaim dan mendapatkan 100000 💵money, 5 🎁Legendary crate dan 3 📦Pet crate`, m)
+        conn.reply(m.chat, `You have claimed and earned 100000 💵money, 5 🎁Legendary crate dan 3 📦Pet crate`, m)
         user.money += 100000
         user.legendary += 5
         user.pet += 3
         user.lastmonthly = new Date * 1
     } else {
-        let buttons = button(`silahkan tunggu *🕒${timers}* lagi untuk bisa mengclaim lagi`, user)
+        let buttons = button(`Please wait *🕒${timers}* again to be able to claim again`, user)
         conn.sendMessage(m.chat, buttons, MessageType.buttonsMessage, { quoted: m })
     }
 }
@@ -46,7 +46,7 @@ function button(teks, user) {
 
     const buttonMessage = {
         contentText: teks,
-        footerText: '©games-wabot',
+        footerText: '©BayMax',
         buttons: buttons,
         headerType: 1
     }
