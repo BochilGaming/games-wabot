@@ -46,6 +46,7 @@ const defaultMenu = {
 ┏━━━━━━━━━━━━━━━━❀
     THANKS TO
 ┗━━━━━━━━━━━━━━━━❀
+┏━━━━━━━━━━━━━━━━❀
   Nurutomo
   Gariox
   BochilGaming
