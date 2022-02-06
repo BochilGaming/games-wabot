@@ -1,12 +1,12 @@
 let handler = async m => m.reply(`
-╭─「 Donasi • Pulsa 」
-│ • Indosat [085713964963]
-│ • Gopay [085713964963]
+┏━━━━❀「 Donate • Pulse 」❀━━
+│ ☆ Paytm [9609900020]
+│ ☆ Gpay [9609900020]
+┗━━━━━━━━━━━━━━━❀
+┏━━━━❀「 contact 」❀━━
+│ > if you want to donate? Wa.me/919609900020
 ╰────
-╭─「 Hubungi 」
-│ > Ingin donasi? Wa.me/6281390658325
-╰────
-`.trim()) // Tambah sendiri kalo mau
+`.trim()) // add yourself if you want
 handler.help = ['donasi']
 handler.tags = ['info']
 handler.command = /^dona(te|si)$/i
