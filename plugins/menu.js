@@ -139,7 +139,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       npmdesc: package.description,
       version: package.version,
       github: package.homepage ? package.homepage.url || package.homepage : '[unknown github url]',
-      name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
+      name, weton, week, date, time, totalreg, rtotalreg,
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
@@ -184,16 +184,16 @@ function ucapan() {
   const time = (new Date().getUTCHours() + 7) % 24
   res = "Woi. Pagi"
   if (time >= 4) {
-    res = "Selamat Pagi"
+    res = "Good morning"
   }
   if (time >= 12) {
-    res = "Selamat Siang"
+    res = "Good morning"
   }
   if (time >= 15) {
-    res = "Selamat Sore"
+    res = "Good afternoon"
   }
   if (time >= 19) {
-    res = "Selamat Malam"
+    res = "Good night"
   }
   return res
 }
