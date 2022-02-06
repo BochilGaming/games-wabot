@@ -20,7 +20,7 @@ let tags = {
   'fun': 'Fun',
   'database': 'Database',
   'vote': 'Voting',
-  'absen': 'Absen',
+  'absen': 'Absent',
   'quran': 'Al Qur\'an',
   'jadibot': 'Jadi Bot',
   'owner': 'Owner',
@@ -31,8 +31,10 @@ let tags = {
 }
 const defaultMenu = {
   before: `
-╭─「 %me 」
-│ Hey🕵️, %name!
+┏━━━━━━━━━━━━━━━━❀
+  Hey🕵️, %name,
+┗━━━━━━━━━━━━━━━━❀
+┏━━━━━━━━━━━━━━━━━━━❀
  🤖Bot Name: BayMax (BOT)
  💬Group chats: 26
  🌐Personal chats: 18
@@ -40,14 +42,21 @@ const defaultMenu = {
  🥏Wa web virson: 10.0
  💻Browser: Desktop
  📱Host number: @918981731437
-╰────
+┗━━━━━━━━━━━━━━━━━━━━❀
+┏━━━━━━━━━━━━━━━━❀
+    THANKS TO
+┗━━━━━━━━━━━━━━━━❀
+  Nurutomo
+  Gariox
+  BochilGaming
+  Toshiro
+  Baileys
+┗━━━━━━━━━━━━━━━━❀
 %readmore`.trimStart(),
-  header: '╭─「 %category 」',
-  body: '│ • %cmd %islimit %isPremium',
-  footer: '╰────\n',
-  after: `
-*%npmname@^%version*
-${'```%npmdesc```'}
+  header: '┏━━━━❀「 %category 」❀━━',
+  body: '  ┣☆ %cmd %islimit %isPremium',
+  footer: '┗━━━━━━━━━━━━━━━━❀',
+  after: `*© copyright by Toshiro*
 `,
 }
 let handler = async (m, { conn, usedPrefix: _p }) => {
