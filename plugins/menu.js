@@ -32,16 +32,14 @@ let tags = {
 const defaultMenu = {
   before: `
 ╭─「 %me 」
-│ Hello🕵️, %name!
-│
-│ Tanggal: *%week %weton, %date*
-│ Tanggal Islam: *%dateIslamic*
-│ Waktu: *%time*
-│
-│ Uptime: *%uptime (%muptime)*
-│ Database: %rtotalreg of %totalreg
-│ Github:
-│ %github
+│ Hey🕵️, %name!
+ 🤖Bot Name: BayMax (BOT)
+ 💬Group chats: 26
+ 🌐Personal chats: 18
+ 🪀Wa Web server Name: SERVER TOSHIRO
+ 🥏Wa web virson: 10.0
+ 💻Browser: Desktop
+ 📱Host number: @918981731437
 ╰────
 %readmore`.trimStart(),
   header: '╭─「 %category 」',
@@ -150,7 +148,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
   ['Owner',  '/owner']
 ], { quoted: m}).catch(_ => conn.sendFile(m.chat, pp, 'menu.jpg', text.trim(), m)).catch(_ => conn.reply(m.chat, text.trim(), m))
   } catch (e) {
-    conn.reply(m.chat, 'Maaf, menu sedang error', m)
+    conn.reply(m.chat, 'sorry, menu currently error', m)
     throw e
   }
 }
@@ -182,7 +180,7 @@ function clockString(ms) {
 }
 function ucapan() {
   const time = (new Date().getUTCHours() + 7) % 24
-  res = "Woi. Pagi"
+  res = "Wow. Morning"
   if (time >= 4) {
     res = "Good morning"
   }
