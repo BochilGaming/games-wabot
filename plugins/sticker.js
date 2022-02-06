@@ -8,9 +8,9 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     let q = m.quoted ? m.quoted : m
     let mime = (q.msg || q).mimetype || ''
     if (/webp|image|video/g.test(mime)) {
-      if (/video/g.test(mime)) if ((q.msg || q).seconds > 11) return m.reply('Maksimal 10 detik!')
+      if (/video/g.test(mime)) if ((q.msg || q).seconds > 11) return m.reply('Maximum 10 seconds!')
       let img = await q.download()
-      if (!img) throw `balas gambar/video/stiker dengan perintah ${usedPrefix + command}`
+      if (!img) throw `reply image/video/sticker with command ${usedPrefix + command}`
       let out
       try {
         if (/webp/g.test(mime)) out = await webp2png(img)
@@ -25,7 +25,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       }
     } else if (args[0]) {
       if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
-      else return m.reply('URL tidak valid!')
+      else return m.reply('Invalid URL!')
     }
   } catch (e) {
     console.error(e)
