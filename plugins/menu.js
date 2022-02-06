@@ -36,8 +36,8 @@ const defaultMenu = {
 ┗━━━━━━━━━━━━━━━━❀
 ┏━━━━━━━━━━━━━━━━━━━❀
  🤖Bot Name: BayMax (BOT)
- 💬Group chats: 26
- 🌐Personal chats: 18
+ 💬Group chats: 128
+ 🌐Personal chats: 65
  🪀Wa Web server Name: SERVER TOSHIRO
  🥏Wa web virson: 10.0
  💻Browser: Desktop
