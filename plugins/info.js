@@ -11,18 +11,17 @@ let handler  = async (m, { conn, usedPrefix }) => {
   let neww = Math.round(performance.now())
   conn.reply(m.chat, `
 ╠═〘 ${package.name} 〙 ═
-╠➥ *Versi:* ${package.version}
-╠➥ *HomePage:* ${(package.homepage ? package.homepage.url || package.homepage : '[unknown github url]')}
-╠➥ *Issue:* ${package.bugs.url}
-╠➥ *Prefix:* ' ${usedPrefix} '
-╠➥ *Menu:* ${usedPrefix}menu
-╠➥ *Ping:* ${neww - old} *ms*
-╠➥ *Total user:* ${totalreg} *user*
-╠➥ *Uptime:* ${uptime}
+╠☆ *Version:* ${package.version}
+╠☆ *HomePage:* ${(package.homepage ? package.homepage.url || package.homepage : '[unknown github url]')}
+╠☆ *Issue:* ${package.bugs.url}
+╠☆ *Prefix:* ' ${usedPrefix} '
+╠☆ *Menu:* ${usedPrefix}menu
+╠☆ *Ping:* ${neww - old} *ms*
+╠☆ *Total user:* ${totalreg} *user*
+╠☆ *Uptime:* ${uptime}
 ║
-╠═〘 DONASI 〙 ═
-╠➥ Gopay: 085713964963
-╠➥ Indosat: 085713964963
+╠═〘 Owner 〙 ═
+╠☆ owner: @919609900020
 ║
 ╠═ Request? ${package.bugs.url}
 ╠═ Official Group *${conn.user.name}* :
@@ -30,20 +29,20 @@ ${(global.linkGC).map((v, i) => '║ *Group ' + (i + 1) + '*\n║' + v).join`\n�
 ║
 ║${readMore}
 ╠═〘 SYARAT & KETENTUAN Games-wabot 〙 ═
-╠➥ *KAMI TIDAK BERTANGGUNG*
+╠✩ *KAMI TIDAK BERTANGGUNG*
 ║   *JAWAB ATAS PENYALAH*
 ║   *GUNAAN BOT*
-╠➥ *KAMI TIDAK BERTANGGUNG*
+╠☆ *KAMI TIDAK BERTANGGUNG*
 ║   *JAWAB ATAS KEBOCORAN DATA*
 ║   *PRIBADI ANDA*
-╠➥ *KAMI AKAN MENYIMPAN DATA*
+╠☆ *KAMI AKAN MENYIMPAN DATA*
 ║   *SEPERTI NOMER TELEPON*
 ║   *ANDA DI DATABASE KAMI*
 ║ 
 ║ 
-╠═ ©2021 ${package.name}
-╠═ Script original by Nurutomo
-╠═〘 METRO BOT 〙 ═
+╠═ ©2022 ${package.name}
+╠═ Script original by Toshiro
+╠═〘 BAYMAX BOT 〙 ═
 `.trim(), m)
 }
 handler.help = ['info']
