@@ -32,7 +32,7 @@ let tags = {
 const defaultMenu = {
   before: `
 ╭─「 %me 」
-│ %ucapan, %name!
+│ Hello🕵️, %name!
 │
 │ Tanggal: *%week %weton, %date*
 │ Tanggal Islam: *%dateIslamic*
