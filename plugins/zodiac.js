@@ -11,8 +11,8 @@ let handler = (m, { usedPrefix, command, text }) => {
     const ageD = new Date(d - date)
     const age = ageD.getFullYear() - new Date(1970, 0, 1).getFullYear()
 
-    const birthday = [tahun + (birth[1] < bulan), ...birth.slice(1)]
-    const cekusia = bulan === birth[1] && tanggal === birth[2] ? `Selamat ulang tahun yang ke-${age} 🥳` : age
+    const birthday = [year + (birth[1] < month), ...birth.slice(1)]
+    const Czechia = month === birth[1] && date === birth[2] ? `'Happy birthday to-${age} 🥳` : age
 
     const teks = `
 Lahir : ${birth.join('-')}
@@ -22,7 +22,7 @@ Zodiak : ${zodiac}
 `.trim()
     m.reply(teks)
 }
-handler.help = ['zodiac *2002 02 25*']
+handler.help = ['zodiac *2004 03 05*']
 handler.tags = ['tools']
 
 handler.command = /^zodia[kc]$/i
