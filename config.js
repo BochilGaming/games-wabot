@@ -53,7 +53,7 @@ global.APIKeys = { // APIKey Here
 
 // Sticker WM
 global.packname = 'wa.me/919609900020'
-global.author = 'BayMax is the best'
+global.author = '© copyright by Toshiro'
 
 global.multiplier = 39 // The higher, The harder levelup
 
