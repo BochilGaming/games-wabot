@@ -57,7 +57,7 @@ const defaultMenu = {
   header: '┏━━━━❀「 %category 」❀━━',
   body: '  ┣☆ %cmd %islimit %isPremium',
   footer: '┗━━━━━━━━━━━━━━━━❀',
-  after: `*© copyright by Toshiro*
+  after: `
 `,
 }
 let handler = async (m, { conn, usedPrefix: _p }) => {
