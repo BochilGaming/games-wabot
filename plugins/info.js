@@ -12,8 +12,6 @@ let handler  = async (m, { conn, usedPrefix }) => {
   conn.reply(m.chat, `
 ╠═〘 ${package.name} 〙 ═
 ╠☆ *Version:* ${package.version}
-╠☆ *HomePage:* ${(package.homepage ? package.homepage.url || package.homepage : '[unknown github url]')}
-╠☆ *Issue:* ${package.bugs.url}
 ╠☆ *Prefix:* ' ${usedPrefix} '
 ╠☆ *Menu:* ${usedPrefix}menu
 ╠☆ *Ping:* ${neww - old} *ms*
