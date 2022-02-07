@@ -11,12 +11,12 @@ let handler = async (m, { conn, args }) => {
   let len = args[0] && args[0].length > 0 ? Math.min(100, Math.max(parseInt(args[0]), 5)) : Math.min(20, sortedExp.length)
     let text = `
 • *Level Leaderboard Top ${len}* •
-Kamu: *${userslevel.indexOf(m.sender) + 1}* dari *${userslevel.length}*
+You: *${userslevel.indexOf(m.sender) + 1}* dari *${userslevel.length}*
 
 ${sortedlevel.slice(0, len).map(([user, data], i) => (i + 1) + '. @' + user.split`@`[0] + ': *' + data.level + ' Lvl*').join`\n`}
 
 • *Money Leaderboard Top ${len}* •
-Kamu: *${usersmoney.indexOf(m.sender) + 1}* dari *${usersmoney.length}*
+You: *${usersmoney.indexOf(m.sender) + 1}* dari *${usersmoney.length}*
 
 ${sortedmoney.slice(0, len).map(([user, data], i) => (i + 1) + '. @' + user.split`@`[0] + ': *' + data.money + ' Money*').join`\n`}
 `.trim()
@@ -26,7 +26,7 @@ ${sortedmoney.slice(0, len).map(([user, data], i) => (i + 1) + '. @' + user.spli
     }
   })
 }
-handler.help = ['leaderboard [jumlah user]', 'lb [jumlah user]']
+handler.help = ['leaderboard [number user]', 'lb [number user]']
 handler.tags = ['rpg']
 handler.command = /^(leaderboard|lb)$/i
 handler.owner = false
