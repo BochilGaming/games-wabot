@@ -1,5 +1,5 @@
 let handler = async (m, { conn, text }) => {
-  if (!text) throw 'Tidak ada teks'
+  if (!text) throw 'No text'
   m.reply(text, false, {
     contextInfo: {
       mentionedJid: conn.parseMention(text)
