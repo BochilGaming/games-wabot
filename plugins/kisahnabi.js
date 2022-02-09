@@ -8,8 +8,8 @@ let handler = async(m, { conn, text }) => {
   let { nabi, lahir, umur, tempat, image, kisah } = json.result
 let kisahnabi = `
 *Nama :* ${nabi}
-*Lahir :* ${lahir}
-*Umur :* ${umur}
+*Lahir :* ${lahir} SM
+*Umur :* ${umur} Tahun
 *Tempat :* ${tempat}
 *Kisah :* ${kisah}`
 
