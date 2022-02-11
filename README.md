@@ -24,6 +24,15 @@
 | **FFMPEG** |[here](https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest) |
 | **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
 
+#### Run On Repl.It
+[![Run on Repl.It](https://repl.it/badge/github/BochilGaming/games-wabot)](https://repl.it/github/BochilGaming/games-wabot)
+- After cloning, open console then run this commands
+```bash
+install-pkg ffmpeg
+install-pkg imagemagick
+npm install
+```
+
 ### FOR TERMUX USER
 ```bash
 pkg update && pkg upgrade
