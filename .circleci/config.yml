@@ -13,7 +13,7 @@ jobs:
       - checkout
       - run:
           name: Install packages
-          command: npm install syntax-error --no-package-lock --no-save --dev
+          command: npm install syntax-error --no-package-lock --no-save --also=dev
       - run:
           name: Run test using nodejs << parameters.node-version >>
           command: node test.js
