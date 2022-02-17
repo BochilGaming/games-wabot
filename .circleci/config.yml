@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  node: circleci/node@4.7.0
+  node: circleci/node@5.0.0
 
 jobs: 
   test:
@@ -12,6 +12,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install packages
+          command: npm install syntax-error --no-package-lock --no-save
+      - run:
           name: Run test using nodejs << parameters.node-version >>
           command: node test.js
         
@@ -21,4 +24,4 @@ workflows:
       - test: 
           matrix:
             parameters:
-              node-version: [12.22.6, 14.17.6, 16.8.0]
+              node-version: [14, 16, 17]
