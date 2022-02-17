@@ -1,14 +1,16 @@
-let handler = async m => m.reply(`
+let handler =  m => m.reply(`
 ╭─「 Donasi • Pulsa 」
-│ • Indosat [085713964963]
-│ • Gopay [085713964963]
+│ • Indosat Ooredoo [085713964963]
+│ • Telkomsel [081319944687]
 ╰────
-╭─「 Hubungi 」
-│ > Ingin donasi? Wa.me/6281390658325
+
+╭─「 Donasi • Non Pulsa 」
+│ • https://saweria.co/BochilGaming
+│ • Gopay [085713964963]
 ╰────
 `.trim()) // Tambah sendiri kalo mau
 handler.help = ['donasi']
 handler.tags = ['info']
 handler.command = /^dona(te|si)$/i
 
-module.exports = handler
+export default handler

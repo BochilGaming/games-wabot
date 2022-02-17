@@ -1,61 +1,65 @@
-let fs = require('fs')
-let path = require('path')
-let levelling = require('../lib/levelling')
+import { promises } from 'fs'
+import { join } from 'path'
+import { xpRange } from '../lib/levelling.js'
 let tags = {
-    'main': 'Main',
-    'rpg': 'Epic RPG',
-    'game': 'Game',
-    'xp': 'Exp & Limit',
-    'sticker': 'Sticker',
-    'kerang': 'Kerang Ajaib',
-    'quotes': 'Quotes',
-    'admin': 'Admin',
-    'group': 'Group',
-    'premium': 'Premium',
-    'internet': 'Internet',
-    'anonymous': 'Anonymous Chat',
-    'nulis': 'MagerNulis & Logo',
-    'downloader': 'Downloader',
-    'tools': 'Tools',
-    'fun': 'Fun',
-    'database': 'Database',
-    'vote': 'Voting',
-    'absen': 'Absen',
-    'quran': 'Al Qur\'an',
-    'jadibot': 'Jadi Bot',
-    'owner': 'Owner',
-    'host': 'Host',
-    'advanced': 'Advanced',
-    'info': 'Info',
-    '': 'No Category',
+  'main': 'Main',
+  'game': 'Game',
+  'rpg': 'RPG Games',
+  'xp': 'Exp & Limit',
+  'sticker': 'Sticker',
+  'kerang': 'Kerang Ajaib',
+  'quotes': 'Quotes',
+  'admin': 'Admin',
+  'group': 'Group',
+  'premium': 'Premium',
+  'internet': 'Internet',
+  'anonymous': 'Anonymous Chat',
+  'nulis': 'MagerNulis & Logo',
+  'downloader': 'Downloader',
+  'tools': 'Tools',
+  'fun': 'Fun',
+  'database': 'Database',
+  'vote': 'Voting',
+  'absen': 'Absen',
+  'quran': 'Al Qur\'an',
+  'jadibot': 'Jadi Bot',
+  'owner': 'Owner',
+  'host': 'Host',
+  'advanced': 'Advanced',
+  'info': 'Info',
+  '': 'No Category',
 }
 const defaultMenu = {
-        before: `
-╭─「 %me 」
-│ %ucapan, %name!
+  before: `
+╭─「 %me 🤖」
+│ 👋🏻 Hai, %name!
 │
-│ Tanggal: *%week %weton, %date*
-│ Tanggal Islam: *%dateIslamic*
-│ Waktu: *%time*
+│ 🧱 Limit : *%limit Limit*
+│ 🦸🏼‍♂️ Role : *%role*
+│ 🔼 Level : *%level (%exp / %maxexp)*
+│ 💫 Total XP : %totalexp ✨
+│ 
+│ 📅 Tanggal: *%week, %date*
+│ 🕰️ Waktu: *%time*
 │
-│ Uptime: *%uptime (%muptime)*
-│ Database: %rtotalreg of %totalreg
-│ Github:
-│ %github
+│ 📈 Uptime: *%uptime (%muptime)*
+│ 📊 Database: %rtotalreg of %totalreg
 ╰────
 %readmore`.trimStart(),
-        header: '╭─「 %category 」',
-        body: '│ • %cmd %islimit %isPremium',
-        footer: '╰────\n',
-        after: `
-*%npmname@^%version*
+  header: '╭─「 %category 」',
+  body: '│ • %cmd %islimit %isPremium',
+  footer: '╰────\n',
+  after: `
+*%npmname* | %version
 ${'```%npmdesc```'}
 `,
 }
-let handler = async (m, { conn, usedPrefix: _p }) => {
+let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
-    let package = JSON.parse(await fs.promises.readFile(path.join(__dirname, '../package.json')).catch(_ => '{}'))
-    let name = conn.getName(m.sender)
+    let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({})))
+    let { exp, limit, level, role } = global.db.data.users[m.sender]
+    let { min, xp, max } = xpRange(level, global.multiplier)
+    let name = await conn.getName(m.sender)
     let d = new Date(new Date + 3600000)
     let locale = 'id'
     // d.getTimeZoneOffset()
@@ -129,22 +133,29 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       }),
       after
     ].join('\n')
-    text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
+    let text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
     let replace = {
       '%': '%',
       p: _p, uptime, muptime,
-      me: conn.user.name,
-      ucapan: ucapan(),
-      npmname: package.name,
-      npmdesc: package.description,
-      version: package.version,
-      github: package.homepage ? package.homepage.url || package.homepage : '[unknown github url]',
-      name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
+      me: conn.getName(conn.user.jid),
+      npmname: _package.name,
+      npmdesc: _package.description,
+      version: _package.version,
+      exp: exp - min,
+      maxexp: xp,
+      totalexp: exp,
+      xp4levelup: max - exp,
+      github: _package.homepage ? _package.homepage.url || _package.homepage : '[unknown github url]',
+      level, limit, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-    let pp = await conn.getProfilePicture(conn.user.jid).catch(_ => path.join(__dirname, '../src/avatar_contact.png'))
-    conn.sendFile(m.chat, pp, 'menu.jpg', text.trim(), m).catch(_ => conn.reply(m.chat, text.trim(), m))
+    // conn.reply(m.chat, text.trim(), m)
+    conn.sendHydrated(m.chat, text.trim(), author, null, 'https://github.com/BochilGaming/games-wabot', 'Github', null, null, [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m)
   } catch (e) {
     conn.reply(m.chat, 'Maaf, menu sedang error', m)
     throw e
@@ -153,19 +164,10 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
 handler.help = ['menu', 'help', '?']
 handler.tags = ['main']
 handler.command = /^(menu|help|\?)$/i
-handler.owner = false
-handler.mods = false
-handler.premium = false
-handler.group = false
-handler.private = false
 
-handler.admin = false
-handler.botAdmin = false
-
-handler.fail = null
 handler.exp = 3
 
-module.exports = handler
+export default handler
 
 const more = String.fromCharCode(8206)
 const readMore = more.repeat(4001)
@@ -175,21 +177,4 @@ function clockString(ms) {
   let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
   let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
-}
-function ucapan() {
-  const time = (new Date().getUTCHours() + 7) % 24
-  res = "Woi. Pagi"
-  if (time >= 4) {
-    res = "Selamat Pagi"
-  }
-  if (time >= 12) {
-    res = "Selamat Siang"
-  }
-  if (time >= 15) {
-    res = "Selamat Sore"
-  }
-  if (time >= 19) {
-    res = "Selamat Malam"
-  }
-  return res
 }
