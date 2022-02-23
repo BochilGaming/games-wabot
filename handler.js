@@ -607,7 +607,7 @@ export async function participantsUpdate({ id, participants, action }) {
                 for (let user of participants) {
                     let pp = './src/avatar_contact.png'
                     try {
-                        pp = await this.getProfilePicture(user)
+                        pp = await this.profilePictureUrl(user, 'image')
                     } catch (e) {
                     } finally {
                         text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || 'unknow') :
