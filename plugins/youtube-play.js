@@ -8,7 +8,7 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
   await conn.sendButton(m.chat, `
 📌 *Title:* ${title}
 🔗 *Url:* ${url}
-🖹 *Description:* ${description}
+📝 *Description:* ${description}
 ⏲️ *Published:* ${publishedTime}
 ⌚ *Duration:* ${durationH}
 👁️ *Views:* ${viewH}
