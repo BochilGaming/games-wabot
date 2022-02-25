@@ -161,6 +161,37 @@ conn.logger.level = 'debug'
 
 ---------
 
+## How To Customise Menu Display
+
+### Hydrated Buttons Image Location
+Sample-
+```bash
+conn.sendHydrated(m.chat, text.trim(), author, 'link.jpg', 'template-url', 'Template-URL', '0123456789', 'Template-CALL', [
+['Donate', '/donasi'],
+['Speed', '/ping'],
+['Owner', '/owner']
+], m, {asLocation: true})
+```
+Example-
+```bash
+conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', '0123456789', 'Call', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+![Screenshot_20220225-135044__01](https://user-images.githubusercontent.com/98645523/155687527-d66d85d6-60fb-4baf-b0e1-9d959418ac20.jpg)
+
+### Replace/Remove Hydrated Buttons/Image Location
+```bash
+conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', null, null, [
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+![Screenshot_20220225-134848__01](https://user-images.githubusercontent.com/98645523/155687450-380c9239-ffdf-4702-950b-5158a7facaa1.jpg)
+
+---------
 
 ### Thanks To 
 **Allah SWT**
