@@ -183,6 +183,38 @@ Presence avaible: available, composing, recording, paused
 
 ---------
 
+## How To Customise Menu Display
+
+### Hydrated Buttons Image Location
+Sample-
+```bash
+conn.sendHydrated(m.chat, text.trim(), author, 'link.jpg', 'template-url', 'Template-URL', '0123456789', 'Template-CALL', [
+['Donate', '/donasi'],
+['Speed', '/ping'],
+['Owner', '/owner']
+], m, {asLocation: true})
+```
+Example-
+```bash
+conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', '0123456789', 'Call', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+![Screenshot_20220225-135044__01__01](https://user-images.githubusercontent.com/98645523/155689533-90cd35e9-a2b0-470d-9cc8-d788d3d31f89.jpg)
+
+### Replace/Remove Hydrated Buttons/Image Location
+```bash
+conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', null, null, [
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+![Screenshot_20220225-134848__01__01](https://user-images.githubusercontent.com/98645523/155689475-f4747c0b-ce0e-4fcb-a1c7-0fc8d9dccd83.jpg)
+
+---------
+
 ### want to contribute?
 1. fork this repository
 2. Change/edit/create what you want. for example you can add features, fix bug, etc
