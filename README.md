@@ -186,16 +186,14 @@ Presence avaible: available, composing, recording, paused
 ## How To Customise Menu Display
 
 ### Hydrated Buttons Image Location
-Sample-
-```bash
+Sample- ```bash
 conn.sendHydrated(m.chat, text.trim(), author, 'link.jpg', 'template-url', 'Template-URL', '0123456789', 'Template-CALL', [
 ['Donate', '/donasi'],
 ['Speed', '/ping'],
 ['Owner', '/owner']
 ], m, {asLocation: true})
 ```
-Example-
-```bash
+Example- ```bash
 conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', '0123456789', 'Call', [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
@@ -203,8 +201,7 @@ conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd03
     ], m, {asLocation: true})
 ```
 
-### Replace/Remove Hydrated Buttons/Image Location
-```bash
+### Replace/Remove Hydrated Buttons/Image Location ```bash
 conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', null, null, [
       ['Speed', '/ping'],
       ['Owner', '/owner']
