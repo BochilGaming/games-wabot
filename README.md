@@ -183,27 +183,37 @@ Presence avaible: available, composing, recording, paused
 
 ---------
 
-## How To Customise Menu Display
+## How To Customise Message Display
 
 ### Hydrated Buttons Image Location
-Sample- ```bash
-conn.sendHydrated(m.chat, text.trim(), author, 'link.jpg', 'template-url', 'Template-URL', '0123456789', 'Template-CALL', [
-['Donate', '/donasi'],
-['Speed', '/ping'],
-['Owner', '/owner']
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
 ], m, {asLocation: true})
 ```
-Example- ```bash
-conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', '0123456789', 'Call', [
+
+### Want To Modify/Remove/Replace Hydrated Buttons Image Location
+* Remove Call Button
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', null, null, [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-
-### Replace/Remove Hydrated Buttons/Image Location ```bash
-conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'https://github.com/BochilGaming/Games-wabot', 'Github', null, null, [
+* Remove Both Template & Call Button
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
+      ['Donate', '/donasi'],
       ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+* Modify/Replace/Remove Buttons
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
