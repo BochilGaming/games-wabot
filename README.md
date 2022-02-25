@@ -194,8 +194,7 @@ conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-
 ], m, {asLocation: true})
 ```
 
-### Want To Modify/Remove/Replace Hydrated Buttons Image Location
-* Remove Call Button
+### Remove Call Button
 ```bash
 conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', null, null, [
       ['Donate', '/donasi'],
@@ -203,7 +202,8 @@ conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-* Remove Both Template & Call Button
+
+### Remove Both Template & Call Button
 ```bash
 conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
       ['Donate', '/donasi'],
@@ -211,10 +211,10 @@ conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-* Add/Remove/Edit Buttons
-** To remove button, delete `['button', '/button']` line.
-** To add button, add `['button', '/button']` code line.
-** To edit button, edit `button` name.
+### Add/Remove/Edit Buttons
+* To remove button, delete `['button', '/button']` line.
+* To add button, add `['button', '/button']` code line.
+* To edit button, edit `button` name.
 ```bash
 conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
       ['Button¹', '/button¹'],
