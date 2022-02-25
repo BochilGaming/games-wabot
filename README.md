@@ -211,10 +211,15 @@ conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-* Modify/Replace/Remove Buttons
+* Add/Remove/Edit Buttons
+** To remove button, delete `['button', '/button']` line.
+** To add button, add `['button', '/button']` code line.
+** To edit button, edit `button` name.
 ```bash
 conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
-      ['Owner', '/owner']
+      ['Button¹', '/button¹'],
+      ['Button²', '/button²'],
+      ['Button³', '/button³]
     ], m, {asLocation: true})
 ```
 
