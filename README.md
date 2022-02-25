@@ -202,7 +202,6 @@ conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd03
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-![Screenshot_20220225-135044__01__01](https://user-images.githubusercontent.com/98645523/155689533-90cd35e9-a2b0-470d-9cc8-d788d3d31f89.jpg)
 
 ### Replace/Remove Hydrated Buttons/Image Location
 ```bash
@@ -211,7 +210,6 @@ conn.sendHydrated(m.chat, 'one', 'two', 'https://telegra.ph/file/fe5883c8011fd03
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
-![Screenshot_20220225-134848__01__01](https://user-images.githubusercontent.com/98645523/155689475-f4747c0b-ce0e-4fcb-a1c7-0fc8d9dccd83.jpg)
 
 ---------
 
