@@ -2,7 +2,7 @@ import { smsg } from './lib/simple.js'
 import { format } from 'util'
 import { fileURLToPath } from 'url'
 import path, { join } from 'path'
-import { watchFile, unwatchFile } from 'fs'
+import { watch } from 'fs'
 import chalk from 'chalk'
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -420,9 +420,9 @@ export async function handler(chatUpdate) {
                 if (m.chat in global.db.data.chats || m.sender in global.db.data.users) {
                     let chat = global.db.data.chats[m.chat]
                     let user = global.db.data.users[m.sender]
-                    if (name != 'unbanchat.js' && chat && chat.isBanned)
+                    if (name != 'owner-unbanchat.js' && chat?.isBanned)
                         return // Except this
-                    if (name != 'unbanuser.js' && user && user.banned)
+                    if (name != 'owner-unbanuser.js' && user?.banned)
                         return
                 }
                 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
@@ -580,11 +580,11 @@ export async function handler(chatUpdate) {
             }
         }
 
-        // try {
-        //     require('./lib/print')(m, this)
-        // } catch (e) {
-        //     console.log(m, m.quoted, e)
-        // }
+        try {
+            await (await import(`./lib/print.js?update=${Date.now()}`)).default(m, this)
+        } catch (e) {
+            console.log(m, m.quoted, e)
+        }
         if (opts['autoread'])
             await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
     }
@@ -670,8 +670,8 @@ global.dfail = (type, m, conn) => {
 
 
 let file = global.__filename(import.meta.url, true)
-watchFile(file, async () => {
-    unwatchFile(file)
+const watcher = watch(file, async () => {
+    watcher.close()
     console.log(chalk.redBright("Update 'handler.js'"))
     if (global.reloadHandler) console.log(await global.reloadHandler())
 })

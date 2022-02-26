@@ -10,7 +10,7 @@ let handler = async (m, { conn, text }) => {
 }
 handler.help = ['broadcastchats', 'bcchats'].map(v => v + ' <teks>')
 handler.tags = ['owner']
-handler.command = /^(broadcastchats?|bcc(hats)?)$/i
+handler.command = /^(broadcastchats?|bcc(hats?)?)$/i
 
 handler.owner = true
 

@@ -17,7 +17,7 @@ let handler = async (m, { conn, args }) => {
   try { res = await tts(text, lang) }
   catch (e) {
     m.reply(e + '')
-    res = await tts(text)
+    res = await tts(args.join(' '))
   } finally {
     conn.sendFile(m.chat, res, 'tts.opus', null, m, true)
   }

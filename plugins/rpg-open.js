@@ -66,7 +66,7 @@ Use Format *${usedPrefix}${command} [crate] [count]*
 Usage example: *${usedPrefix}${command} common 10*
 
 📍Crate list: 
-${Object.keys(listCrate).map(([v]) => `
+${Object.keys(listCrate).map((v) => `
 ${rpg.emoticon(v)}${v}
 `).join('\n')}
 `.trim()
@@ -79,33 +79,36 @@ type *${usedPrefix}buy ${type} ${count - user[type]}* to buy
 `.trim())
     // TODO: add pet crate
     // if (type !== 'pet')
+    let crateReward = {}
     for (let i = 0; i < count; i++)
         for (let [reward, value] of Object.entries(listCrate[type]))
             if (reward in user) {
                 const total = value.getRandom()
-                console.log({ reward, total })
+                if (total) {
+                    user[reward] += total * 1
+                    crateReward[reward] = (crateReward[reward] || 0) + (total * 1)
+                }
             }
-    //     user[type] -= count * 1
-    //     Object.keys(crateReward).map(reward => !(reward in user) ? user[reward] = 0 : user[reward] += crateReward[reward])
-    //     m.reply(`
-    // You have opened *${count}* ${emot(type)}${type} crate and got:
-    // ${Object.keys(crateReward).filter(v => v && crateReward[v] && !/legendary|pet|mythic|diamond|emerald/gi.test(v)).map(reward => `
-    // *${emot(reward)}${reward}:* ${crateReward[reward]}
-    // `.trim()).join('\n')}
-    // `.trim())
-    //     let diamond = crateReward.diamond, mythic = crateReward.mythic, pet = crateReward.pet, legendary = crateReward.legendary, emerald = crateReward.emerald
-    //     if (mythic || diamond) m.reply(`
-    // Congrats you got a rare item, which is ${diamond ? `*${diamond}* ${emot('diamond')}diamond` : ''}${diamond && mythic ? 'and ' : ''}${mythic ? `*${mythic}* ${emot('mythic')}mythic` : ''}
-    // `.trim())
-    //     if (pet || legendary || emerald) m.reply(`
-    // Congrats you got a epic item, which is ${pet ? `*${pet}* ${emot('pet')}pet` : ''}${pet && legendary && emerald ? ', ' : (pet && legendary || legendary && emerald || emerald && pet) ? 'and ' : ''}${legendary ? `*${legendary}* ${emot('legendary')}legendary` : ''}${pet && legendary && emerald ? 'and ' : ''}${emerald ? `*${emerald}* ${emot('emerald')}emerald` : ''}
-    // `.trim())
+    user[type] -= count * 1
+    m.reply(`
+You have opened *${count}* ${emot(type)}${type} crate and got:
+${Object.keys(crateReward).filter(v => v && crateReward[v] && !/legendary|pet|mythic|diamond|emerald/i.test(v)).map(reward => `
+*${emot(reward)}${reward}:* ${crateReward[reward]}
+`.trim()).join('\n')}
+`.trim())
+    let diamond = crateReward.diamond, mythic = crateReward.mythic, pet = crateReward.pet, legendary = crateReward.legendary, emerald = crateReward.emerald
+    if (mythic || diamond) m.reply(`
+Congrats you got a rare item, which is ${diamond ? `*${diamond}* ${emot('diamond')}diamond` : ''}${diamond && mythic ? 'and ' : ''}${mythic ? `*${mythic}* ${emot('mythic')}mythic` : ''}
+`.trim())
+    if (pet || legendary || emerald) m.reply(`
+Congrats you got a epic item, which is ${pet ? `*${pet}* ${emot('pet')}pet` : ''}${pet && legendary && emerald ? ', ' : (pet && legendary || legendary && emerald || emerald && pet) ? 'and ' : ''}${legendary ? `*${legendary}* ${emot('legendary')}legendary` : ''}${pet && legendary && emerald ? 'and ' : ''}${emerald ? `*${emerald}* ${emot('emerald')}emerald` : ''}
+`.trim())
 }
 handler.help = ['open', 'gacha'].map(v => v + ' [crate] [count]')
 handler.tags = ['rpg']
 handler.command = /^(open|buka|gacha)$/i
 
-handler.disabled = false
+handler.disabled = true
 
 export default handler
 
