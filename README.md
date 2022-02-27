@@ -18,18 +18,64 @@
 #### Deploy to Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/BochilGaming/games-wabot)
 
-#### Heroku Buildpack
-| BuildPack | LINK |
-|--------|--------|
-| **FFMPEG** |[here](https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest) |
-| **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
+---------
 
-### FOR TERMUX USER
-```bash
-pkg update && pkg upgrade
-pkg install bash && pkg install wget
-wget -O - https://raw.githubusercontent.com/BochilGaming/games-wabot/main/install2.sh | bash
+## Installation For Termux User
+### Requirement:
+* Android 7 or above
+* Internet
+* 2 Device (one to scan qr code from whatsapp web)
+* Little bit IQ
+
+### Steps To Setup Bot Into Termux
+* Download Termux. [`Download`](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk)
+* Download `node_modules`. [`Download`](https://drive.google.com/file/d/1Ydcjt3PnGiOr9vL66dFC11V0sEywJb32/view?usp=drivesdk)
+* Fork repo or download `games-wabot`. [`Download`](https://github.com/BochilGaming/games-wabot/archive/refs/heads/multi-device.zip)
+* Open termux.
+* Type below given commands one by one ↓↓
+(do not try to copy `$` along with command 😂)
 ```
+$ termux-setup-storage
+$ pkg update && pkg upgrade
+$ pkg install git
+$ pkg install nodejs-lts -y
+$ pkg install ffmpeg -y
+$ pkg install imagemagick -y
+$ pkg install yarn
+$ cd /storage/downloads
+$ git clone https://github.com/BochilGaming/games-wabot
+╭──────────────────
+│[If Error in git clone]
+│• download `games-wabot` from 3nd step.
+│• extract `games-wabot.zip` using any file manager into `downloads` folder.
+╰──────────────────
+$ cd /storage/downloads/valor-bot
+(Here replace `games-wabot` name with current download `games-wabot` folder name)
+```
+* Extract `node_modules.zip` using any file manager into `games-wabot` folder. For ex. (downloads/games-wabot/node_modules)
+* Continue in termux after `$ cd /storage/downloads/games-wabot`
+```
+$ node .
+╭──────────────────
+│[If Error after excute `node .`]
+│• check twice node_modules
+│• contact me on whatsapp
+╰──────────────────
+```
+* Wait for bot starting...
+* Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join `Multi Device Beta` > Click on `link device`)
+```
+╭──────────────────
+│[If device vibrate but not connected]
+│• open file manager, go to `downloads > valor-bot > session.data.json` & delete session.data.json file.
+│• exit from termux.
+╰──────────────────
+$ cd /storage/downloads/games-wabot-bot
+$ node .
+```
+* Scan QR code, once bot connected, appear green in termux at first boot-up.
+
+*Caution:- If failed again to scan QR code, then repeat steps.
 
 ---------
 
@@ -163,44 +209,63 @@ conn.logger.level = 'debug'
 
 ## How To Customise Message Display
 
-### Hydrated Buttons Image Location
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
+### Message With Image-Location, Template-URL, Template-Call, Buttons
+```
+conn.sendHydrated(m.chat, 'text', 'footer', 'image.jpg', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
       ['Owner', '/owner']
 ], m, {asLocation: true})
 ```
 
-### Remove Call Button
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', null, null, [
+### Remove Template Call Button
+* Replace 'Template-Call' with 'null' both places to remove it.
+```
+conn.sendHydrated(m.chat, 'text', 'footer', 'image.jpg', 'template-url', 'Template-Name', null, null, [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
 
-### Remove Both Template & Call Button
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
+### Remove Both Template URL & Call Button
+* Replace 'Template-URL' & 'Template-Call' with 'null' each time both places to remove it.
+```
+conn.sendHydrated(m.chat, 'text', 'footer', 'image.jpg', null, null, null, null, [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
       ['Owner', '/owner']
     ], m, {asLocation: true})
 ```
 ### Add/Remove/Edit Buttons
-* To remove button, delete `['button', '/button']` line.
+* To remove button, delete `['button', '/button']` row.
 * To add button, add `['button', '/button']` code line.
-* To edit button, edit `button` name.
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
+* To edit/rename button, edit/rename `button` name.
+```
+conn.sendHydrated(m.chat, 'text', 'footer', 'image.jpg', null, null, null, null, [
       ['Button¹', '/button¹'],
       ['Button²', '/button²'],
       ['Button³', '/button³]
     ], m, {asLocation: true})
 ```
 
+### Add/Remove/Edit Image
+* To remove image, replace 'image.jpg' with 'null'.
+```
+conn.sendHydrated(m.chat, 'text', 'footer', null, 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+], m, {asLocation: true})
+```
+* To change image, replace 'image.jpg' with custom 'image.jpg link'.
+```
+conn.sendHydrated(m.chat, 'text', 'footer', 'https://telegra.ph/file/fe5883c8011fd033e395c.jpg', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+], m, {asLocation: true})
+```
 ---------
 
 ### Thanks To 
