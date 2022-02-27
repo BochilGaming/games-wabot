@@ -161,6 +161,47 @@ conn.logger.level = 'debug'
 
 ---------
 
+## How To Customise Message Display
+
+### Hydrated Buttons Image Location
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+], m, {asLocation: true})
+```
+
+### Remove Call Button
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', null, null, [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+
+### Remove Both Template & Call Button
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
+      ['Donate', '/donasi'],
+      ['Speed', '/ping'],
+      ['Owner', '/owner']
+    ], m, {asLocation: true})
+```
+### Add/Remove/Edit Buttons
+* To remove button, delete `['button', '/button']` line.
+* To add button, add `['button', '/button']` code line.
+* To edit button, edit `button` name.
+```bash
+conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
+      ['Button¹', '/button¹'],
+      ['Button²', '/button²'],
+      ['Button³', '/button³]
+    ], m, {asLocation: true})
+```
+
+---------
 
 ### Thanks To 
 **Allah SWT**
