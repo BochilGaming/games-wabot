@@ -24,14 +24,22 @@
 | **FFMPEG** |[here](https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest) |
 | **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
 
-### FOR TERMUX USER
-```bash
-pkg update && pkg upgrade
-pkg install bash && pkg install wget
-wget -O - https://raw.githubusercontent.com/BochilGaming/games-wabot/main/install2.sh | bash
+## For Termux User
+```
+$ pkg update && pkg upgrade
+$ pkg install git -y
+$ pkg install nodejs-lts -y
+$ pkg install ffmpeg -y
+$ pkg install imagemagick -y
+$ pkg install yarn
+$ git clone https://github.com/BochilGaming/games-wabot
+ (do not forget to use multi-device branch)
+$ cd games-wabot
+$ yarn
+$ node .
 ```
 
----------
+=============================
 
 ## INSTALL ON TERMUX WITH UBUNTU
 
@@ -44,7 +52,7 @@ proot-distro install ubuntu
 echo "proot-distro login ubuntu" > $PREFIX/bin/ubuntu
 ubuntu
 ```
----------
+=============================
 
 [ INSTALLING REQUIRED PACKAGES ]
 
@@ -54,7 +62,7 @@ apt update && apt full-upgrade
 apt install wget curl git ffmpeg imagemagick build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev dbus-x11 ffmpeg2theora ffmpegfs ffmpegthumbnailer ffmpegthumbnailer-dbg ffmpegthumbs libavcodec-dev libavcodec-extra libavcodec-extra58 libavdevice-dev libavdevice58 libavfilter-dev libavfilter-extra libavfilter-extra7 libavformat-dev libavformat58 libavifile-0.7-bin libavifile-0.7-common libavifile-0.7c2 libavresample-dev libavresample4 libavutil-dev libavutil56 libpostproc-dev libpostproc55 graphicsmagick graphicsmagick-dbg graphicsmagick-imagemagick-compat graphicsmagick-libmagick-dev-compat groff imagemagick-6.q16hdri imagemagick-common libchart-gnuplot-perl libgraphics-magick-perl libgraphicsmagick++-q16-12 libgraphicsmagick++1-dev
 ```
 
----------
+=============================
 
 [ INSTALLING NODEJS & GAMES-WABOT ]
 
@@ -68,7 +76,7 @@ npm install
 npm update
 ```
 
----------
+=============================
 
 ## FOR WINDOWS/VPS/RDP USER
 
@@ -84,7 +92,7 @@ npm install
 npm update
 ```
 
----------
+=============================
 
 ## Run
 
@@ -92,7 +100,7 @@ npm update
 node .
 ```
 
----------
+=============================
 
 ## Arguments `node . [--options] [<session name>]`
 
@@ -159,7 +167,7 @@ conn.logger.level = 'trace'
 conn.logger.level = 'debug'
 ```
 
----------
+=============================
 
 ## How To Customise Message Display
 
@@ -201,7 +209,7 @@ conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
     ], m, {asLocation: true})
 ```
 
----------
+=============================
 
 ### Thanks To 
 **Allah SWT**
