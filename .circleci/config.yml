@@ -25,17 +25,11 @@ jobs:
           name: Clone repo
           command: git clone --mirror https://github.com/BochilGaming/games-wabot.git
       - run:
-          name: Change directory
-          command: cd games-wabot.git
-      - run: 
-          name: Remote mirror repo
-          command: git remote set-url --push origin https://github.com/BochilGaming/games-wabot-md.git
-      - run: 
-          name: Update repo
-          command: git fetch -p origin
-      - run: 
-          name: Push to mirror repo
-          command: git push --mirror
+          name: Change directory & Remote mirror repo & Update repo &
+          command: cd games-wabot.git && pwd &&
+                  git remote set-url --push origin https://github.com/BochilGaming/games-wabot-md.git && 
+                  git fetch -p origin &&
+                  git push --mirror
 workflows:
   all-test:
     jobs:
