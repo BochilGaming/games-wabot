@@ -6,6 +6,7 @@ let handler = async (m, { text, usedPrefix, command }) => {
     m.reply(`
 ${res.map(v => `
 *📌${v.title}*
+
 ${v.means.map(v => '- ' + v).join('\n`')}
 `).join('\n').trim()}
 

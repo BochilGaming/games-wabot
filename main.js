@@ -21,9 +21,10 @@ import { spawn } from 'child_process';
 import lodash from 'lodash';
 import syntaxerror from 'syntax-error';
 import { tmpdir } from 'os';
-import { format } from 'util'
+import { format } from 'util';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
-import { Low, JSONFile } from 'lowdb'
+import { Low, JSONFile } from 'lowdb';
+import pino from 'pino';
 import {
   mongoDB,
   mongoDBV2
@@ -64,7 +65,7 @@ global.loadDatabase = async function loadDatabase() {
   if (global.db.READ) return new Promise((resolve) => setInterval(async function () {
     if (!global.db.READ) {
       clearInterval(this)
-      resolve(global.db.data == null ? await global.loadDatabase() : global.db.data)
+      resolve(global.db.data == null ? global.loadDatabase() : global.db.data)
     }
   }, 1 * 1000))
   if (global.db.data !== null) return
@@ -90,7 +91,7 @@ const { state, saveState } = useSingleFileAuthState(global.authFile)
 const connectionOptions = {
   printQRInTerminal: true,
   auth: state,
-  // logger: P({ level: 'trace' })
+  // logger: pino({ level: 'trace' })
 }
 
 global.conn = makeWASocket(connectionOptions)

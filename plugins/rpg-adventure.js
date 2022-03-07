@@ -51,12 +51,12 @@ function reward(user = {}) {
                     (user.dog > 2 && user.dog < 6 && user.dog) || (user.dog > 5 && 5) || 2
                 )).fill(0)
             ),
-            mythic: [0, 0, 0, 0, 0, 1, 0, 0].concat(
+            mythic: [0, 0, 0, 0, 0, 1, 0, 0, 0].concat(
                 new Array(8 - (
                     (user.dog > 5 && user.dog < 8 && user.dog) || (user.dog > 7 && 8) || 3
                 )).fill(0)
             ),
-            legendary: [0, 0, 0, 0, 0, 0, 0, 1, 0].concat(
+            legendary: [0, 0, 0, 0, 0, 0, 0, 1, 0, 0].concat(
                 new Array(10 - (
                     (user.dog > 8 && user.dog) || 4
                 )).fill(0)

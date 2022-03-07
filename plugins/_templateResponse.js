@@ -73,7 +73,7 @@ export async function all(m, chatUpdate) {
         messages.participant = m.sender
     let msg = {
         ...chatUpdate,
-        messages: [proto.WebMessageInfo.fromObject(messages)],
+        messages: [proto.WebMessageInfo.fromObject(messages)].map(v => (v.conn = this, v)),
         type: 'append'
     }
     this.ev.emit('messages.upsert', msg)
