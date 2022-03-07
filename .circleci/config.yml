@@ -33,7 +33,7 @@ jobs:
           command: cd games-wabot.git && pwd &&
                   git remote set-url --push origin https://github.com/BochilGaming/games-wabot-md.git && 
                   git fetch -p origin &&
-                  git push --mirror
+                  (git push --mirror || exit 0)
 workflows:
   all-test:
     jobs:
