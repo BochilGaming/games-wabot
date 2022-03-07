@@ -15,11 +15,12 @@ jobs:
           key: v1-deps-{{ checksum "package.json" }}
       - run:
           name: Install packages
-          command: npm install syntax-error
+          command: npm install
       - save_cache:
           key: v1-deps-{{ checksum "package.json" }}
           paths: 
-            - node_modules   
+            - node_modules
+            - package-lock.json 
       - run:
           name: Run test using nodejs << parameters.node-version >>
           command: node test.js
