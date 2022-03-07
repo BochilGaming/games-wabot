@@ -17,7 +17,25 @@ jobs:
       - run:
           name: Run test using nodejs << parameters.node-version >>
           command: node test.js
-        
+  push:
+    docker:
+      - image: cimg/base:2021.04
+    steps:
+      - run: 
+          name: Clone repo
+          command: git clone --mirror https://github.com/BochilGaming/games-wabot.git
+      - run:
+          name: Change directory
+          command: cd games-wabot.git
+      - run: 
+          name: Remote mirror repo
+          command: git remote set-url --push origin https://github.com/BochilGaming/games-wabot-md.git
+      - run: 
+          name: Update repo
+          command: git fetch -p origin
+      - run: 
+          name: Push to mirror repo
+          command: git push --mirror
 workflows:
   all-test:
     jobs:
@@ -25,3 +43,6 @@ workflows:
           matrix:
             parameters:
               node-version: ['14.19', '16.14', '17.5']
+  push-to-mirror:
+    jobs:
+      - push
