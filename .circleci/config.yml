@@ -21,6 +21,7 @@ jobs:
     docker:
       - image: cimg/base:2021.04
     steps:
+      - checkout
       - run: 
           name: Clone repo
           command: git clone --mirror https://github.com/BochilGaming/games-wabot.git
