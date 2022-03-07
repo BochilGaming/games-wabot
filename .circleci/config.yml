@@ -14,8 +14,14 @@ jobs:
       - restore_cache:
           key: v1-deps-{{ checksum "package.json" }}
       - run:
+          name: Setting restore cache
+          command: mv ./node_modules/package-lock.json package-lock.json
+      - run:
           name: Install packages
           command: npm install
+      - run:
+          name: Setting to save cache
+          command: mv package-lock.json ./node_modules/package-lock.json
       - save_cache:
           key: v1-deps-{{ checksum "package.json" }}
           paths: 
@@ -37,7 +43,7 @@ jobs:
           command: git clone --mirror https://github.com/BochilGaming/games-wabot.git
       - run:
           name: Change directory & Remote mirror repo & Update repo &
-          command: cd games-wabot.git && pwd &&
+          command: cd games-wabot.git &&
                   git remote set-url --push origin https://github.com/BochilGaming/games-wabot-md.git && 
                   git fetch -p origin &&
                   (git push --mirror || exit 0)
