@@ -11,9 +11,15 @@ jobs:
       - image: cimg/node:<< parameters.node-version >>
     steps:
       - checkout
+      - restore_cache:
+          key: v1-deps-{{ checksum "package.json" }}
       - run:
           name: Install packages
-          command: npm install syntax-error --no-package-lock --no-save --also=dev
+          command: npm install syntax-error
+      - save_cache:
+          key: v1-deps-{{ checksum "package.json" }}
+          paths: 
+            - node_modules   
       - run:
           name: Run test using nodejs << parameters.node-version >>
           command: node test.js
@@ -43,4 +49,9 @@ workflows:
               node-version: ['14.19', '16.14', '17.5']
   push-to-mirror:
     jobs:
-      - push
+      - push:
+          filters:
+            branches:
+              only:
+                - multi-device
+                - main
