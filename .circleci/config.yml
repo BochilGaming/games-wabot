@@ -15,7 +15,11 @@ jobs:
           key: v1-deps-{{ checksum "package.json" }}
       - run:
           name: Setting restore cache
-          command: mv ./node_modules/package-lock.json package-lock.json
+          command: |
+            PACKAGE_LOCK_FILE=./node_modules/package-lock.json
+            if [ -e "$PACKAGE_LOCK_FILE" ]; then 
+              mv $PACKAGE_LOCK_FILE package-lock.json
+            fi
       - run:
           name: Install packages
           command: npm install
