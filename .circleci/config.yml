@@ -21,7 +21,9 @@ jobs:
     docker:
       - image: cimg/base:2021.04
     steps:
-      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "5b:27:23:ab:01:73:4e:bb:a1:6f:24:c1:8b:5c:54:5f"
       - run: 
           name: Clone repo
           command: git clone --mirror https://github.com/BochilGaming/games-wabot.git
