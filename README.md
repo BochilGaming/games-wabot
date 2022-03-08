@@ -26,30 +26,17 @@
 
 ### FOR TERMUX USER
 1. Type mentioned below given commands one by one in Termux.
-```
-$ pkg update && pkg upgrade
+```sh
+$ pkg upgrade && pkg update
 $ pkg install git -y
-$ pkg install nodejs-lts -y
+$ pkg install nodejs -y
 $ pkg install ffmpeg -y
 $ pkg install imagemagick -y
-$ pkg install yarn
-$ git clone --single-branch --branch multi-device https://github.com/BochilGaming/games-wabot
+$ git clone https://github.com/BochilGaming/games-wabot -b multi-device
 $ cd games-wabot
+$ npm i 
 $ node .
 ```
-╭────────────────────────
-
-[ If Error in `node .` command ]
-* Replace line 42 in `package.json` file. 
-https://github.com/BochilGaming/games-wabot/blob/1997986cb47fcf35a2d63cb28146ae51fd9e6920/package.json#L42
-```
-        "@adiwajshing/baileys": "^4.0.1",
-        "@adiwajshing/keyed-db": "^0.2.4",
-```
-* Save it, and start again from step 3
-
-╰────────────────────────
-
 2. Wait for bot starting...
 3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join `Multi Device Beta` > Click on `link device`)
 4. Now your bot is ready to rock n roll.
