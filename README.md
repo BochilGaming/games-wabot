@@ -25,11 +25,21 @@
 | **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
 
 ### FOR TERMUX USER
-```bash
-pkg update && pkg upgrade
-pkg install bash && pkg install wget
-wget -O - https://raw.githubusercontent.com/BochilGaming/games-wabot/main/install2.sh | bash
+1. Type mentioned below given commands one by one in Termux.
+```sh
+$ pkg upgrade && pkg update
+$ pkg install git -y
+$ pkg install nodejs -y
+$ pkg install ffmpeg -y
+$ pkg install imagemagick -y
+$ git clone https://github.com/BochilGaming/games-wabot -b multi-device
+$ cd games-wabot
+$ npm i 
+$ node .
 ```
+2. Wait for bot starting...
+3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join `Multi Device Beta` > Click on `link device`)
+4. Now your bot is ready to rock n roll.
 
 ---------
 
