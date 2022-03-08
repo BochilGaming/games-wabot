@@ -67,6 +67,7 @@
         "syntax-error": "^1.4.0",
         "terminal-image": "^2.0.0",
         "url-regex-safe": "^3.0.0",
-        "yargs": "^17.3.1"
+        "yargs": "^17.3.1",
+        "qrcode-terminal": "^0.12.0"
     }
 }
