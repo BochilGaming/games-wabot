@@ -12,22 +12,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: v1-deps-{{ checksum "package.json" }}
-      - run:
-          name: Setting restore cache
-          command: |
-            PACKAGE_LOCK_FILE=./node_modules/package-lock.json
-            if [ -e "$PACKAGE_LOCK_FILE" ]; then 
-              mv $PACKAGE_LOCK_FILE package-lock.json
-            fi
+          key: v1-deps-{{ checksum "package.json" }}-<< parameters.node-version >>
       - run:
           name: Install packages
-          command: npm install
-      - run:
-          name: Setting to save cache
-          command: mv package-lock.json ./node_modules/package-lock.json
+          command: npm install --prefer-offline --no-audit --progress=false
       - save_cache:
-          key: v1-deps-{{ checksum "package.json" }}
+          key: v1-deps-{{ checksum "package.json" }}-<< parameters.node-version >>
           paths: 
             - node_modules
             - package-lock.json 
