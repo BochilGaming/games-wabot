@@ -41,6 +41,24 @@ $ node .
 3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join `Multi Device Beta` > Click on `link device`)
 4. Now your bot is ready to rock n roll.
 
+#### IF ERROR `yarn / node .` IN TERMUX
+1. Fork the Repo.
+2. Replace line 42 in `package.json` (multi-device branch)
+https://github.com/BochilGaming/games-wabot/blob/cc1eb9c538ab31a67ff583f24e54197fa0305c9b/package.json#L42
+With below line
+```
+        "@adiwajshing/baileys": "^4.0.1",
+        "@adiwajshing/keyed-db": "^0.2.4",
+```
+3. Save Commit Changes.
+4. Open Termux and type below commands
+```
+$ git clone https://github.com/<username>/games-wabot -b multi-device
+$ cd games-wabot
+$ pkg install yarn
+$ yarn
+$ node .
+```
 ---------
 
 ## INSTALL ON TERMUX WITH UBUNTU
