@@ -12,7 +12,7 @@ let handler = async (m, { args, usedPrefix, command }) => {
     conn.sendFile(m.chat, url, filename, null, m)
 }
 handler.help = ['gitclone <url>']
-handler.tags = ['download']
+handler.tags = ['downloader']
 handler.command = /gitclone/i
 
 handler.limit = true
