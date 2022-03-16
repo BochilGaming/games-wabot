@@ -45,9 +45,9 @@ async function handler(m, { command }) {
     }
 }
 handler.help = ['start', 'leave', 'next']
-handler.tags = 'anonymous'
+handler.tags = ['anonymous']
 
-handler.command = ['start', 'leave', 'next']
+handler.command = /^(start|leave|next)$/i
 handler.private = true
 
 module.exports = handler
