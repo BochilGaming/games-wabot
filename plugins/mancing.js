@@ -4,15 +4,7 @@ let handler = async (m, { conn }) => {
     let _timers = (500000 - __timers)
     let timers = clockString(_timers) 
     let user = global.db.data.users[m.sender]
-    let buttons = [
-{buttonId: 'id1', buttonText: {displayText: 'kolam'}, type: 1}, 
-]
-const buttonMessage = {
-    contentText: `\n*Sepertinya Anda Sudah Kecapekan*\n*Silahkan Istirahat Sejenak Sekitar ${timers}*\n*Untuk Bisa Melanjutkan Memancing Lagi*\n`,
-    footerText: '©games-wabot', 
-    buttons: buttons,
-    headerType: 1
-}
+    let caption = `Kamu sudah kelelahan\nSilakan memancing lagi sekitar ${timers}`
     if (new Date - global.db.data.users[m.sender].as > 500000) {
 let randomaku1 = `${Math.floor(Math.random() * 10)}`
 let randomaku2 = `${Math.floor(Math.random() * 10)}`
@@ -96,7 +88,7 @@ setTimeout(() => {
                      m.reply('_Sedang Memancing..._')
                      }, 0) 
   user.as = new Date * 1
-    } else conn.sendMessage(m.chat, buttonMessage, MessageType.buttonsMessage ,m )
+    } else conn.reply(m.chat, caption, m)
 }
 handler.help = ['mancing']
 handler.tags = ['rpg']
