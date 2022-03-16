@@ -40,8 +40,10 @@ const defaultMenu = {
 │
 │ Uptime: *%uptime (%muptime)*
 │ Database: %rtotalreg of %totalreg
-│ Github:
-│ %github
+│
+│ Info:
+│ Ini adalah bot whatsapp md
+│ Jika menemukan bug harap lapor ke owner
 ╰────
 %readmore`.trimStart(),
         header: '╭─「 %category 」',
