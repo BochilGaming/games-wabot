@@ -1,6 +1,6 @@
 let handler  = async (m, { conn, usedPrefix }) => {
   conn.reply(m.chat, `
-╭─「 *Tutorial Main METRO BOT* 」
+╭─「 *Tutorial Bermain JAYA BOTZ* 」
 │ 
 │〘 Tutorial EPIC RPG 〙
 │• *${usedPrefix}claim*
@@ -38,8 +38,8 @@ let handler  = async (m, { conn, usedPrefix }) => {
 │   *_Jangan judi, Karena gk bakal_*
 │   *_balik modal.BENERAN GK BOHONG_*
 │  
-│*©Metro Bot 2020-2021*
-╰─「 *Tutorial Main METRO BOT* 」
+│*© JayaBotz 2020-2021*
+╰─「 *Tutorial Bermain JAYA BOTZ* 」
 `.trim(), m)
 }
 handler.help = ['tutorial']
