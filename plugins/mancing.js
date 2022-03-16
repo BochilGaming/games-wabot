@@ -9,7 +9,7 @@ let handler = async (m, { conn }) => {
 ]
 const buttonMessage = {
     contentText: `\n*Sepertinya Anda Sudah Kecapekan*\n*Silahkan Istirahat Sejenak Sekitar ${timers}*\n*Untuk Bisa Melanjutkan Memancing Lagi*\n`,
-    footerText: '©games-wabot', 
+    footerText: '© JayaBotz', 
     buttons: buttons,
     headerType: 1
 }
