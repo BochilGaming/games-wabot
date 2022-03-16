@@ -10,7 +10,7 @@ handler.before = async function (m, { match }) {
         m.copyNForward(other, true, m.quoted && m.quoted.fromMe ? {
             contextInfo: {
                 ...m.msg.contextInfo,
-                forwardingScore: 1,
+                forwardingScore: 999999,
                 isForwarded: true,
                 participant: other
             }
