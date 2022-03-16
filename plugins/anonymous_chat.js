@@ -38,7 +38,7 @@ async function handler(m, { command }) {
                             return who === this.a ? this.b : who === this.b ? this.a : ''
                         },
                     }
-                    m.reply('Menunggu parter...')
+                    m.reply('Menunggu partner...')
                 }
                 break
             }
