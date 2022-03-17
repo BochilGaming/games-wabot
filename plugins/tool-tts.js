@@ -3,7 +3,7 @@ import { readFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
 
 const defaultLang = 'id'
-let handler = async (m, { conn, args }) => {
+let handler = async (m, { conn, args, usedPrefix, command }) => {
 
   let lang = args[0]
   let text = args.slice(1).join(' ')
@@ -11,15 +11,17 @@ let handler = async (m, { conn, args }) => {
     lang = defaultLang
     text = args.join(' ')
   }
-  if (!text && m.quoted && m.quoted.text) text = m.quoted.text
+  if (!text && m.quoted?.text) text = m.quoted.text
 
   let res
   try { res = await tts(text, lang) }
   catch (e) {
     m.reply(e + '')
-    res = await tts(args.join(' '))
+    text = args.join(' ')
+    if (!text) throw `Use example ${usedPrefix}${command} en hello world`
+    res = await tts(text, defaultLang)
   } finally {
-    conn.sendFile(m.chat, res, 'tts.opus', null, m, true)
+    if (res) conn.sendFile(m.chat, res, 'tts.opus', null, m, true)
   }
 }
 handler.help = ['tts <lang> <teks>']

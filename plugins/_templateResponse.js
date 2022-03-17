@@ -70,7 +70,7 @@ export async function all(m, chatUpdate) {
     messages.key.id = m.key.id
     messages.pushName = m.name
     if (m.isGroup)
-        messages.participant = m.sender
+        messages.key.participant = messages.participant = m.sender
     let msg = {
         ...chatUpdate,
         messages: [proto.WebMessageInfo.fromObject(messages)].map(v => (v.conn = this, v)),

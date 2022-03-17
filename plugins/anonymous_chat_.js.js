@@ -1,4 +1,4 @@
-export default async function before(m, { match }) {
+export async function before(m, { match }) {
     // if (match) return !1
     if (!m.chat.endsWith('@s.whatsapp.net'))
         return !0
@@ -8,14 +8,7 @@ export default async function before(m, { match }) {
         if (/^.*(next|leave|start)/.test(m.text))
             return
         let other = [room.a, room.b].find(user => user !== m.sender)
-        m.copyNForward(other, true, m.quoted && m.quoted.fromMe ? {
-            contextInfo: {
-                ...m.msg.contextInfo,
-                forwardingScore: 1,
-                isForwarded: true,
-                participant: other
-            }
-        } : {})
+        await m.copyNForward(other, true)
     }
     return !0
 }

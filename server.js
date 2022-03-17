@@ -1,4 +1,5 @@
 import express from 'express'
+import { createServer } from 'http'
 import path from 'path'
 import { Socket } from 'socket.io'
 import { toBuffer } from 'qrcode'
@@ -6,7 +7,8 @@ import fetch from 'node-fetch'
 
 function connect(conn, PORT) {
     let app = global.app = express()
-
+    console.log(app)
+    let server = global.server = createServer(app)
     // app.use(express.static(path.join(__dirname, 'views')))
     let _qr = 'invalid'
 
@@ -19,14 +21,15 @@ function connect(conn, PORT) {
         res.end(await toBuffer(_qr))
     })
 
-    let server = app.listen(PORT, () => {
-      console.log('App listened on port', PORT)
-      if (opts['keepalive']) keepAlive()
-    })
-    let io = Socket(server)
-    io.on('connection', socket => {
-        let { unpipeEmit } = pipeEmit(conn, socket, 'conn-')
-        socket.on('disconnect', unpipeEmit)
+    // let io = new Socket(server)
+    // io.on('connection', socket => {
+    //     let { unpipeEmit } = pipeEmit(conn, socket, 'conn-')
+    //     socket.on('disconnect', unpipeEmit)
+    // })
+
+    server.listen(PORT, () => {
+        console.log('App listened on port', PORT)
+        if (opts['keepalive']) keepAlive()
     })
 }
 
@@ -44,11 +47,11 @@ function pipeEmit(event, event2, prefix = '') {
 }
 
 function keepAlive() {
-  const url = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
-  if (/(\/\/|\.)undefined\./.test(url)) return
-  setInterval(()=> {
-    fetch(url).catch(console.error)
-  }, 5 * 1000 * 60)
+    const url = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
+    if (/(\/\/|\.)undefined\./.test(url)) return
+    setInterval(() => {
+        fetch(url).catch(console.error)
+    }, 5 * 1000 * 60)
 }
 
 

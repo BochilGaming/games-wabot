@@ -14,7 +14,6 @@ let handler = async (m, { conn, text, participants }) => {
     }),
     text || q.text, conn.user.jid, { mentions: users }
   )
-
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
 handler.help = ['pengumuman', 'announce', 'hidetag'].map(v => v + ' [teks]')

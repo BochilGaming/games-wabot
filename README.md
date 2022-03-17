@@ -35,29 +35,19 @@ $ pkg install imagemagick -y
 $ git clone https://github.com/BochilGaming/games-wabot -b multi-device
 $ cd games-wabot
 $ npm i 
+```
+If error try using yarn instead of npm, see [here](https://github.com/BochilGaming/games-wabot/tree/multi-device#if-npm-install-failed--try--using-yarn-instead-of-npm)
+```sh
 $ node .
 ```
 2. Wait for bot starting...
 3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join `Multi Device Beta` > Click on `link device`)
 4. Now your bot is ready to rock n roll.
 
-#### IF ERROR `yarn / node .` IN TERMUX
-1. Fork the Repo.
-2. Replace line 42 in `package.json` (multi-device branch)
-https://github.com/BochilGaming/games-wabot/blob/cc1eb9c538ab31a67ff583f24e54197fa0305c9b/package.json#L42
-With below line
-```
-        "@adiwajshing/baileys": "^4.0.1",
-        "@adiwajshing/keyed-db": "^0.2.4",
-```
-3. Save Commit Changes.
-4. Open Termux and type below commands
-```
-$ git clone https://github.com/<username>/games-wabot -b multi-device
-$ cd games-wabot
-$ pkg install yarn
-$ yarn
-$ node .
+#### If npm install failed, try using yarn instead of npm
+```sh
+$ pkg install yarn -y
+$ yarn install
 ```
 ---------
 
@@ -90,7 +80,7 @@ apt install wget curl git ffmpeg imagemagick build-essential libcairo2-dev libpa
 ubuntu
 curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
 apt install -y nodejs gcc g++ make
-git clone https://github.com/BochilGaming/games-wabot
+git clone https://github.com/BochilGaming/games-wabot -b multi-device
 cd games-wabot
 npm install
 npm update
@@ -106,7 +96,7 @@ npm update
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php)
 
 ```bash
-git clone https://github.com/BochilGaming/games-wabot
+git clone https://github.com/BochilGaming/games-wabot -b multi-device
 cd games-wabot
 npm install
 npm update
@@ -149,10 +139,6 @@ Set prefix
 
 Used for [heroku](https://heroku.com/) or scan through website
 
-### `--big-qr`
-
-If small qr unicode doesn't support
-
 ### `--restrict`
 
 Enables restricted plugins (which can lead your number to be **banned** if used too often)
@@ -175,72 +161,69 @@ No bot, just print received messages and add users to database
 
 **Development** Testing Mode
 
-### `--trace`
-
-```js
-conn.logger.level = 'trace'
-```
-
-### `--debug`
-
-```js
-conn.logger.level = 'debug'
-```
-
 ---------
 
 ## How To Customise Message Display
+```js
+// Syntax
+conn.sendButton(
+      jid, // jid of the user to send the message to
+      text, // text to send
+      foooter, // footer to send
+      buffer, // buffer to send (optional), if you want to send button image, location, etc
+      buttons, // buttons to send, example [['text1', 'id1'], ['text2', 'id2']]
+      quoted, // quoted message to send (optional)
+      options // options to send, example { asLocation: true }
+)
 
-### Hydrated Buttons Image Location
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', '0123456789', 'Template-CALL', [
-      ['Donate', '/donasi'],
-      ['Speed', '/ping'],
-      ['Owner', '/owner']
-], m, {asLocation: true})
+// example 
+conn.sendButton(m.chat, 'Hello world!', '@BochilGaming', null, [
+      ['Hello', 'hello'], ['Bye', 'bye']
+])
+// example button location
+conn.sendButton(m.chat, 'Hello world!', '@BochilGaming', 'https://github.com/BochilGaming', 
+      [['Hello', 'hello'], ['Bye', 'bye']], 
+      null, { asLocation: true }
+)
 ```
+---------
 
-### Remove Call Button
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', 'template-url', 'Template-Name', null, null, [
-      ['Donate', '/donasi'],
-      ['Speed', '/ping'],
-      ['Owner', '/owner']
-    ], m, {asLocation: true})
-```
-
-### Remove Both Template & Call Button
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
-      ['Donate', '/donasi'],
-      ['Speed', '/ping'],
-      ['Owner', '/owner']
-    ], m, {asLocation: true})
-```
-### Add/Remove/Edit Buttons
-* To remove button, delete `['button', '/button']` line.
-* To add button, add `['button', '/button']` code line.
-* To edit button, edit `button` name.
-```bash
-conn.sendHydrated(m.chat, 'text', 'footer', 'buffer', null, null, null, null, [
-      ['Button¹', '/button¹'],
-      ['Button²', '/button²'],
-      ['Button³', '/button³]
-    ], m, {asLocation: true})
-```
+### want to contribute?
+1. fork this repository
+2. Change/edit/create what you want. for example you can add features, fix bug, etc
+3. **test** before making a pull req!!
+4. make a pull req!
+5. if your pull req is already in **acc/merge**, you can delete your branch or you can create pull req again :)
 
 ---------
 
-### Thanks To 
-**Allah SWT**
 
+### Thanks To 
+**Allah SWT**,
+
+**Orang Tua**,
+
+**Semua yang selalu mendukung**
+
+
+#### Special Thanks to
 [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo)
 [![BochilGaming](https://github.com/BochilGaming.png?size=100)](https://github.com/BochilGaming)
 
 #### Contributor
-[![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
-[![zatu22](https://github.com/zatu22)](https://github.com/zatu22)
 [![Adiixyz](https://github.com/Adiixyz.png?size=100)](https://github.com/Adiixyz)
+[![idhamthoriqbot](https://github.com/idhamthoriqbot.png?size=100)](https://github.com/idhamthoriqbot)
+[![BlueShiYT](https://github.com/BlueShiYT.png?size=100)](https://github.com/BlueShiYT)
+[![zatu22](https://github.com/zatu22.png?size=100)](https://github.com/zatu22)
+[![unx21](https://github.com/unx21.png?size=100)](https://github.com/unx21)
+[![botstylee](https://github.com/botstylee.png?size=100)](https://github.com/botstylee)
+[![Jauhariq](https://github.com/Jauhariq.png?size=100)](https://github.com/Jauhariq)
 [![Nobuyaki](https://github.com/Nobuyaki.png?size=100)](https://github.com/Nobuyaki)
+[![Aiinne](https://github.com/Aiinne.png?size=100)](https://github.com/Aiinne)
 [![arisawali2014](https://github.com/arisawali2014.png?size=100)](https://github.com/arisawali2014)
-[![botstylee](https://github.com/botstylee)](https://github.com/botstylee)
+[![ryznxx](https://github.com/ryznxx.png?size=100)](https://github.com/ryznxx)
+[![ZeroChanBot](https://github.com/ZeroChanBot.png?size=100)](https://github.com/ZeroChanBot)
+[![Bintangp02](https://github.com/Bintangp02.png?size=100)](https://github.com/Bintangp02)
+[![itsmeR1F4I](https://github.com/itsmeR1F4I.png?size=100)](https://github.com/itsmeR1F4I)
+[![DineshValor](https://github.com/DineshValor.png?size=100)](https://github.com/DineshValor)
+[![TeamMars20](https://github.com/TeamMars20.png?size=100)](https://github.com/TeamMars20)
