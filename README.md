@@ -153,6 +153,10 @@ Enable image inspector through terminal
 
 If enabled, all incoming messages will be marked as read
 
+### `--autocleartmp`
+
+If enabled, **tmp* folder contain files will be auto delete
+
 ### `--nyimak`
 
 No bot, just print received messages and add users to database
