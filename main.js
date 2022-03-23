@@ -206,12 +206,12 @@ global.reload = async (_ev, filename) => {
   if (pluginFilter(filename)) {
     let dir = global.__filename(join(pluginFolder, filename), true)
     if (filename in global.plugins) {
-      if (existsSync(dir)) conn.logger.info(`re - require plugin '${filename}'`)
+      if (existsSync(dir)) conn.logger.info(` updated plugin - '${filename}'`)
       else {
-        conn.logger.warn(`deleted plugin '${filename}'`)
+        conn.logger.warn(`deleted plugin - '${filename}'`)
         return delete global.plugins[filename]
       }
-    } else conn.logger.info(`requiring new plugin '${filename}'`)
+    } else conn.logger.info(`new plugin - '${filename}'`)
     let err = syntaxerror(readFileSync(dir), filename, {
       sourceType: 'module',
       allowAwaitOutsideFunction: true
