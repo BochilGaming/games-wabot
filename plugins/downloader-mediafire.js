@@ -10,7 +10,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 *Uploaded:* ${aploud}
 `.trim()
     m.reply(caption)
-    await conn.sendMessage(m.chat, { document: { url: url}, mimetype: ext, fileName: `${filename}`}, {quoted: m})
+    await conn.sendFile(m.chat, url, filename, '', m, null, { mimetype: ext, asDocument: true })
 }
 handler.help = ['mediafire'].map(v => v + ' <url>')
 handler.tags = ['downloader']
