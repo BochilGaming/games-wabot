@@ -35,7 +35,10 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
     }
 
 }
-// handler.tags = 
-handler.command = /^vhs|cyberpunk$/i
+// handler.tags = []
+// handler.help = []
+// handler.premium = false
+handler.command = /^vhs|cyberpunk|memories|flower|smoke|heart|ring|spectrum$/i
+// handler.limit = false
 
 export default handler
