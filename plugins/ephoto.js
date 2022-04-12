@@ -26,7 +26,7 @@ let handler = async (m, { conn, command, args, usedPrefix }) => {
 
         let img = await fetch(global.API('xcoders', '/api/ephoto/' + command, { url: upld }, 'apikey')).then(a => a.buffer())
 
-        conn.sendFile(m.chat, img, 'tes.jpg', 'tes', m)
+        conn.sendFile(m.chat, img, 'tes.jpg', '', m)
 
     } catch (err) {
 
