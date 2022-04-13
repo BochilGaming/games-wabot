@@ -13,6 +13,6 @@ let handler = async (m, { conn, command, usedPrefix }) => {
 }
 handler.help = ['fakboi', 'ilham', 'bacot', 'sindiran']
 handler.tags = ['quotes']
-handler.command = /^fakboi|ilham|bacot|sindiran|$/i
+handler.command = /^fakboi|ilham|bacot|sindiran$/i
 
 export default handler
