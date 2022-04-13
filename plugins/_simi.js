@@ -12,6 +12,8 @@ export async function before(m) {
             response,
             result
         } = json.messages[0]
+        await this.chatRead(m.chat, m.sender, m.id || m.key.id)
+        await delay(1000)
         await this.sendPresenceUpdate('composing', m.chat)
         await delay(2000)
         m.reply(response)
