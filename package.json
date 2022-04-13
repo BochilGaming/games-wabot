@@ -48,6 +48,7 @@
         "cheerio": "^1.0.0-rc.10",
         "colors": "1.4.0",
         "express": "^4.17.3",
+        "deepai": "1.0.21",
         "file-type": "^17.1.1",
         "fluent-ffmpeg": "^2.1.2",
         "formdata-node": "^4.3.2",
@@ -69,10 +70,9 @@
         "socket.io": "^4.4.1",
         "syntax-error": "^1.4.0",
         "terminal-image": "^2.0.0",
-        "url-regex-safe": "^3.0.0",
-        "yargs": "^17.3.1",
         "twibbonizze": "1.0.3",
-        "deepai": "1.0.21"
+        "url-regex-safe": "^3.0.0",
+        "yargs": "^17.3.1"
     },
     "optionalDependencies": {
         "wa-sticker-formatter": "^4.3.2"
