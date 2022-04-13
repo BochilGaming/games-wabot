@@ -71,7 +71,8 @@
         "terminal-image": "^2.0.0",
         "url-regex-safe": "^3.0.0",
         "yargs": "^17.3.1",
-        "twibbonizze": "1.0.3"
+        "twibbonizze": "1.0.3",
+        "deepai": "1.0.21"
     },
     "optionalDependencies": {
         "wa-sticker-formatter": "^4.3.2"
