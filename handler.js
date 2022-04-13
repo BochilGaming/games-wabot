@@ -270,6 +270,8 @@ export async function handler(chatUpdate) {
                     chat.antiToxic = false
                 if (!isNumber(chat.expired))
                     chat.expired = 0
+                if (!('simi' in chat))
+                    chat.simi = false
             } else
                 global.db.data.chats[m.chat] = {
                     isBanned: false,
@@ -284,6 +286,7 @@ export async function handler(chatUpdate) {
                     viewonce: false,
                     antiToxic: true,
                     expired: 0,
+                    simi: false
                 }
             let settings = global.db.data.settings[this.user.jid]
             if (typeof settings !== 'object') global.db.data.settings[this.user.jid] = {}
