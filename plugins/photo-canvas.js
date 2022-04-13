@@ -21,9 +21,9 @@ let handler = async (m, { conn, command, usedPrefix}) => {
         let msg = await conn.fakeReply(m.chat, `*ERROR !*`, '0@s.whatsapp.net', command)
     }
 }
-handler.help = ['wasted', 'glass', 'gay', 'passed', 'jail', 'comrade / komunis']
+handler.help = ['wasted', 'glass', 'gay', 'passed', 'jail', 'comrade / komunis', 'pixelate', 'blur', 'greyscale', 'invert', 'brightness', 'threshold', 'sepia', 'red']
 handler.tags = ['canvas']
-handler.command = /^wasted|glaass|gay|passed|jail|comrade|komunis$/i
+handler.command = /^wasted|glaass|gay|passed|jail|comrade|komunis|pixelate|blur|greyscale|invert|brightness|threshold|sepia|red$/i
 export default handler
 
 
