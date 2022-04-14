@@ -26,7 +26,7 @@ let handler = async (m, { conn, command, args, usedPrefix, text }) => {
         let [teks, teks2] = text.split`|`
         try {
             command = 'wposter'
-            let res = await fetch(global.API('xcoders', '/api/ephoto/' + command, { url: upld }, { teks, teks2 }, 'apikey')).then(a => a.buffer())
+            let img = await fetch(global.API('xcoders', '/api/ephoto/' + command, { url: upld }, { teks, teks2 }, 'apikey')).then(a => a.buffer())
             conn.sendFile(m.chat, img, '', 'Sudah jadi kak ```>_<```', m)
             await conn.sendMessage(m.chat, { delete: msg.key })
         } catch (err) {
@@ -36,7 +36,7 @@ let handler = async (m, { conn, command, args, usedPrefix, text }) => {
     } else if (/flower|glazing/i.test(command)) {
         if (!text) throw `Reply Foto/Kirim foto dengan caption *${usedPrefix + command}* teks`
         try {
-            let res = await fetch(global.API('xcoders', '/api/ephoto/' + command, { url: upld }, { text }, 'apikey')).then(a => a.buffer())
+            let img = await fetch(global.API('xcoders', '/api/ephoto/' + command, { url: upld }, { text }, 'apikey')).then(a => a.buffer())
             conn.sendFile(m.chat, img, '', 'Sudah jadi kak ```>_<```', m)
             await conn.sendMessage(m.chat, { delete: msg.key })
         } catch (err) {
