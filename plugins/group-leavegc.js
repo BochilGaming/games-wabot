@@ -3,7 +3,7 @@ let handler = async (m, { conn, args, command }) => {
     if (command.endsWith('all') || command.endsWith('semua')) {
         for (let id of chat) { // perulangan
             await conn.groupLeave(id)
-            await delay(i * 2000) // jeda 2 detik
+            await delay(2000) // jeda 2 detik
         }
         await m.reply('Berhasil!')
     } else if (args[0] || args.length > 5) {
