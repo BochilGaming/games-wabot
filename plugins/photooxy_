@@ -1,0 +1,4 @@
+import axios from 'axios'
+import cheerio from 'cheerio'
+
+const baseURl = 'https://photooxy.com'
