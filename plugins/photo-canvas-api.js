@@ -47,7 +47,7 @@ let handler = async (m, { conn, command, args, usedPrefix, text }) => {
             conn.sendFile(m.chat, img, 'tes.jpg', '', m)
         } catch (err) {
             conn.fakeReply(m.chat, `*ERROR !*`, '0@s.whatsapp.net', command)
-            conn.sendMessage(global.owner[0]'@s.whatsapp.net', { text: err }, { quoted: m })
+            conn.sendMessage(global.owner[0]+'@s.whatsapp.net', { text: err }, { quoted: m })
         }
     }
     await conn.sendMessage(m.chat, { delete: msg.key })
