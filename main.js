@@ -24,13 +24,14 @@ import { tmpdir } from 'os';
 import { format } from 'util';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { Low, JSONFile } from 'lowdb';
-import pino from 'pino';
+// import pino from 'pino';
 import {
   mongoDB,
   mongoDBV2
 } from './lib/mongoDB.js';
+import store from './lib/store.js'
+
 const {
-  useSingleFileAuthState,
   DisconnectReason
 } = await import('@adiwajshing/baileys')
 
@@ -51,6 +52,8 @@ const __dirname = global.__dirname(import.meta.url)
 
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
+
+// global.opts['db'] = process.env['db']
 
 global.db = new Low(
   /https?:\/\//.test(opts['db'] || '') ?
@@ -86,7 +89,7 @@ global.loadDatabase = async function loadDatabase() {
 loadDatabase()
 
 global.authFile = `${opts._[0] || 'session'}.data.json`
-const { state, saveState } = useSingleFileAuthState(global.authFile)
+const { state, saveState } = store.useSingleFileAuthState(global.authFile)
 
 const connectionOptions = {
   printQRInTerminal: true,
@@ -173,7 +176,7 @@ global.reloadHandler = async function (restatConn) {
   conn.groupsUpdate = handler.groupsUpdate.bind(global.conn)
   conn.onDelete = handler.deleteUpdate.bind(global.conn)
   conn.connectionUpdate = connectionUpdate.bind(global.conn)
-  conn.credsUpdate = saveState.bind(global.conn)
+  conn.credsUpdate = saveState.bind(global.conn, true)
 
   conn.ev.on('messages.upsert', conn.handler)
   conn.ev.on('group-participants.update', conn.participantsUpdate)

@@ -14,15 +14,17 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (!img) throw `balas gambar/video/stiker dengan perintah ${usedPrefix + command}`
       let out
       try {
-        if (/webp/g.test(mime)) out = await webp2png(img)
-        else if (/image/g.test(mime)) out = await uploadImage(img)
-        else if (/video/g.test(mime)) out = await uploadFile(img)
-        if (typeof out !== 'string') out = await uploadImage(img)
-        stiker = await sticker(false, out, global.packname, global.author)
+        stiker = await sticker(img, false, global.packname, global.author)
       } catch (e) {
         console.error(e)
       } finally {
-        if (!stiker) stiker = await sticker(img, false, global.packname, global.author)
+        if (!stiker) {
+          if (/webp/g.test(mime)) out = await webp2png(img)
+          else if (/image/g.test(mime)) out = await uploadImage(img)
+          else if (/video/g.test(mime)) out = await uploadFile(img)
+          if (typeof out !== 'string') out = await uploadImage(img)
+          stiker = await sticker(false, out, global.packname, global.author)
+        }
       }
     } else if (args[0]) {
       if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
