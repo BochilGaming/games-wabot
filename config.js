@@ -32,6 +32,7 @@ global.APIs = { // API Prefix
   xteam: 'https://api.xteam.xyz',
   nzcha: 'http://nzcha-apii.herokuapp.com',
   bg: 'http://bochil.ddns.net',
+  td: 'https://api-toxic-devil.herokuapp.com/api',
   fdci: 'https://api.fdci.se',
   dzx: 'https://api.dhamzxploit.my.id',
   zahir: 'https://zahirr-web.herokuapp.com',
