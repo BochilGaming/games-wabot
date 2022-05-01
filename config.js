@@ -39,7 +39,7 @@ global.APIs = { // API Prefix
   zeks: 'https://api.zeks.xyz',
   pencarikode: 'https://pencarikode.xyz',
   hardianto: 'http://hardianto-chan.herokuapp.com',
-  adiisus: 'https://adiixyzapi.herokuapp.com',
+  adiisus: false,
   LeysCoder: 'https://leyscoders-api.herokuapp.com'
 }
 global.APIKeys = { // APIKey Here
