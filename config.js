@@ -34,11 +34,12 @@ global.APIs = { // API Prefix
   bg: 'http://bochil.ddns.net',
   td: 'https://api-toxic-devil.herokuapp.com/api',
   fdci: 'https://api.fdci.se',
+  skh: 'https://sekha.me',
   dzx: 'https://api.dhamzxploit.my.id',
   zahir: 'https://zahirr-web.herokuapp.com',
-  zeks: 'https://api.zeks.xyz',
-  pencarikode: 'https://pencarikode.xyz',
-  hardianto: 'http://hardianto-chan.herokuapp.com',
+  zeks: 'https://api.zeks.me',
+  pencarikode: 'https://api.chipa.xyz',
+  hardianto: 'http://hardianto.xyz',
   adiisus: 'https://adiixyzapi.herokuapp.com',
   LeysCoder: 'https://leyscoders-api.herokuapp.com'
 }
@@ -46,9 +47,10 @@ global.APIKeys = { // APIKey Here
   // 'https://website': 'apikey'
   'https://api.xteam.xyz': 'd90a9e986e18778b',
   'https://zahirr-web.herokuapp.com': 'zahirgans',
-  'https://api.zeks.xyz': 'apivinz',
-  'https://pencarikode.xyz': 'pais',
-  'http://hardianto-chan.herokuapp.com': 'hardianto',
+  'https://api.zeks.me': 'apivinz',
+  'https://sekha.me': 'apirey',
+  'https://api.chipa.xyz': 'pais',
+  'http://hardianto.xyz': 'hardianto',
   'https://leyscoders-api.herokuapp.com': 'dappakntlll'
 }
 
