@@ -2,7 +2,7 @@ import db from '../lib/database.js'
 
 let handler = async (m, { text, usedPrefix, command }) => {
     db.data.sticker = db.data.sticker || {}
-    if (!m.quoted) throw 'Balas stiker dengan perintah *${usedPrefix + command}*'
+    if (!m.quoted) throw `Balas stiker dengan perintah *${usedPrefix + command}*`
     if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'
     if (!text) throw `Penggunaan:\n${usedPrefix + command} <teks>\n\nContoh:\n${usedPrefix + command} tes`
     let sticker = db.data.sticker
