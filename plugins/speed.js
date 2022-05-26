@@ -1,5 +1,6 @@
+import Connection from '../lib/connection.js'
 import { cpus as _cpus, totalmem, freemem } from 'os'
-import util from 'util'
+// import util from 'util'
 import { performance } from 'perf_hooks'
 import { sizeFormatter } from 'human-readable'
 let format = sizeFormatter({
@@ -9,7 +10,7 @@ let format = sizeFormatter({
   render: (literal, symbol) => `${literal} ${symbol}B`,
 })
 let handler = async (m, { conn }) => {
-  const chats = Object.entries(conn.chats).filter(([id, data]) => id && data.isChats)
+  const chats = Object.entries(Connection.store.chats).filter(([id, data]) => id && data.isChats)
   const groupsIn = chats.filter(([id]) => id.endsWith('@g.us')) //groups.filter(v => !v.read_only)
   const used = process.memoryUsage()
   const cpus = _cpus().map(cpu => {
@@ -36,8 +37,9 @@ let handler = async (m, { conn }) => {
       irq: 0
     }
   })
+  const message = m.reply('_Testing speed..._')
   let old = performance.now()
-  await m.reply('_Testing speed..._')
+  await message
   let neww = performance.now()
   let speed = neww - old
   m.reply(`

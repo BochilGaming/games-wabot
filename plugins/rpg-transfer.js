@@ -1,3 +1,5 @@
+import db from '../lib/database.js'
+
 const items = [
     'money', 'potion', 'trash', 'wood',
     'rock', 'string', 'petFood', 'emerald',
@@ -7,7 +9,7 @@ const items = [
 let confirmation = {}
 async function handler(m, { conn, args, usedPrefix, command }) {
     if (confirmation[m.sender]) return m.reply('Kamu sedang melakukan transfer!')
-    let user = global.db.data.users[m.sender]
+    let user = db.data.users[m.sender]
     const item = items.filter(v => v in user && typeof user[v] == 'number')
     let lol = `Use format ${usedPrefix}${command} [type] [value] [number]
 example ${usedPrefix}${command} money 9999 @621927237001
@@ -20,7 +22,7 @@ ${item.map(v => `${rpg.emoticon(v)}${v}`.trim()).join('\n')}
     const count = Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, (isNumber(args[1]) ? parseInt(args[1]) : 1))) * 1
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : args[2] ? (args[2].replace(/[@ .+-]/g, '') + '@s.whatsapp.net') : ''
     if (!who) return m.reply('Tag salah satu, atau ketik Nomernya!!')
-    if (!(who in global.db.data.users)) return m.reply(`User ${who} not in database`)
+    if (!(who in db.data.users)) return m.reply(`User ${who} not in database`)
     if (user[type] * 1 < count) return m.reply(`Your *${rpg.emoticon(type)}${type}${special(type)}* is less *${count - user[type]}*`)
     let confirm = `
 Are you sure you want to transfer *${count}* ${rpg.emoticon(type)}${type}${special(type)} to *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}*
@@ -44,8 +46,8 @@ handler.before = async m => {
     if (!m.text) return
     let { timeout, sender, message, to, type, count } = confirmation[m.sender]
     if (m.id === message.id) return
-    let user = global.db.data.users[sender]
-    let _user = global.db.data.users[to]
+    let user = db.data.users[sender]
+    let _user = db.data.users[to]
     if (/no?/g.test(m.text.toLowerCase())) {
         clearTimeout(timeout)
         delete confirmation[sender]

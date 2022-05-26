@@ -1,10 +1,13 @@
+import db from '../lib/database.js'
+
 const linkRegex = /chat.whatsapp.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
+
 export async function before(m, { isAdmin, isBotAdmin }) {
     if (m.isBaileys && m.fromMe)
         return !0
     if (!m.isGroup) return !1
-    let chat = global.db.data.chats[m.chat]
-    let bot = global.db.data.settings[this.user.jid] || {}
+    let chat = db.data.chats[m.chat]
+    let bot = db.data.settings[this.user.jid] || {}
     const isGroupLink = linkRegex.exec(m.text)
 
     if (chat.antiLink && isGroupLink && !isAdmin) {

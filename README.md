@@ -165,9 +165,14 @@ No bot, just print received messages and add users to database
 
 **Development** Testing Mode
 
+### `--db`
+
+pass mongodb url or cloud url to connect to database, by the default it will connect to database.json
+
 ---------
 
-## How To Customise Message Display
+## FAQ
+- How to send button image?
 ```js
 // Syntax
 conn.sendButton(
@@ -190,6 +195,29 @@ conn.sendButton(m.chat, 'Hello world!', '@BochilGaming', 'https://github.com/Boc
       null, { asLocation: true }
 )
 ```
+
+- Why my plugins not working in this multi-device?
+      
+> Please cek syntax error on your plugins. and maybe your script still using CJS
+> This multi-device script use ESM and CJS [(legacy code)](https://github.com/BochilGaming/games-wabot/tree/main) not support yet. Learn more about [ESM](https://nodejs.org/api/esm.html)
+
+- How to delete session?
+
+> You can delete folder `sessions` or run command ```rm -rf sessions```
+
+- Why i can't scan qr code?
+
+> if your error like this ```(node:7016) UnhandledPromiseRejectionWarning: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined``` you can use [multi-device branch](https://github.com/BochilGaming/games-wabot/tree/multi-device)
+
+- How to change owner number?
+
+> You can change in `config.js`, on global.owner. make sure you use correct syntax.
+```js
+global.owner = [
+  ['6281319944687', 'BG', true]
+]
+```
+> First argument on array is number like `6281319944687`, second argument is name like `BG` (if this argument pass, if using `owner` command, this number will send as owner), third argument is developer like `true` (if this argument pass, if there have plugins error (not syntax error) the error will send to developer)
 ---------
 
 ### want to contribute?

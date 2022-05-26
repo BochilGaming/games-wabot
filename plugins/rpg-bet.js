@@ -1,10 +1,12 @@
+import db from '../lib/database.js'
+
 let confirm = {}
 
 async function handler(m, { conn, args }) {
     //if (!isROwner) throw 'Dalam perbaikan'
     if (m.sender in confirm) throw 'Kamu masih melakukan judi, tunggu sampai selesai!!'
     try {
-        let user = global.db.data.users[m.sender]
+        let user = db.data.users[m.sender]
         let count = (args[0] && number(parseInt(args[0])) ? Math.max(parseInt(args[0]), 1) : /all/i.test(args[0]) ? Math.floor(parseInt(user.money)) : 1) * 1
         if ((user.money * 1) < count) return m.reply('💵Uang kamu tidak cukup!!')
         if (!(m.sender in confirm)) {
@@ -31,7 +33,7 @@ handler.before = async m => {
     if (!(m.sender in confirm)) return
     if (m.isBaileys) return
     let { timeout, count } = confirm[m.sender]
-    let user = global.db.data.users[m.sender]
+    let user = db.data.users[m.sender]
     let moneyDulu = user.money * 1
     let txt = (m.msg && m.msg.selectedDisplayText ? m.msg.selectedDisplayText : m.text ? m.text : '').toLowerCase()
     try {

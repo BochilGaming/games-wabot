@@ -1,3 +1,4 @@
+import db from '../lib/database.js'
 import daily from './rpg-daily.js'
 import monthly from './rpg-monthly.js'
 import adventure from './rpg-adventure.js'
@@ -94,7 +95,7 @@ const inventory = {
   }
 }
 let handler = async (m, { conn }) => {
-  let user = global.db.data.users[m.sender]
+  let user = db.data.users[m.sender]
   const tools = Object.keys(inventory.tools).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${typeof inventory.tools[v] === 'object' ? inventory.tools[v][user[v]?.toString()] : `Level(s) ${user[v]}`}`).filter(v => v).join('\n').trim()
   const items = Object.keys(inventory.items).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${user[v]}`).filter(v => v).join('\n').trim()
   const crates = Object.keys(inventory.crates).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${user[v]}`).filter(v => v).join('\n').trim()

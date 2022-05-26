@@ -1,3 +1,4 @@
+import { plugins } from '../lib/plugins.js'
 const {
     proto,
     generateWAMessage,
@@ -14,8 +15,8 @@ export async function all(m, chatUpdate) {
     let id = m.message.buttonsResponseMessage?.selectedButtonId || m.message.templateButtonReplyMessage?.selectedId || m.message.listResponseMessage?.singleSelectReply?.selectedRowId
     let text = m.message.buttonsResponseMessage?.selectedDisplayText || m.message.templateButtonReplyMessage?.selectedDisplayText || m.message.listResponseMessage?.title
     let isIdMessage = false, usedPrefix
-    for (let name in global.plugins) {
-        let plugin = global.plugins[name]
+    for (let name in plugins) {
+        let plugin = plugins[name]
         if (!plugin)
             continue
         if (plugin.disabled)

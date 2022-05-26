@@ -1,14 +1,16 @@
 import { smsg } from './lib/simple.js'
+import { plugins } from './lib/plugins.js'
 import { format } from 'util'
 import { fileURLToPath } from 'url'
 import path, { join } from 'path'
 import { unwatchFile, watchFile } from 'fs'
 import chalk from 'chalk'
+import Connection from './lib/connection.js'
+import printMessage from './lib/print.js'
+import Helper from './lib/helper.js'
+import db, { loadDatabase } from './lib/database.js'
 
-/**
- * @type {import('@adiwajshing/baileys')}
- */
-const { proto } = (await import('@adiwajshing/baileys')).default
+// const { proto } = (await import('@adiwajshing/baileys')).default
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function () {
     clearTimeout(this)
@@ -17,18 +19,18 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
 
 /**
  * Handle messages upsert
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
+ * @this {import('./lib/connection').Socket}
+ * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} chatUpdate
  */
 export async function handler(chatUpdate) {
     this.msgqueque = this.msgqueque || []
     if (!chatUpdate)
         return
-    this.pushMessage(chatUpdate.messages).catch(console.error)
     let m = chatUpdate.messages[chatUpdate.messages.length - 1]
     if (!m)
         return
-    if (global.db.data == null)
-        await global.loadDatabase()
+    if (db.data == null)
+        await loadDatabase()
     try {
         m = smsg(this, m) || m
         if (!m)
@@ -37,9 +39,9 @@ export async function handler(chatUpdate) {
         m.limit = false
         try {
             // TODO: use loop to insert data instead of this
-            let user = global.db.data.users[m.sender]
+            let user = db.data.users[m.sender]
             if (typeof user !== 'object')
-                global.db.data.users[m.sender] = {}
+                db.data.users[m.sender] = {}
             if (user) {
                 if (!isNumber(user.exp))
                     user.exp = 0
@@ -173,7 +175,7 @@ export async function handler(chatUpdate) {
                 if (!isNumber(user.lastmonthly))
                     user.lastmonthly = 0
             } else
-                global.db.data.users[m.sender] = {
+                db.data.users[m.sender] = {
                     exp: 0,
                     limit: 10,
                     lastclaim: 0,
@@ -242,9 +244,9 @@ export async function handler(chatUpdate) {
                     lastweekly: 0,
                     lastmonthly: 0,
                 }
-            let chat = global.db.data.chats[m.chat]
+            let chat = db.data.chats[m.chat]
             if (typeof chat !== 'object')
-                global.db.data.chats[m.chat] = {}
+                db.data.chats[m.chat] = {}
             if (chat) {
                 if (!('isBanned' in chat))
                     chat.isBanned = false
@@ -271,7 +273,7 @@ export async function handler(chatUpdate) {
                 if (!isNumber(chat.expired))
                     chat.expired = 0
             } else
-                global.db.data.chats[m.chat] = {
+                db.data.chats[m.chat] = {
                     isBanned: false,
                     welcome: false,
                     detect: false,
@@ -285,13 +287,13 @@ export async function handler(chatUpdate) {
                     antiToxic: true,
                     expired: 0,
                 }
-            let settings = global.db.data.settings[this.user.jid]
-            if (typeof settings !== 'object') global.db.data.settings[this.user.jid] = {}
+            let settings = db.data.settings[this.user.jid]
+            if (typeof settings !== 'object') db.data.settings[this.user.jid] = {}
             if (settings) {
                 if (!('self' in settings)) settings.self = false
                 if (!('autoread' in settings)) settings.autoread = false
                 if (!('restrict' in settings)) settings.restrict = false
-            } else global.db.data.settings[this.user.jid] = {
+            } else db.data.settings[this.user.jid] = {
                 self: false,
                 autoread: false,
                 restrict: false
@@ -312,7 +314,7 @@ export async function handler(chatUpdate) {
         if (typeof m.text !== 'string')
             m.text = ''
 
-        const isROwner = [conn.decodeJid(global.conn.user.id), ...global.owner.map(([number]) => number)].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        const isROwner = [this.decodeJid(this.user.id), ...global.owner.map(([number]) => number)].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isOwner = isROwner || m.fromMe
         const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
@@ -332,19 +334,19 @@ export async function handler(chatUpdate) {
         m.exp += Math.ceil(Math.random() * 10)
 
         let usedPrefix
-        let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
+        let _user = db.data && db.data.users && db.data.users[m.sender]
 
-        const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await this.groupMetadata(m.chat).catch(_ => null)) : {}) || {}
+        const groupMetadata = (m.isGroup ? await Connection.store.fetchGroupMetadata(m.chat, this.groupMetadata) : {}) || {}
         const participants = (m.isGroup ? groupMetadata.participants : []) || []
-        const user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {} // User Data
-        const bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {} // Your Data
+        const user = (m.isGroup ? participants.find(u => this.decodeJid(u.id) === m.sender) : {}) || {} // User Data
+        const bot = (m.isGroup ? participants.find(u => this.decodeJid(u.id) == this.user.jid) : {}) || {} // Your Data
         const isRAdmin = user?.admin == 'superadmin' || false
         const isAdmin = isRAdmin || user?.admin == 'admin' || false // Is User Admin?
         const isBotAdmin = bot?.admin || false // Are you Admin?
 
         const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
-        for (let name in global.plugins) {
-            let plugin = global.plugins[name]
+        for (let name in plugins) {
+            let plugin = plugins[name]
             if (!plugin)
                 continue
             if (plugin.disabled)
@@ -361,7 +363,7 @@ export async function handler(chatUpdate) {
                     // if (typeof e === 'string') continue
                     console.error(e)
                     for (let [jid] of global.owner.filter(([number, _, isDeveloper]) => isDeveloper && number)) {
-                        let data = (await conn.onWhatsApp(jid))[0] || {}
+                        let data = (await this.onWhatsApp(jid))[0] || {}
                         if (data.exists)
                             m.reply(`*Plugin:* ${name}\n*Sender:* ${m.sender}\n*Chat:* ${m.chat}\n*Command:* ${m.text}\n\n\`\`\`${format(e)}\`\`\``.trim(), data.jid)
                     }
@@ -373,7 +375,7 @@ export async function handler(chatUpdate) {
                     continue
                 }
             const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
-            let _prefix = plugin.customPrefix ? plugin.customPrefix : conn.prefix ? conn.prefix : global.prefix
+            let _prefix = plugin.customPrefix ? plugin.customPrefix : this.prefix ? this.prefix : global.prefix
             let match = (_prefix instanceof RegExp ? // RegExp Mode?
                 [[_prefix.exec(m.text), _prefix]] :
                 Array.isArray(_prefix) ? // Array?
@@ -431,9 +433,9 @@ export async function handler(chatUpdate) {
                 if (!isAccept)
                     continue
                 m.plugin = name
-                if (m.chat in global.db.data.chats || m.sender in global.db.data.users) {
-                    let chat = global.db.data.chats[m.chat]
-                    let user = global.db.data.users[m.sender]
+                if (m.chat in db.data.chats || m.sender in db.data.users) {
+                    let chat = db.data.chats[m.chat]
+                    let user = db.data.users[m.sender]
                     if (name != 'owner-unbanchat.js' && chat?.isBanned)
                         return // Except this
                     if (name != 'owner-unbanuser.js' && user?.banned)
@@ -483,7 +485,7 @@ export async function handler(chatUpdate) {
                     m.reply('Ngecit -_-') // Hehehe
                 else
                     m.exp += xp
-                if (!isPrems && plugin.limit && global.db.data.users[m.sender].limit < plugin.limit * 1) {
+                if (!isPrems && plugin.limit && db.data.users[m.sender].limit < plugin.limit * 1) {
                     this.reply(m.chat, `Limit anda habis, silahkan beli melalui *${usedPrefix}buy*`, m)
                     continue // Limit habis
                 }
@@ -528,7 +530,7 @@ export async function handler(chatUpdate) {
                             text = text.replace(new RegExp(key, 'g'), '#HIDDEN#')
                         if (e.name)
                             for (let [jid] of global.owner.filter(([number, _, isDeveloper]) => isDeveloper && number)) {
-                                let data = (await conn.onWhatsApp(jid))[0] || {}
+                                let data = (await this.onWhatsApp(jid))[0] || {}
                                 if (data.exists)
                                     m.reply(`*Plugin:* ${m.plugin}\n*Sender:* ${m.sender}\n*Chat:* ${m.chat}\n*Command:* ${usedPrefix}${command} ${args.join(' ')}\n\n\`\`\`${text}\`\`\``.trim(), data.jid)
                             }
@@ -557,10 +559,10 @@ export async function handler(chatUpdate) {
             if (quequeIndex !== -1)
                 this.msgqueque.splice(quequeIndex, 1)
         }
-        //console.log(global.db.data.users[m.sender])
-        let user, stats = global.db.data.stats
+        //console.log(db.data.users[m.sender])
+        let user, stats = db.data.stats
         if (m) {
-            if (m.sender && (user = global.db.data.users[m.sender])) {
+            if (m.sender && (user = db.data.users[m.sender])) {
                 user.exp += m.exp
                 user.limit -= m.limit * 1
             }
@@ -595,7 +597,7 @@ export async function handler(chatUpdate) {
         }
 
         try {
-            if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this)
+            if (!opts['noprint']) await printMessage(m, this)
         } catch (e) {
             console.log(m, m.quoted, e)
         }
@@ -606,23 +608,23 @@ export async function handler(chatUpdate) {
 
 /**
  * Handle groups participants update
+ * @this {import('./lib/connection').Socket}
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
  */
 export async function participantsUpdate({ id, participants, action }) {
     if (opts['self'])
         return
-    // if (id in conn.chats) return // First login will spam
     if (this.isInit)
         return
-    if (global.db.data == null)
+    if (db.data == null)
         await loadDatabase()
-    let chat = global.db.data.chats[id] || {}
+    let chat = db.data.chats[id] || {}
     let text = ''
     switch (action) {
         case 'add':
         case 'remove':
             if (chat.welcome) {
-                let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
+                let groupMetadata = await Connection.store.fetchGroupMetadata(id, this.groupMetadata)
                 for (let user of participants) {
                     let pp = './src/avatar_contact.png'
                     try {
@@ -650,6 +652,7 @@ export async function participantsUpdate({ id, participants, action }) {
 
 /**
  * Handle groups update
+ * @this {import('./lib/connection').Socket}
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate 
  */
 export async function groupsUpdate(groupsUpdate) {
@@ -658,7 +661,7 @@ export async function groupsUpdate(groupsUpdate) {
     for (const groupUpdate of groupsUpdate) {
         const id = groupUpdate.id
         if (!id) continue
-        let chats = global.db.data.chats[id], text = ''
+        let chats = db.data.chats[id], text = ''
         if (!chats?.detect) continue
         if (groupUpdate.desc) text = (chats.sDesc || this.sDesc || conn.sDesc || '```Description has been changed to```\n@desc').replace('@desc', groupUpdate.desc)
         if (groupUpdate.subject) text = (chats.sSubject || this.sSubject || conn.sSubject || '```Subject has been changed to```\n@subject').replace('@subject', groupUpdate.subject)
@@ -669,29 +672,35 @@ export async function groupsUpdate(groupsUpdate) {
     }
 }
 
+/**
+ * @this {import('./lib/connection').Socket}
+ * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.delete']} message 
+ */
 export async function deleteUpdate(message) {
-    try {
-        const { fromMe, id, participant } = message
-        if (fromMe)
-            return
-        let msg = this.serializeM(this.loadMessage(id))
-        if (!msg)
-            return
-        let chat = global.db.data.chats[msg.chat] || {}
-        if (chat.delete)
-            return
-        await this.reply(msg.chat, `
+    if (message.keys && Array.isArray(message.keys)) {
+        try {
+            for (const key of message.keys) {
+                if (key.fromMe) continue
+                const msg = Connection.store.loadMessage(key.id)
+                if (!msg) continue
+                let chat = db.data.chats[msg.key.remoteJid]
+                if (!chat || chat.delete) continue
+                const participant = msg.participant || msg.key.participant || msg.key.remoteJid
+                await this.reply(msg.key.remoteJid, `
 Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
 Untuk mematikan fitur ini, ketik
 *.enable delete*
 `.trim(), msg, {
-            mentions: [participant]
-        })
-        this.copyNForward(msg.chat, msg).catch(e => console.log(e, msg))
-    } catch (e) {
-        console.error(e)
+                    mentions: [participant]
+                })
+                this.copyNForward(msg.key.remoteJid, msg).catch(e => console.log(e, msg))
+            }
+        } catch (e) {
+            console.error(e)
+        }
     }
 }
+
 
 global.dfail = (type, m, conn) => {
     let msg = {
@@ -709,9 +718,9 @@ global.dfail = (type, m, conn) => {
     if (msg) return m.reply(msg)
 }
 
-let file = global.__filename(import.meta.url, true)
+let file = Helper.__filename(import.meta.url, true)
 watchFile(file, async () => {
     unwatchFile(file)
     console.log(chalk.redBright("Update 'handler.js'"))
-    if (global.reloadHandler) console.log(await global.reloadHandler())
+    if (Connection.reload) console.log(await Connection.reload(await Connection.conn))
 })

@@ -1,4 +1,6 @@
-let handler = async (m, { conn, text, usedPrefix, command }) => {
+import db from '../lib/database.js'
+
+let handler = async (m, { text, usedPrefix, command }) => {
     db.data.sticker = db.data.sticker || {}
     if (!m.quoted) throw 'Balas stiker dengan perintah *${usedPrefix + command}*'
     if (!m.quoted.fileSha256) throw 'SHA256 Hash Missing'

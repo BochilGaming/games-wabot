@@ -1,5 +1,7 @@
+import db from '../lib/database.js'
+
 let handler = async (m, { args, usedPrefix }) => {
-    let user = global.db.data.users[m.sender]
+    let user = db.data.users[m.sender]
     if (user.health >= 100) return m.reply(`
 Your ❤️health is full!
 `.trim())

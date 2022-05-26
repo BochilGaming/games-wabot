@@ -1,4 +1,4 @@
-let handler = function (m) {
+let handler = function (m, { conn }) {
     if (!m.quoted) throw false
     let { chat, fromMe, isBaileys } = m.quoted
     if (!fromMe) throw false

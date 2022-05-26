@@ -1,3 +1,5 @@
+import db from '../lib/database.js'
+
 const rewards = {
     common: {
         money: 101,
@@ -62,7 +64,7 @@ const rewards = {
     // }
 }
 let handler = async (m, { command, args, usedPrefix }) => {
-    let user = global.db.data.users[m.sender]
+    let user = db.data.users[m.sender]
     let listCrate = Object.fromEntries(Object.entries(rewards).filter(([v]) => v && v in user))
     let info = `
 Use Format *${usedPrefix}${command} [crate] [count]*
