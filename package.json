@@ -1,7 +1,7 @@
 {
-  "name": "games-wabot",
-  "version": "0.9.8",
-  "description": "Customizable WhatsApp Bot",
+  "name": "Surena",
+  "version": "2.1.1",
+  "description": "Customizable Bot",
   "depecrated": false,
   "main": "index.js",
   "directories": {
@@ -23,19 +23,19 @@
     "whatsapp",
     "js-whatsapp",
     "whatsapp",
-    "Games-wabot",
+    "surena",
     "wabot-aq"
   ],
-  "homepage": "https://github.com/BochilGaming/games-wabot",
+  "homepage": "https://github.com/hyno831/games-wabot",
   "author": {
-    "name": "BochilGaming"
+    "name": "DEVIL"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BochilGaming/games-wabot.git"
+    "url": "git+https://github.com/hyno831/games-wabot.git"
   },
   "bugs": {
-    "url": "https://github.com/BochilGaming/games-wabot/issues"
+    "url": "https://github.com/hyno831/games-wabot/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
