@@ -1,6 +1,6 @@
 import db from '../lib/database.js'
 
-let handler = async (m, { conn, text}) => {
+let handler = async (m, { conn, text }) => {
     if (!text) throw 'Siapa yang mau di unbanned?'
     let who
     if (m.isGroup) who = m.mentionedJid[0]
