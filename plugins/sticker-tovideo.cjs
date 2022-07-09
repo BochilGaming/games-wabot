@@ -24,4 +24,4 @@ handler.tags = ['sticker']
 
 handler.command = ['tovideo']
 
-module.exports = handler
+export default handler
