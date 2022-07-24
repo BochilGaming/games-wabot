@@ -1,3 +1,5 @@
+import db from '../lib/database.js'
+
 let handler = async (m, { conn }) => {
   let stats = Object.entries(db.data.stats).map(([key, val]) => {
     let name = Array.isArray(plugins[key]?.help) ? plugins[key]?.help?.join(' & ') : plugins[key]?.help || key 
