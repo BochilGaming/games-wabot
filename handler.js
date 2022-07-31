@@ -11,7 +11,9 @@ import Helper from './lib/helper.js'
 import db, { loadDatabase } from './lib/database.js'
 import Queque from './lib/queque.js'
 
-// const { proto } = (await import('@adiwajshing/baileys')).default
+/** @type {import('@adiwajshing/baileys')} */
+const { getContentType, proto } = (await import('@adiwajshing/baileys')).default
+
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 /**
  * Handle messages upsert
@@ -669,27 +671,32 @@ export async function groupsUpdate(groupsUpdate) {
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.delete']} message 
  */
 export async function deleteUpdate(message) {
-    if (message.keys && Array.isArray(message.keys)) {
-        try {
-            for (const key of message.keys) {
-                if (key.fromMe) continue
-                const msg = Connection.store.loadMessage(key.id)
-                if (!msg) continue
-                let chat = db.data.chats[msg.key.remoteJid]
-                if (!chat || chat.delete) continue
-                const participant = msg.participant || msg.key.participant || msg.key.remoteJid
-                await this.reply(msg.key.remoteJid, `
-Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
+
+    if (Array.isArray(message.keys) && message.keys.length > 0) {
+        const tasks = await Promise.allSettled(message.keys.map(async (key) => {
+            if (key.fromMe) return
+            const msg = this.loadMessage(key.remoteJid, key.id) || this.loadMessage(key.id)
+            if (!msg || !msg.message) return
+            let chat = db.data.chats[key.remoteJid]
+            if (!chat || chat.delete) return
+
+            // if message type is conversation, convert it to extended text message because if not, it will throw an error
+            const mtype = getContentType(msg.message)
+            if (mtype === 'conversation') {
+                msg.message.extendedTextMessage = { text: msg.message[mtype] }
+                delete msg.message[mtype]
+            }
+
+            const participant = msg.participant || msg.key.participant || msg.key.remoteJid
+
+            await this.reply(key.remoteJid, `
+        Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
 Untuk mematikan fitur ini, ketik
 *.enable delete*
-`.trim(), msg, {
-                    mentions: [participant]
-                })
-                this.copyNForward(msg.key.remoteJid, msg).catch(e => console.log(e, msg))
-            }
-        } catch (e) {
-            console.error(e)
-        }
+`.trim(), msg, { mentions: [participant] })
+            return await this.copyNForward(key.remoteJid, msg).catch(e => console.log(e, msg))
+        }))
+        tasks.map(t => t.status === 'rejected' && console.error(t.reason))
     }
 }
 

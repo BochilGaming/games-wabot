@@ -8,6 +8,7 @@ const inventory = {
     health: true,
     money: true,
     exp: true,
+    role: true
   },
   items: {
     potion: true,
@@ -96,6 +97,8 @@ const inventory = {
 }
 let handler = async (m, { conn }) => {
   let user = db.data.users[m.sender]
+  // Make sure role is correct
+  user.role = global.rpg.role(user.level).name
   const tools = Object.keys(inventory.tools).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${typeof inventory.tools[v] === 'object' ? inventory.tools[v][user[v]?.toString()] : `Level(s) ${user[v]}`}`).filter(v => v).join('\n').trim()
   const items = Object.keys(inventory.items).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${user[v]}`).filter(v => v).join('\n').trim()
   const crates = Object.keys(inventory.crates).map(v => user[v] && `*${global.rpg.emoticon(v)}${v}:* ${user[v]}`).filter(v => v).join('\n').trim()

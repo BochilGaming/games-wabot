@@ -14,11 +14,13 @@ Kurang *${max - user.exp}* lagi!
     let before = user.level * 1
     while (canLevelUp(user.level, user.exp, global.multiplier)) user.level++
     if (before !== user.level) {
+        user.role = global.rpg.role(user.level).name
         let teks = `Selamat ${conn.getName(m.sender)} naik 🧬level`
         let str = `
 ${teks} 
 • 🧬Level Sebelumnya : ${before}
 • 🧬Level Baru : ${user.level}
+• 🧬Role Kamu : ${user.role}
 • Pada Jam : ${new Date().toLocaleString('id-ID')}
 *_Semakin sering berinteraksi dengan bot Semakin Tinggi level kamu_*
 `.trim()

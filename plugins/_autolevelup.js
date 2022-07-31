@@ -10,10 +10,13 @@ export function before(m) {
         user.level++
 
     if (before !== user.level) {
+        user.role = global.rpg.role(user.level).name
         m.reply(`
-Selamat, anda telah naik level!
-*${before}* -> *${user.level}*
-gunakan *.profile* untuk mengecek
+Selamat, ${this.getName(m.sender)} telah naik level!
+• 🧬Level Sebelumnya : ${before}
+• 🧬Level Baru : ${user.level}
+• 🧬Role Kamu : ${user.role}
+gunakan *.inventory* untuk mengecek
 	`.trim())
     }
 }

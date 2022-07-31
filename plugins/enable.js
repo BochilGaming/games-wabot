@@ -1,5 +1,18 @@
 import db from '../lib/database.js'
 
+// TODO:
+// const data = {
+//   user: [{
+//     name: 'autolevelup',
+//     isEnable: true
+//   }],
+//   chat: [{
+//     name: 'welcome',
+//     isEnable: true,
+//     rules: [{
+//     }]
+//   }]
+// }
 let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
   let isEnable = /true|enable|(turn)?on|1/i.test(command)
   let chat = db.data.chats[m.chat]
@@ -20,18 +33,18 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
       }
       chat.welcome = isEnable
       break
-    // case 'detect':
-    //   if (!m.isGroup) {
-    //     if (!isOwner) {
-    //       global.dfail('group', m, conn)
-    //       throw false
-    //     }
-    //   } else if (!isAdmin) {
-    //     global.dfail('admin', m, conn)
-    //     throw false
-    //   }
-    //   chat.detect = isEnable
-    //   break
+    case 'detect':
+      if (!m.isGroup) {
+        if (!isOwner) {
+          global.dfail('group', m, conn)
+          throw false
+        }
+      } else if (!isAdmin) {
+        global.dfail('admin', m, conn)
+        throw false
+      }
+      chat.detect = isEnable
+      break
     case 'delete':
       if (m.isGroup) {
         if (!(isAdmin || isOwner)) {
@@ -59,9 +72,12 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     //   }
     //   chat.autodelvn = isEnable
     //   break
-    // case 'document':
-    //   chat.useDocument = isEnable
-    //   break
+    case 'document':
+      if (m.isGroup) {
+        if (!(isAdmin || isOwner)) return dfail('admin', m, conn)
+      }
+      chat.useDocument = isEnable
+      break
     case 'public':
       isAll = true
       if (!isROwner) {
@@ -97,10 +113,10 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     //   }
     //   chat.antiToxic = isEnable
     //   break
-    // case 'autolevelup':
-    //   isUser = true
-    //   user.autolevelup = isEnable
-    //   break
+    case 'autolevelup':
+      isUser = true
+      user.autolevelup = isEnable
+      break
     // case 'mycontact':
     // case 'mycontacts':
     // case 'whitelistcontact':
@@ -164,9 +180,15 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
       }
       global.opts['swonly'] = isEnable
       break
+    case 'getmsg':
+      if (m.isGroup) {
+        if (!(isAdmin || isOwner)) return dfail('admin', m, conn)
+      }
+      chat.getmsg = isEnable
+      break
     default:
       if (!/[01]/.test(command)) return m.reply(`
-List option: welcome | delete | public | antilink | antidelete | antitoxic | autolevelup | detect | document | whitelistmycontacts | restrict | nyimak | autoread | pconly | gconly | swonly
+List option: welcome | detect | delete | antidelete | public | antilink | autolevelup | document | whitelistmycontacts | restrict | nyimak | autoread | pconly | gconly | swonly | getmsg
 Contoh:
 ${usedPrefix}enable welcome
 ${usedPrefix}disable welcome

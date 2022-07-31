@@ -38,7 +38,12 @@ global.timestamp = {
 
 // global.opts['db'] = process.env['db']
 
-const conn = await Connection.conn
+const conn = Object.defineProperty(Connection, 'conn', {
+  value: await Connection.conn,
+  enumerable: true,
+  configurable: true,
+  writable: true
+}).conn
 
 // load plugins
 filesInit(pluginFolder, pluginFilter, conn).then(_ => console.log(Object.keys(plugins))).catch(console.error)
