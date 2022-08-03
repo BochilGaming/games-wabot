@@ -169,10 +169,14 @@ No bot, just print received messages and add users to database
 
 pass mongodb url or cloud url to connect to database, by the default it will connect to database.json
 
+### `--singleauth`
+
+you can convert single file auth to multiple file auth using this argument, it will convert if you have single file auth and folder multi auth is empty (creds.json is not exist)
+
 ---------
 
 ## FAQ
-- How to send button image?
+### How to send button image?
 ```js
 // Syntax
 conn.sendButton(
@@ -196,20 +200,20 @@ conn.sendButton(m.chat, 'Hello world!', '@BochilGaming', 'https://github.com/Boc
 )
 ```
 
-- Why my plugins not working in this multi-device?
+### Why my plugins not working in this multi-device?
       
 > Please cek syntax error on your plugins. and maybe your script still using CJS
 > This multi-device script use ESM and CJS [(legacy code)](https://github.com/BochilGaming/games-wabot/tree/main) not support yet. Learn more about [ESM](https://nodejs.org/api/esm.html)
 
-- How to delete session?
+### How to delete session?
 
 > You can delete folder `sessions` or run command ```rm -rf sessions```
 
-- Why i can't scan qr code?
+### Why i can't scan qr code?
 
 > if your error like this ```(node:7016) UnhandledPromiseRejectionWarning: TypeError [ERR_INVALID_ARG_TYPE]: The "key" argument must be of type string or an instance of Buffer, TypedArray, DataView, or KeyObject. Received undefined``` you can use [multi-device branch](https://github.com/BochilGaming/games-wabot/tree/multi-device)
 
-- How to change owner number?
+### How to change owner number?
 
 > You can change in `config.js`, on global.owner. make sure you use correct syntax.
 ```js
