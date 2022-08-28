@@ -19,7 +19,7 @@ async function handler(m, { command }) {
                 await this.sendButton(room.a, '_Partner ditemukan!_', author, null, [['Next', `.next`]], m)
                 room.b = m.sender
                 room.state = 'CHATTING'
-                await this.sendButton(room.a, '_Partner ditemukan!_', author, null, [['Next', `.next`]], m)
+                await this.sendButton(room.b, '_Partner ditemukan!_', author, null, [['Next', `.next`]], m)
             } else {
                 let id = + new Date
                 this.anonymous[id] = {
