@@ -19,6 +19,7 @@ let tags = {
   'nulis': 'MagerNulis & Logo',
   'downloader': 'Downloader',
   'tools': 'Tools',
+  'audio': 'Audio',
   'fun': 'Fun',
   'database': 'Database',
   'vote': 'Voting',
