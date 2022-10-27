@@ -1,10 +1,11 @@
-// TODO: reduce global variabel usage
-
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 process.on('uncaughtException', console.error)
 
 import './config.js'
-
+import Connection from './lib/connection.js'
+import Helper from './lib/helper.js'
+import db from './lib/database.js'
+import clearTmp from './lib/clearTmp.js';
 import {
   spawn
 } from 'child_process'
@@ -14,30 +15,28 @@ import {
 } from './lib/simple.js'
 import {
   plugins,
-  filesInit,
+  loadPluginFiles,
   reload,
   pluginFolder,
   pluginFilter
 } from './lib/plugins.js'
-import Connection from './lib/connection.js'
-import Helper from './lib/helper.js'
-import db, { loadDatabase } from './lib/database.js'
-import clearTmp from './lib/clearTmp.js';
 
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 
 protoType()
 serialize()
-if (db.data == null) loadDatabase()
 
-Object.assign(global, Helper)
-// global.Fn = function functionCallBack(fn, ...args) { return fn.call(Connection.conn, ...args) }
-global.timestamp = {
-  start: new Date
-}
+// Assign all the value in the Helper to global
+Object.assign(global, {
+  ...Helper,
+  timestamp: {
+    start: Date.now()
+  }
+})
 
 // global.opts['db'] = process.env['db']
 
+/** @type {import('./lib/connection.js').Socket} */
 const conn = Object.defineProperty(Connection, 'conn', {
   value: await Connection.conn,
   enumerable: true,
@@ -46,9 +45,11 @@ const conn = Object.defineProperty(Connection, 'conn', {
 }).conn
 
 // load plugins
-filesInit(pluginFolder, pluginFilter, conn).then(_ => console.log(Object.keys(plugins))).catch(console.error)
-
-Object.freeze(reload)
+loadPluginFiles(pluginFolder, pluginFilter, {
+  logger: conn.logger,
+  recursiveRead: false
+}).then(_ => console.log(Object.keys(plugins)))
+  .catch(console.error)
 
 
 if (!opts['test']) {
@@ -100,10 +101,10 @@ async function _quickTest() {
   Object.freeze(global.support)
 
   if (!s.ffmpeg) (conn?.logger || console).warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
-  if (s.ffmpeg && !s.ffmpegWebp) (conn?.logger || console).warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
+  if (s.ffmpeg && !s.ffmpegWebp) (conn?.logger || console).warn('Stickers may not animated without libwebp on ffmpeg (--enable-libwebp while compiling ffmpeg)')
   if (!s.convert && !s.magick && !s.gm) (conn?.logger || console).warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
 }
 
 _quickTest()
-  .then(() => (conn?.logger.info || console.log)('Quick Test Done'))
+  .then(() => (conn?.logger?.info || console.log)('Quick Test Done'))
   .catch(console.error)

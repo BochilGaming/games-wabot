@@ -20,9 +20,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       } finally {
         if (!stiker) {
           if (/webp/g.test(mime)) out = await webp2png(img)
-          else if (/image/g.test(mime)) out = await uploadImage(img)
           else if (/video/g.test(mime)) out = await uploadFile(img)
-          if (typeof out !== 'string') out = await uploadImage(img)
+          if (!out || typeof out !== 'string') out = await uploadImage(img)
           stiker = await sticker(false, out, global.packname, global.author)
         }
       }
