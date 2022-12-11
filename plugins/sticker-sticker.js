@@ -12,13 +12,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       if (/video/g.test(mime)) if ((q.msg || q).seconds > 11) return m.reply('Maksimal 10 detik!')
       let img = await q.download?.()
       if (!img) throw `balas gambar/video/stiker dengan perintah ${usedPrefix + command}`
-      let out
       try {
         stiker = await sticker(img, false, global.packname, global.author)
       } catch (e) {
         console.error(e)
       } finally {
         if (!stiker) {
+          let out
           if (/webp/g.test(mime)) out = await webp2png(img)
           else if (/video/g.test(mime)) out = await uploadFile(img)
           if (!out || typeof out !== 'string') out = await uploadImage(img)

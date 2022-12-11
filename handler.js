@@ -12,7 +12,7 @@ import db, { loadDatabase } from './lib/database.js'
 import Queque from './lib/queque.js'
 
 /** @type {import('@adiwajshing/baileys')} */
-const { getContentType, proto } = (await import('@adiwajshing/baileys')).default
+const { getContentType } = (await import('@adiwajshing/baileys')).default
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 /**
