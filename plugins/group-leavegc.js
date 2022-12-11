@@ -6,7 +6,7 @@ let handler = async (m, { conn, args, command }) => {
             await conn.groupLeave(id)
             await delay(2000) // jeda 2 detik
         }
-        await m.reply('Berhasil!')
+        await conn.reply(m.sender, 'Berhasil!', m)
     } else if (args[0] || args.length > 5) {
         let ada = chat.find(bot => bot == args[0]) // Apakah botnya ada disitu
         if (!ada) throw 'id salah/bot tidak ada digrup itu'
